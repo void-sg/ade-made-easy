@@ -1,4 +1,5 @@
 from fastapi import FastAPI, Request, Response
+from fastapi.responses import RedirectResponse
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from pathlib import Path
@@ -70,7 +71,9 @@ def health_check():
     }
 
 @app.get("/", tags=["system"])
-def root():
+def root(request: Request):
+    if "text/html" in request.headers.get("accept", ""):
+        return RedirectResponse(url="/landing.html")
     return {
         "status": "ok",
         "product": "Digital Logic Simulation Suite API",
