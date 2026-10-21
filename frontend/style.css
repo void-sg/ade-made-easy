@@ -78,7 +78,7 @@ body {
 .brand small {
   margin-top: 2px;
   color: #aebdd1;
-  font-size: 10px;
+  font-size: 11px;
 }
 
 .main-nav {
@@ -113,7 +113,7 @@ body {
 
 .label {
   margin: 0 0 11px;
-  color: var(--blue);
+  color: #1d4ed8;
   font-family: "DM Mono", monospace;
   font-size: 11px;
   letter-spacing: 1.4px;
@@ -121,9 +121,9 @@ body {
 
 h1 {
   margin: 0;
-  font-size: clamp(36px, 5vw, 61px);
-  letter-spacing: -2.6px;
-  line-height: 1.12;
+  font-size: clamp(32px, 4.5vw, 48px);
+  letter-spacing: -0.02em;
+  line-height: 1.2;
 }
 
 .intro-text {
@@ -167,8 +167,8 @@ h1 {
 
 h2 {
   margin: 0;
-  font-size: 29px;
-  letter-spacing: -1px;
+  font-size: 26px;
+  letter-spacing: -0.01em;
 }
 
 .topic-grid {
@@ -308,7 +308,7 @@ h3 {
 .hero-track-card:hover {
   transform: translateY(-4px);
   border-color: var(--blue);
-  box-shadow: 0 12px 28px rgba(44, 110, 232, 0.15);
+  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.08);
 }
 
 .hero-track-card.track-sequential {
@@ -318,7 +318,7 @@ h3 {
 
 .hero-track-card.track-sequential:hover {
   border-color: #d97706;
-  box-shadow: 0 12px 28px rgba(217, 119, 6, 0.15);
+  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.08);
 }
 
 .track-header {
