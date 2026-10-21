@@ -118,18 +118,18 @@
   border: 1px solid rgba(245, 158, 11, 0.25);
 }
 
-/* KiCad Workbench Main Toolbar */
+/* KiCad Workbench Main Toolbar (High-Craft Linear/Tinkercad Aesthetic) */
 .wb-toolbar {
   background: #ffffff;
-  border-bottom: 1px solid #dce1e6;
+  border-bottom: 1px solid #e2e8f0;
   padding: 6px 16px;
-  height: 52px;
+  height: 50px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   flex-shrink: 0;
   gap: 12px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
 }
 
 .wb-toolbar-group {
@@ -140,38 +140,38 @@
 
 .wb-toolbar-divider {
   width: 1px;
-  height: 28px;
+  height: 22px;
   background: #e2e8f0;
   margin: 0 4px;
 }
 
-/* Tool Buttons */
+/* Tool Buttons Base */
 .wb-btn {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 6px 12px;
+  padding: 0 10px;
   font-family: "DM Mono", monospace;
   font-size: 12px;
   font-weight: 600;
   border: 1px solid #cbd5e1;
   border-radius: 6px;
-  background: #f8fafc;
+  background: #ffffff;
   color: #334155;
   cursor: pointer;
-  transition: all 0.15s ease;
+  transition: all 0.15s cubic-bezier(0.16, 1, 0.3, 1);
   user-select: none;
-  height: 36px;
+  height: 32px;
 }
 
 .wb-btn:hover {
-  background: #f1f5f9;
+  background: #f8fafc;
   border-color: #94a3b8;
   color: #0f172a;
 }
 
 .wb-btn:active {
-  transform: scale(0.98);
+  transform: translateY(1px);
 }
 
 .wb-btn:disabled {
@@ -183,81 +183,115 @@
   color: #94a3b8;
 }
 
-.wb-btn.active {
-  background: #0f1115;
-  border-color: #0f1115;
-  color: #ffffff;
+/* Segmented Control Switch (Linear / Figma style) */
+.wb-segmented-group {
+  display: inline-flex;
+  align-items: center;
+  background: #f1f5f9;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  padding: 3px;
+  gap: 3px;
 }
 
+.wb-segmented-group .tool-btn,
+.wb-segmented-group .wb-btn {
+  border: none !important;
+  background: transparent !important;
+  color: #475569 !important;
+  height: 28px !important;
+  padding: 0 10px !important;
+  border-radius: 4px !important;
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  transition: all 0.12s ease !important;
+  box-shadow: none !important;
+}
+
+.wb-segmented-group .tool-btn:hover,
+.wb-segmented-group .wb-btn:hover {
+  background: rgba(0, 0, 0, 0.05) !important;
+  color: #0f172a !important;
+}
+
+.wb-segmented-group .tool-btn.active {
+  background: #ffffff !important;
+  color: #0f172a !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12) !important;
+  font-weight: 700 !important;
+}
+
+.wb-segmented-group .tool-btn.wb-btn-danger:hover {
+  background: #fee2e2 !important;
+  color: #b91c1c !important;
+}
+
+/* Primary Action Button (+ Choose Symbol) */
 .wb-btn-primary {
-  background: #d97706;
-  border-color: #f59e0b;
+  background: #2563eb;
+  border-color: #1d4ed8;
   color: #ffffff;
-}
-
-.wb-btn-primary:hover {
-  background: #b45309;
-  border-color: #d97706;
-  color: #ffffff;
-}
-
-.wb-btn-accent {
-  background: #e9bd4f;
-  border-color: #d4a532;
-  color: #14233b;
   font-weight: 700;
 }
 
-.wb-btn-accent:hover {
-  background: #dfb23e;
+.wb-btn-primary:hover {
+  background: #1d4ed8;
+  border-color: #1e40af;
+  color: #ffffff;
+}
+
+.track-seq .wb-btn-primary {
+  background: #c2410c;
+  border-color: #9a3412;
+  color: #ffffff;
+}
+
+.track-seq .wb-btn-primary:hover {
+  background: #9a3412;
+  border-color: #7c2d12;
+  color: #ffffff;
+}
+
+.wb-btn-blank,
+.wb-btn-save,
+.wb-btn-library {
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  color: #334155;
+  font-weight: 600;
+}
+
+.wb-btn-blank:hover,
+.wb-btn-save:hover,
+.wb-btn-library:hover {
+  background: #f8fafc;
+  border-color: #94a3b8;
+  color: #0f172a;
+}
+
+.wb-btn-danger {
+  color: #b91c1c;
+  border-color: #fca5a5;
+  background: #ffffff;
 }
 
 .wb-btn-danger:hover {
   background: #fee2e2;
   border-color: #ef4444;
-  color: #b91c1c;
+  color: #991b1b;
 }
 
 .wb-btn-success {
-  background: #10b981;
-  border-color: #059669;
-  color: #ffffff;
+  background: #ffffff;
+  border-color: #cbd5e1;
+  color: #15803d;
+  font-weight: 600;
 }
 
 .wb-btn-success:hover {
-  background: #059669;
-  color: #ffffff;
-}
-
-.wb-btn-blank:hover {
-  background: #fef3c7;
-  border-color: #f59e0b;
-  color: #92400e;
-}
-
-.wb-btn-save {
   background: #f0fdf4;
   border-color: #86efac;
   color: #166534;
-  font-weight: 700;
-}
-
-.wb-btn-save:hover {
-  background: #dcfce7;
-  border-color: #22c55e;
-  color: #15803d;
-}
-
-.wb-btn-library {
-  background: #f8fafc;
-  border-color: #cbd5e1;
-  color: #334155;
-}
-
-.wb-btn-library:hover {
-  background: #eff6ff;
-  border-color: #3b82f6;
-  color: #1d4ed8;
 }
 
 /* Preset Dropdown */
@@ -295,18 +329,18 @@
 }
 
 .wb-status-dot {
-  width: 9px;
-  height: 9px;
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
   background: #10b981;
-  box-shadow: 0 0 6px rgba(16, 185, 129, 0.7);
-  animation: pulse-dot 2s infinite;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 .wb-status-dot.paused {
   background: #f59e0b;
-  box-shadow: 0 0 6px rgba(245, 158, 11, 0.6);
-  animation: none;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 @keyframes pulse-dot {
@@ -350,7 +384,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 10px;
+  font-size: 11px;
   color: #64748b;
   transition: all 0.15s ease;
 }
@@ -418,10 +452,10 @@
 
 .wb-palette-category-title {
   font-family: "DM Mono", monospace;
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 700;
   color: #64748b;
-  letter-spacing: 1px;
+  letter-spacing: 0.8px;
   text-transform: uppercase;
   margin-bottom: 6px;
 }
@@ -464,17 +498,17 @@
 
 .wb-palette-tag {
   font-family: "DM Mono", monospace;
-  font-size: 9px;
-  font-weight: 700;
-  padding: 2px 5px;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 6px;
   border-radius: 4px;
   background: #e2e8f0;
   color: #475569;
 }
 
-.wb-palette-tag.tag-ic { background: #dbeafe; color: #1e40af; }
-.wb-palette-tag.tag-io { background: #dcfce7; color: #166534; }
-.wb-palette-tag.tag-gate { background: #fef3c7; color: #92400e; }
+.wb-palette-tag.tag-ic { background: #f1f5f9; color: #1e40af; border: 1px solid #cbd5e1; }
+.wb-palette-tag.tag-io { background: #f1f5f9; color: #166534; border: 1px solid #cbd5e1; }
+.wb-palette-tag.tag-gate { background: #f1f5f9; color: #92400e; border: 1px solid #cbd5e1; }
 
 /* Canvas Container */
 .wb-canvas-wrap {
@@ -512,31 +546,35 @@
   user-select: none;
 }
 
-/* Tool Overlay / Hint Banner */
+/* Tool Overlay / Hint Banner (Sleek HUD Status Strip) */
 .wb-hint-bar {
   position: absolute;
-  bottom: 14px;
+  bottom: 12px;
   left: 14px;
-  background: rgba(15, 23, 42, 0.88);
-  backdrop-filter: blur(4px);
-  color: #f8fafc;
-  padding: 6px 14px;
+  background: rgba(15, 23, 42, 0.82);
+  backdrop-filter: blur(8px);
+  color: #e2e8f0;
+  padding: 4px 10px;
   border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
   font-family: "DM Mono", monospace;
   font-size: 11px;
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 8px;
   z-index: 10;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  pointer-events: none;
 }
 
 .wb-hint-badge {
-  background: #e9bd4f;
-  color: #14233b;
+  background: rgba(255, 255, 255, 0.15);
+  color: #ffffff;
   font-weight: 700;
+  font-size: 11px;
   padding: 2px 6px;
   border-radius: 3px;
+  letter-spacing: 0.5px;
 }
 
 /* Pin Hover & Wire Interactive Styles */
@@ -917,7 +955,8 @@
 .modal-preview-panel {
   display: flex;
   flex-direction: column;
-  overflow: hidden;
+  gap: 12px;
+  padding: 12px;
   background: #faf8f5;
 }
 
@@ -940,7 +979,7 @@
   top: 8px;
   left: 10px;
   font-family: "DM Mono", monospace;
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 700;
   padding: 2px 6px;
   border-radius: 4px;
@@ -1034,8 +1073,8 @@
   background: #e0e7ff;
   color: #3730a3;
   font-family: "DM Mono", monospace;
-  font-size: 10px;
-  font-weight: 800;
+  font-size: 11px;
+  font-weight: 700;
   letter-spacing: 0.6px;
   padding: 3px 7px;
   border-radius: 4px;

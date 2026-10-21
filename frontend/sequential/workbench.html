@@ -10,84 +10,93 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,400;0,500;0,700;1,400&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
-    /* Scope Drawer & Clock Strip Enhancements */
+    /* Scope Drawer & Clock Strip Enhancements (Hardware Instrument Bezel) */
     .clock-generator-bar {
       display: flex;
       align-items: center;
-      gap: 14px;
-      background: #111827;
+      gap: 12px;
+      background: #0f1115;
       color: #f8fafc;
-      padding: 6px 18px;
-      border-bottom: 1px solid #1f2937;
+      padding: 0 16px;
+      height: 40px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
       font-family: 'DM Mono', monospace;
-      font-size: 12px;
+      font-size: 11px;
       flex-shrink: 0;
       z-index: 10;
-      flex-wrap: wrap;
     }
     .clock-bar-title {
       display: flex;
       align-items: center;
       gap: 8px;
       font-weight: 700;
-      color: #fbbf24;
+      color: #fdba74;
+      font-size: 11px;
+      letter-spacing: 0.5px;
     }
     .clock-led-dot {
-      width: 10px;
-      height: 10px;
+      width: 8px;
+      height: 8px;
       border-radius: 50%;
-      background: #374151;
-      box-shadow: 0 0 0 1px #4b5563;
+      background: #27272a;
+      border: 1px solid rgba(255, 255, 255, 0.15);
       transition: background 0.08s, box-shadow 0.08s;
     }
     .clock-led-dot.on {
       background: #f59e0b;
-      box-shadow: 0 0 8px #f59e0b, 0 0 14px rgba(245, 158, 11, 0.7);
+      border-color: #d97706;
+      box-shadow: 0 1px 4px rgba(245, 158, 11, 0.5);
     }
     .clock-freq-group {
       display: inline-flex;
+      align-items: center;
       gap: 2px;
-      background: #1f2937;
+      background: #161920;
       padding: 2px;
       border-radius: 6px;
-      border: 1px solid #374151;
+      border: 1px solid rgba(255, 255, 255, 0.1);
     }
     .clock-freq-btn {
       background: transparent;
       border: none;
-      color: #9ca3af;
+      color: #94a3b8;
       padding: 3px 8px;
       font-family: 'DM Mono', monospace;
       font-size: 11px;
       font-weight: 600;
       cursor: pointer;
       border-radius: 4px;
-      transition: all 0.15s;
+      transition: all 0.12s ease;
     }
     .clock-freq-btn.active {
-      background: #d97706;
+      background: #c2410c;
       color: #ffffff;
+      font-weight: 700;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
     }
     .clock-freq-btn:hover:not(.active) {
-      color: #f3f4f6;
+      color: #ffffff;
+      background: rgba(255, 255, 255, 0.06);
     }
     .btn-step-pulse {
-      background: #d97706;
+      background: #c2410c;
       color: #ffffff;
-      border: 1px solid #f59e0b;
-      padding: 4px 12px;
-      border-radius: 6px;
+      border: 1px solid #9a3412;
+      padding: 0 10px;
+      height: 28px;
+      border-radius: 4px;
       font-family: 'DM Mono', monospace;
       font-weight: 700;
-      font-size: 12px;
+      font-size: 11px;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      transition: all 0.15s;
+      transition: all 0.12s ease;
     }
     .btn-step-pulse:hover {
-      background: #b45309;
+      background: #9a3412;
+      border-color: #7c2d12;
     }
     .btn-step-pulse:active {
       transform: translateY(1px);
@@ -96,14 +105,14 @@
     /* Logic Analyzer Scope Dock Drawer */
     .scope-dock-drawer {
       background: #090d16;
-      border-top: 2px solid #d97706;
+      border-top: 2px solid #c2410c;
       color: #f8fafc;
       display: flex;
       flex-direction: column;
       flex-shrink: 0;
       z-index: 25;
       height: 250px;
-      transition: height 0.25s ease;
+      transition: height 0.3s cubic-bezier(0.16, 1, 0.3, 1);
       position: relative;
     }
     .scope-dock-drawer.collapsed {
@@ -116,10 +125,11 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 6px 16px;
-      background: #0f172a;
-      border-bottom: 1px solid #1e293b;
-      font-size: 12px;
+      padding: 0 16px;
+      height: 38px;
+      background: #0f1115;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      font-size: 11px;
       font-family: 'DM Mono', monospace;
       user-select: none;
     }
@@ -136,29 +146,36 @@
       font-size: 11px;
     }
     .scope-legend-color {
-      width: 9px;
-      height: 9px;
+      width: 8px;
+      height: 8px;
       border-radius: 2px;
     }
     .scope-btn {
-      background: #1e293b;
-      border: 1px solid #334155;
+      background: #161920;
+      border: 1px solid rgba(255, 255, 255, 0.12);
       color: #cbd5e1;
-      padding: 3px 8px;
+      padding: 0 10px;
+      height: 28px;
       border-radius: 4px;
       font-family: 'DM Mono', monospace;
       font-size: 11px;
+      font-weight: 600;
       cursor: pointer;
-      transition: all 0.15s;
+      transition: all 0.12s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
     }
     .scope-btn:hover {
-      background: #334155;
+      background: #222630;
       color: #ffffff;
+      border-color: rgba(255, 255, 255, 0.2);
     }
     .scope-btn.active {
-      background: #d97706;
-      border-color: #f59e0b;
+      background: #c2410c;
+      border-color: #9a3412;
       color: #ffffff;
+      font-weight: 700;
     }
     #scope-canvas {
       display: block;
@@ -252,27 +269,33 @@
 
       <div class="wb-toolbar-divider"></div>
 
-      <button class="wb-btn tool-btn active" id="btn-tool-select" title="Select & Move Tool (Shortcut: S)">
-        <span>↖ Select [S]</span>
-      </button>
+      <!-- Segmented Tool Switch (Linear / Tinkercad style) -->
+      <div class="wb-segmented-group" title="Interaction Tool Mode">
+        <button class="wb-btn tool-btn active" id="btn-tool-select" title="Select & Move Tool (Shortcut: S)">
+          <span>↖ Select [S]</span>
+        </button>
 
-      <button class="wb-btn tool-btn" id="btn-tool-wire" title="Draw Manhattan Wire (Shortcut: W)">
-        <span>⚡ Wire [W]</span>
-      </button>
+        <button class="wb-btn tool-btn" id="btn-tool-wire" title="Draw Manhattan Wire (Shortcut: W)">
+          <span>⚡ Wire [W]</span>
+        </button>
 
-      <button class="wb-btn tool-btn wb-btn-danger" id="btn-tool-delete" title="Delete Selected Item (Shortcut: Del)">
-        <span>🗑 Delete [Del]</span>
-      </button>
+        <button class="wb-btn tool-btn wb-btn-danger" id="btn-tool-delete" title="Delete Selected Item (Shortcut: Del)">
+          <span>🗑 Delete [Del]</span>
+        </button>
+      </div>
 
       <div class="wb-toolbar-divider"></div>
 
-      <button class="wb-btn" id="btn-undo" title="Undo Action (Shortcut: Ctrl+Z)" disabled>
-        <span>↩ Undo</span>
-      </button>
+      <!-- History Segmented Group -->
+      <div class="wb-segmented-group" title="Undo / Redo History">
+        <button class="wb-btn" id="btn-undo" title="Undo Action (Shortcut: Ctrl+Z)" disabled>
+          <span>↩</span>
+        </button>
 
-      <button class="wb-btn" id="btn-redo" title="Redo Action (Shortcut: Ctrl+Y)" disabled>
-        <span>↪ Redo</span>
-      </button>
+        <button class="wb-btn" id="btn-redo" title="Redo Action (Shortcut: Ctrl+Y)" disabled>
+          <span>↪</span>
+        </button>
+      </div>
 
       <div class="wb-toolbar-divider"></div>
 

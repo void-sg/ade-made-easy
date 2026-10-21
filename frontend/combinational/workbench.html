@@ -94,27 +94,33 @@
 
       <div class="wb-toolbar-divider"></div>
 
-      <button class="wb-btn tool-btn active" id="btn-tool-select" title="Select & Move Tool (Shortcut: S)">
-        <span>↖ Select [S]</span>
-      </button>
+      <!-- Segmented Tool Switch (Linear / Tinkercad style) -->
+      <div class="wb-segmented-group" title="Interaction Tool Mode">
+        <button class="wb-btn tool-btn active" id="btn-tool-select" title="Select & Move Tool (Shortcut: S)">
+          <span>↖ Select [S]</span>
+        </button>
 
-      <button class="wb-btn tool-btn" id="btn-tool-wire" title="Draw Manhattan Wire (Shortcut: W)">
-        <span>⚡ Wire [W]</span>
-      </button>
+        <button class="wb-btn tool-btn" id="btn-tool-wire" title="Draw Manhattan Wire (Shortcut: W)">
+          <span>⚡ Wire [W]</span>
+        </button>
 
-      <button class="wb-btn tool-btn wb-btn-danger" id="btn-tool-delete" title="Delete Selected Item (Shortcut: Del)">
-        <span>🗑 Delete [Del]</span>
-      </button>
+        <button class="wb-btn tool-btn wb-btn-danger" id="btn-tool-delete" title="Delete Selected Item (Shortcut: Del)">
+          <span>🗑 Delete [Del]</span>
+        </button>
+      </div>
 
       <div class="wb-toolbar-divider"></div>
 
-      <button class="wb-btn" id="btn-undo" title="Undo Action (Shortcut: Ctrl+Z)" disabled>
-        <span>↩ Undo</span>
-      </button>
+      <!-- History Segmented Group -->
+      <div class="wb-segmented-group" title="Undo / Redo History">
+        <button class="wb-btn" id="btn-undo" title="Undo Action (Shortcut: Ctrl+Z)" disabled>
+          <span>↩</span>
+        </button>
 
-      <button class="wb-btn" id="btn-redo" title="Redo Action (Shortcut: Ctrl+Y)" disabled>
-        <span>↪ Redo</span>
-      </button>
+        <button class="wb-btn" id="btn-redo" title="Redo Action (Shortcut: Ctrl+Y)" disabled>
+          <span>↪</span>
+        </button>
+      </div>
 
       <div class="wb-toolbar-divider"></div>
 
