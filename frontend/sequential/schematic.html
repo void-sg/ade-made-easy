@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sequential Schematics | ADE Made Easy</title>
+  <link rel="stylesheet" href="../shared/ui-components.css">
+  <link rel="stylesheet" href="../circuit-viewer.css">
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body class="track-seq">
+
+  <!-- Symmetrical Global Header -->
+  <header class="ade-global-header">
+    <div class="ade-header-wrap">
+      <a class="ade-brand" href="../index.html">
+        <span class="ade-brand-badge">ADE</span>
+        <span class="ade-brand-text">
+          <strong>ADE Made Easy</strong>
+          <small>Concept to Silicon</small>
+        </span>
+      </a>
+
+      <nav class="ade-segment-switcher">
+        <a href="../combinational/index.html" class="segment-toggle-btn">
+          <span class="icon">🔷</span>
+          <span>Combinational Track</span>
+        </a>
+        <a href="index.html" class="segment-toggle-btn active-sequential">
+          <span class="icon">🔶</span>
+          <span>Sequential Track</span>
+        </a>
+      </nav>
+
+      <div class="ade-header-right">
+        <a href="../index.html" class="hub-nav-link">🏠 Main Hub</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- 4-Part Subsystem Navigation -->
+  <nav class="subsystem-subnav">
+    <div class="subsystem-nav-wrap">
+      <div class="subsystem-tabs">
+        <a href="index.html" class="subsystem-tab-link">
+          <span class="step-num">0</span>
+          <span>Track Overview</span>
+        </a>
+        <a href="theory.html" class="subsystem-tab-link">
+          <span class="step-num">1</span>
+          <span>Theory &amp; Excitation</span>
+        </a>
+        <a href="schematic.html" class="subsystem-tab-link active">
+          <span class="step-num">2</span>
+          <span>Vector Schematics</span>
+        </a>
+        <a href="workbench.html" class="subsystem-tab-link">
+          <span class="step-num">3</span>
+          <span>Clocked Workbench &amp; Scope</span>
+        </a>
+        <a href="applications.html" class="subsystem-tab-link">
+          <span class="step-num">4</span>
+          <span>FSMs &amp; VLSI Timing</span>
+        </a>
+      </div>
+      <div class="subsystem-track-indicator indicator-seq">
+        🔶 PART 2 &bull; SEQUENTIAL VECTOR SCHEMATICS &bull; CLOCKED NET TRACING
+      </div>
+    </div>
+  </nav>
+
+  <div class="schematic-page-container" style="max-width: 1240px; margin: 24px auto; padding: 0 20px;">
+    <!-- Title & Description -->
+    <div class="schematic-header-intro" style="margin-bottom: 20px;">
+      <p class="label" style="font-family: 'DM Mono', monospace; font-size: 11px; font-weight: 700; color: #d97706; letter-spacing: 1px; margin-bottom: 4px;">
+        PART 2 OF 4 • ANSI/IEEE VECTOR SCHEMATICS &bull; CLOCK EXCITATION &bull; ASYNC OVERRIDES
+      </p>
+      <h1 style="font-size: 28px; color: var(--navy); margin-bottom: 6px;">Sequential Circuit Schematic Blueprint</h1>
+      <p style="color: var(--muted); font-size: 14px;">
+        Interactive, data-driven vector schematics with clock-edge triggering, active-low preset/clear overrides, mode selection, and live net tracing for TTL MSI sequential ICs.
+      </p>
+    </div>
+
+    <!-- Circuit Selector Tabs (Sequential Only) -->
+    <div class="circuit-tabs-nav">
+      <button class="circuit-tab-btn active" data-circuit="counter_74ls90">
+        <span>BCD Decade Counter</span>
+        <span class="tab-badge">IC 74LS90</span>
+      </button>
+      <button class="circuit-tab-btn" data-circuit="counter_74ls93">
+        <span>4-Bit Binary Counter</span>
+        <span class="tab-badge">IC 74LS93</span>
+      </button>
+      <button class="circuit-tab-btn" data-circuit="flipflop_74ls74">
+        <span>Dual D Flip-Flop</span>
+        <span class="tab-badge">IC 74LS74</span>
+      </button>
+      <button class="circuit-tab-btn" data-circuit="flipflop_74ls76">
+        <span>Master-Slave JK FF</span>
+        <span class="tab-badge">IC 74LS76</span>
+      </button>
+      <button class="circuit-tab-btn" data-circuit="shiftreg_74ls194">
+        <span>Universal Shift Register</span>
+        <span class="tab-badge">IC 74LS194</span>
+      </button>
+    </div>
+
+    <!-- =====================================================================
+         CONTROL DECK 1: DECADE / BCD COUNTER (IC 74LS90)
+         ===================================================================== -->
+    <div class="circuit-control-deck circuit-deck-section" id="deck-counter90">
+      <div class="deck-row">
+        <!-- Clock Controls -->
+        <div class="deck-group">
+          <span class="deck-group-label">CLOCK EXCITATION</span>
+          <div style="display: inline-flex; gap: 8px;">
+            <button class="btn-sm active" id="btn-clk-step-90" style="font-family: 'DM Mono', monospace; font-weight: 700;">⚡ Pulse Clock A (CP0)</button>
+            <button class="btn-sm" id="btn-clk-b-step-90" style="font-family: 'DM Mono', monospace;">⚡ Pulse Clock B (CP1)</button>
+            <button class="btn-sm" id="btn-clk-auto-90" style="font-family: 'DM Mono', monospace;">▶ Auto 1Hz</button>
+          </div>
+        </div>
+
+        <!-- Result Card -->
+        <div class="output-display-card">
+          <div>
+            <div class="output-display-label">BCD COUNT OUTPUT (QA..QD)</div>
+            <div style="display: flex; gap: 10px; align-items: center; margin-top: 4px;">
+              <span class="status-badge" id="c90-mod-badge" style="background:#fef3c7; color:#92400e; border-color:#fde68a;">Mod-10 (BCD)</span>
+              <span style="font-family: 'DM Mono', monospace; font-size: 20px; font-weight: 800; color: #d97706;" id="c90-dec-val">0</span>
+              <span style="font-family: 'DM Mono', monospace; font-size: 14px; color: #64748b;" id="c90-bin-val">[QD..QA: 0000]</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Resets & Cascade Loop -->
+      <div class="deck-row" style="margin-top: 14px; padding-top: 12px; border-top: 1px solid #f1f5f9;">
+        <div class="deck-group">
+          <span class="deck-group-label">MASTER RESETS (R0: CLEAR TO 0000)</span>
+          <div class="bit-btn-group">
+            <button class="bit-toggle-btn" id="btn-r0-1-90" data-group="c90-r0" data-index="1" title="Reset-to-0 Gate Input 1"><span class="bit-label">R₀(1) [Pin 2]</span><span class="bit-val">0</span></button>
+            <button class="bit-toggle-btn" id="btn-r0-2-90" data-group="c90-r0" data-index="2" title="Reset-to-0 Gate Input 2"><span class="bit-label">R₀(2) [Pin 3]</span><span class="bit-val">0</span></button>
+          </div>
+        </div>
+
+        <div class="deck-group">
+          <span class="deck-group-label">MASTER PRESETS (R9: SET TO 1001)</span>
+          <div class="bit-btn-group">
+            <button class="bit-toggle-btn" id="btn-r9-1-90" data-group="c90-r9" data-index="1" title="Set-to-9 Gate Input 1"><span class="bit-label">R₉(1) [Pin 6]</span><span class="bit-val">0</span></button>
+            <button class="bit-toggle-btn" id="btn-r9-2-90" data-group="c90-r9" data-index="2" title="Set-to-9 Gate Input 2"><span class="bit-label">R₉(2) [Pin 7]</span><span class="bit-val">0</span></button>
+          </div>
+        </div>
+
+        <div class="deck-group">
+          <span class="deck-group-label">CASCADE LINK</span>
+          <button class="btn-sm active" id="btn-cascade-90" title="Connect QA (Pin 12) to CP1 (Pin 1)">🔗 QA ➔ CP1 (Jumper ON)</button>
+        </div>
+      </div>
+
+      <div class="action-presets-row">
+        <div class="preset-btn-list">
+          <span style="font-size: 12px; font-weight: 600; color: #64748b; align-self: center;">Presets:</span>
+          <button class="btn-sm" data-preset="c90-mod10">Mod-10 (BCD 0..9)</button>
+          <button class="btn-sm" data-preset="c90-mod6">Mod-6 (Reset at 6: QC·QB)</button>
+          <button class="btn-sm" data-preset="c90-mod5">Mod-5 (CP1 Alone)</button>
+          <button class="btn-sm" data-preset="c90-mod2">Mod-2 (CP0 Alone)</button>
+          <button class="btn-sm" data-preset="c90-force-r0">Master Reset (0000)</button>
+          <button class="btn-sm" data-preset="c90-force-r9">Preset-9 (1001)</button>
+          <button class="btn-sm" data-preset="c90-reset-count">Zero Count</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- =====================================================================
+         CONTROL DECK 2: 4-BIT BINARY COUNTER (IC 74LS93)
+         ===================================================================== -->
+    <div class="circuit-control-deck circuit-deck-section" id="deck-counter93" style="display: none;">
+      <div class="deck-row">
+        <!-- Clock Controls -->
+        <div class="deck-group">
+          <span class="deck-group-label">CLOCK EXCITATION</span>
+          <div style="display: inline-flex; gap: 8px;">
+            <button class="btn-sm active" id="btn-clk-step-93" style="font-family: 'DM Mono', monospace; font-weight: 700;">⚡ Pulse Clock A (CP0)</button>
+            <button class="btn-sm" id="btn-clk-b-step-93" style="font-family: 'DM Mono', monospace;">⚡ Pulse Clock B (CP1)</button>
+            <button class="btn-sm" id="btn-clk-auto-93" style="font-family: 'DM Mono', monospace;">▶ Auto 1Hz</button>
+          </div>
+        </div>
+
+        <!-- Result Card -->
+        <div class="output-display-card">
+          <div>
+            <div class="output-display-label">BINARY COUNT OUTPUT (QA..QD)</div>
+            <div style="display: flex; gap: 10px; align-items: center; margin-top: 4px;">
+              <span class="status-badge" id="c93-mod-badge" style="background:#ecfdf5; color:#065f46; border-color:#a7f3d0;">Mod-16 (0..15)</span>
+              <span style="font-family: 'DM Mono', monospace; font-size: 20px; font-weight: 800; color: #10b981;" id="c93-dec-val">0</span>
+              <span style="font-family: 'DM Mono', monospace; font-size: 14px; color: #64748b;" id="c93-bin-val">[QD..QA: 0000]</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Resets & Cascade Loop -->
+      <div class="deck-row" style="margin-top: 14px; padding-top: 12px; border-top: 1px solid #f1f5f9;">
+        <div class="deck-group">
+          <span class="deck-group-label">MASTER RESETS (R0: CLEAR TO 0000)</span>
+          <div class="bit-btn-group">
+            <button class="bit-toggle-btn" id="btn-r0-1-93" data-group="c93-r0" data-index="1" title="Reset-to-0 Gate Input 1"><span class="bit-label">R₀(1) [Pin 2]</span><span class="bit-val">0</span></button>
+            <button class="bit-toggle-btn" id="btn-r0-2-93" data-group="c93-r0" data-index="2" title="Reset-to-0 Gate Input 2"><span class="bit-label">R₀(2) [Pin 3]</span><span class="bit-val">0</span></button>
+          </div>
+        </div>
+
+        <div class="deck-group">
+          <span class="deck-group-label">CASCADE LINK</span>
+          <button class="btn-sm active" id="btn-cascade-93" title="Connect QA (Pin 12) to CP1 (Pin 1)">🔗 QA ➔ CP1 (Jumper ON)</button>
+        </div>
+      </div>
+
+      <div class="action-presets-row">
+        <div class="preset-btn-list">
+          <span style="font-size: 12px; font-weight: 600; color: #64748b; align-self: center;">Presets:</span>
+          <button class="btn-sm" data-preset="c93-mod16">Mod-16 (0..15 Full)</button>
+          <button class="btn-sm" data-preset="c93-mod12">Mod-12 (Reset at 12: QD·QC)</button>
+          <button class="btn-sm" data-preset="c93-mod8">Mod-8 (CP1 Alone)</button>
+          <button class="btn-sm" data-preset="c93-mod2">Mod-2 (CP0 Alone)</button>
+          <button class="btn-sm" data-preset="c93-force-r0">Master Reset (0000)</button>
+          <button class="btn-sm" data-preset="c93-reset-count">Zero Count</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- =====================================================================
+         CONTROL DECK 3: D FLIP-FLOP (IC 74LS74)
+         ===================================================================== -->
+    <div class="circuit-control-deck circuit-deck-section" id="deck-ff74" style="display: none;">
+      <div class="deck-row">
+        <div class="deck-group">
+          <span class="deck-group-label">CLOCK &amp; DATA</span>
+          <button class="btn-sm active" id="btn-clk-pulse-74" style="font-family: 'DM Mono', monospace; font-weight: 700;">⚡ Pulse Clock (↑ Positive Edge)</button>
+          <div class="bit-btn-group">
+            <button class="bit-toggle-btn" id="btn-d-74" title="Toggle Data Input D">
+              <span class="bit-label">1D [Pin 2]</span>
+              <span class="bit-val">0</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="deck-group">
+          <span class="deck-group-label">ASYNC OVERRIDES (ACTIVE-LOW)</span>
+          <div class="bit-btn-group">
+            <button class="bit-toggle-btn" id="btn-pr-74" title="Active-Low Preset (0=Preset Q=1)">
+              <span class="bit-label">~1PR [Pin 4]</span>
+              <span class="bit-val">1</span>
+            </button>
+            <button class="bit-toggle-btn" id="btn-clr-74" title="Active-Low Clear (0=Clear Q=0)">
+              <span class="bit-label">~1CLR [Pin 1]</span>
+              <span class="bit-val">1</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="output-display-card">
+          <div>
+            <div class="output-display-label">FLIP-FLOP OUTPUTS</div>
+            <div style="display: flex; gap: 14px; align-items: center; margin-top: 4px;">
+              <div style="display: flex; align-items: center; gap: 6px;">
+                <span style="font-family: 'DM Mono', monospace; font-size: 12px; font-weight: 700; color: #64748b;">1Q:</span>
+                <span class="output-led" id="ff74-q-led">0</span>
+              </div>
+              <div style="display: flex; align-items: center; gap: 6px;">
+                <span style="font-family: 'DM Mono', monospace; font-size: 12px; font-weight: 700; color: #64748b;">~1Q:</span>
+                <span class="output-led on" id="ff74-qbar-led">1</span>
+              </div>
+            </div>
+            <div class="status-badge" id="ff74-status-desc" style="margin-top: 6px;">Active Data State: D=0 -> Q=0 on Clock Edge</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="action-presets-row" style="margin-top: 14px; padding-top: 12px; border-top: 1px solid #f1f5f9;">
+        <div class="preset-btn-list">
+          <span style="font-size: 12px; font-weight: 600; color: #64748b; align-self: center;">Presets:</span>
+          <button class="btn-sm" data-preset="ff74-d-high">Set D = 1</button>
+          <button class="btn-sm" data-preset="ff74-d-low">Set D = 0</button>
+          <button class="btn-sm" data-preset="ff74-pr-assert">Assert ~Preset (~PR=0)</button>
+          <button class="btn-sm" data-preset="ff74-clr-assert">Assert ~Clear (~CLR=0)</button>
+          <button class="btn-sm" data-preset="ff74-forbidden">Forbidden (~PR=~CLR=0)</button>
+          <button class="btn-sm" data-preset="ff74-reset">Reset All</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- =====================================================================
+         CONTROL DECK 4: MASTER-SLAVE JK FLIP-FLOP (IC 74LS76)
+         ===================================================================== -->
+    <div class="circuit-control-deck circuit-deck-section" id="deck-ff76" style="display: none;">
+      <div class="deck-row">
+        <div class="deck-group">
+          <span class="deck-group-label">CLOCK EXCITATION</span>
+          <button class="btn-sm active" id="btn-clk-pulse-76" style="font-family: 'DM Mono', monospace; font-weight: 700;">⚡ Pulse Clock (↓ Negative Edge)</button>
+        </div>
+
+        <div class="deck-group">
+          <span class="deck-group-label">INPUTS (J, K)</span>
+          <div class="bit-btn-group">
+            <button class="bit-toggle-btn" id="btn-j-76" title="Toggle J Input">
+              <span class="bit-label">1J [Pin 1]</span>
+              <span class="bit-val">0</span>
+            </button>
+            <button class="bit-toggle-btn" id="btn-k-76" title="Toggle K Input">
+              <span class="bit-label">1K [Pin 4]</span>
+              <span class="bit-val">0</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="deck-group">
+          <span class="deck-group-label">OVERRIDES</span>
+          <div class="bit-btn-group">
+            <button class="bit-toggle-btn" id="btn-pr-76" title="Active-Low Preset">
+              <span class="bit-label">~1PR [Pin 2]</span>
+              <span class="bit-val">1</span>
+            </button>
+            <button class="bit-toggle-btn" id="btn-clr-76" title="Active-Low Clear">
+              <span class="bit-label">~1CLR [Pin 3]</span>
+              <span class="bit-val">1</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="output-display-card">
+          <div>
+            <div class="output-display-label">JK OUTPUTS (1Q, ~1Q)</div>
+            <div style="display: flex; gap: 14px; align-items: center; margin-top: 4px;">
+              <div style="display: flex; align-items: center; gap: 6px;">
+                <span style="font-family: 'DM Mono', monospace; font-size: 12px; font-weight: 700; color: #64748b;">1Q:</span>
+                <span class="output-led" id="ff76-q-led">0</span>
+              </div>
+              <div style="display: flex; align-items: center; gap: 6px;">
+                <span style="font-family: 'DM Mono', monospace; font-size: 12px; font-weight: 700; color: #64748b;">~1Q:</span>
+                <span class="output-led on" id="ff76-qbar-led">1</span>
+              </div>
+            </div>
+            <div class="status-badge" id="ff76-status-desc" style="margin-top: 6px;">HOLD NO-CHANGE (J=0, K=0): Q=0 preserved</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="action-presets-row" style="margin-top: 14px; padding-top: 12px; border-top: 1px solid #f1f5f9;">
+        <div class="preset-btn-list">
+          <span style="font-size: 12px; font-weight: 600; color: #64748b; align-self: center;">Presets:</span>
+          <button class="btn-sm" data-preset="ff76-toggle">Toggle Mode (J=1, K=1)</button>
+          <button class="btn-sm" data-preset="ff76-set">Set Mode (J=1, K=0)</button>
+          <button class="btn-sm" data-preset="ff76-reset">Reset Mode (J=0, K=1)</button>
+          <button class="btn-sm" data-preset="ff76-hold">Hold Mode (J=0, K=0)</button>
+          <button class="btn-sm" data-preset="ff76-pr-assert">Assert Preset (~PR=0)</button>
+          <button class="btn-sm" data-preset="ff76-clr-assert">Assert Clear (~CLR=0)</button>
+          <button class="btn-sm" data-preset="ff76-reset-all">Reset All</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- =====================================================================
+         CONTROL DECK 5: UNIVERSAL SHIFT REGISTER (IC 74LS194)
+         ===================================================================== -->
+    <div class="circuit-control-deck circuit-deck-section" id="deck-sr194" style="display: none;">
+      <div class="deck-row">
+        <div class="deck-group">
+          <span class="deck-group-label">MODE SELECT (S₁ S₀)</span>
+          <div class="bit-btn-group">
+            <button class="bit-toggle-btn" id="btn-s1-194" title="Mode Select S1">
+              <span class="bit-label">S₁ [Pin 9]</span>
+              <span class="bit-val">0</span>
+            </button>
+            <button class="bit-toggle-btn" id="btn-s0-194" title="Mode Select S0">
+              <span class="bit-label">S₀ [Pin 10]</span>
+              <span class="bit-val">0</span>
+            </button>
+          </div>
+          <button class="btn-sm active" id="btn-clk-pulse-194" style="font-family: 'DM Mono', monospace; font-weight: 700;">⚡ Pulse Clock (↑ Rising Edge)</button>
+        </div>
+
+        <div class="deck-group">
+          <span class="deck-group-label">SERIAL INPUTS</span>
+          <div class="bit-btn-group">
+            <button class="bit-toggle-btn" id="btn-srin-194" title="Serial Input for Shift-Right">
+              <span class="bit-label">SR_IN [Pin 2]</span>
+              <span class="bit-val">0</span>
+            </button>
+            <button class="bit-toggle-btn" id="btn-slin-194" title="Serial Input for Shift-Left">
+              <span class="bit-label">SL_IN [Pin 7]</span>
+              <span class="bit-val">0</span>
+            </button>
+            <button class="bit-toggle-btn" id="btn-clr-194" title="Active-Low Master Reset">
+              <span class="bit-label">~CLR [Pin 1]</span>
+              <span class="bit-val">1</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="output-display-card">
+          <div>
+            <div class="output-display-label">PARALLEL OUTPUT (QA..QD)</div>
+            <div style="display: flex; gap: 10px; align-items: center; margin-top: 4px;">
+              <span class="status-badge" id="sr194-mode-badge" style="background:#fef3c7; color:#92400e; border-color:#fde68a;">Hold (00)</span>
+              <span style="font-family: 'DM Mono', monospace; font-size: 20px; font-weight: 800; color: #d97706;" id="sr194-q-led">0000</span>
+            </div>
+            <div class="status-badge" id="sr194-status-desc" style="margin-top: 6px;">HOLD: State [0000] unchanged on clock pulse</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Parallel Load Inputs -->
+      <div class="deck-row" style="margin-top: 14px; padding-top: 12px; border-top: 1px solid #f1f5f9;">
+        <div class="deck-group">
+          <span class="deck-group-label">PARALLEL INPUTS (A..D)</span>
+          <div class="bit-btn-group">
+            <button class="bit-toggle-btn" data-parallel-in="0"><span class="bit-label">A [Pin 3]</span><span class="bit-val">0</span></button>
+            <button class="bit-toggle-btn" data-parallel-in="1"><span class="bit-label">B [Pin 4]</span><span class="bit-val">0</span></button>
+            <button class="bit-toggle-btn" data-parallel-in="2"><span class="bit-label">C [Pin 5]</span><span class="bit-val">0</span></button>
+            <button class="bit-toggle-btn" data-parallel-in="3"><span class="bit-label">D [Pin 6]</span><span class="bit-val">0</span></button>
+          </div>
+          <span style="font-size: 11px; color: #64748b;">(Active only when S₁S₀ = 11: Parallel Load)</span>
+        </div>
+      </div>
+
+      <div class="action-presets-row">
+        <div class="preset-btn-list">
+          <span style="font-size: 12px; font-weight: 600; color: #64748b; align-self: center;">Presets:</span>
+          <button class="btn-sm" data-preset="sr194-load-1010">Parallel Load: 1010</button>
+          <button class="btn-sm" data-preset="sr194-shift-right">Shift Right with 1</button>
+          <button class="btn-sm" data-preset="sr194-shift-left">Shift Left with 1</button>
+          <button class="btn-sm" data-preset="sr194-hold">Hold Mode (00)</button>
+          <button class="btn-sm" data-preset="sr194-clear">Clear (~CLR=0)</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- API Status Pill -->
+    <div style="display: flex; justify-content: flex-end; margin-bottom: 8px;">
+      <div class="api-status-pill">
+        <span class="status-dot" id="api-status-dot"></span>
+        <span id="api-status-text">Connecting...</span>
+      </div>
+    </div>
+
+    <!-- KiCad Schematic Viewport -->
+    <div class="schematic-viewport">
+      <svg id="schematic-svg" class="schematic-svg" xmlns="http://www.w3.org/2000/svg" width="100%" height="700"></svg>
+
+      <!-- Viewport Overlay Toolbar -->
+      <div class="schematic-toolbar">
+        <button class="schematic-btn" id="btn-zoom-in" title="Zoom In (+)">🔍 +</button>
+        <button class="schematic-btn" id="btn-zoom-out" title="Zoom Out (-)">🔍 -</button>
+        <button class="schematic-btn" id="btn-zoom-reset" title="Reset View (1:1)">1:1</button>
+      </div>
+    </div>
+
+    <!-- Dynamic Flow Explainer Cards (Sequential) -->
+    <div class="flow-explainer-card circuit-flow-card" id="flow-counter90">
+      <h3>IC 74LS90 Decade / BCD Counter Architecture</h3>
+      <div class="flow-steps">
+        <div class="flow-step-item">
+          <div class="flow-step-title">1. Asynchronous Dual Section Structure</div>
+          <div>Contains a divide-by-two section (clocked by CP0 into QA) and a divide-by-five section (clocked by CP1 into QB, QC, QD). Jumpering QA to CP1 produces a complete BCD Mod-10 decade counter (0 to 9).</div>
+        </div>
+        <div class="flow-step-item">
+          <div class="flow-step-title">2. Mod-6 Digital Clock Synthesis</div>
+          <div>To build a Mod-6 counter (minutes/seconds tens digit: 0..5), outputs QC (Pin 8) and QB (Pin 9) are tied back to reset inputs R₀(1) and R₀(2). At state 6 (0110), the gated reset instantly clears the counter back to 0000.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flow-explainer-card circuit-flow-card" id="flow-counter93" style="display: none;">
+      <h3>IC 74LS93 4-Bit Binary Ripple Counter Architecture</h3>
+      <div class="flow-steps">
+        <div class="flow-step-item">
+          <div class="flow-step-title">1. Cascaded Divide-by-2 and Divide-by-8</div>
+          <div>Clock CP0 drives the LSB flip-flop QA. Connecting QA to CP1 cascades the divide-by-8 section (QB, QC, QD), producing a 4-bit binary ripple counter cycling from 0000 (0) to 1111 (15).</div>
+        </div>
+        <div class="flow-step-item">
+          <div class="flow-step-title">2. Mod-12 Truncated Counter Reset</div>
+          <div>By feeding back QD (Pin 11) and QC (Pin 8) into the active-high reset-to-zero gates R₀(1) and R₀(2), the counter automatically resets upon reaching decimal 12 (binary 1100), producing a standard Mod-12 counter (0..11).</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flow-explainer-card circuit-flow-card" id="flow-ff74" style="display: none;">
+      <h3>IC 74LS74 Dual D-Type Positive-Edge-Triggered Flip-Flop Architecture</h3>
+      <div class="flow-steps">
+        <div class="flow-step-item">
+          <div class="flow-step-title">1. Data Storage &amp; Edge Triggering</div>
+          <div>On the low-to-high transition (↑) of the clock pulse (CP), data present at D is transferred to output Q ($Q_{n+1} = D$). Setup and hold timing constraints must be respected before and after the edge.</div>
+        </div>
+        <div class="flow-step-item">
+          <div class="flow-step-title">2. Asynchronous Overrides</div>
+          <div>Active-Low Preset (~PR) and Clear (~CLR) override clock and data. If ~PR=0, Q is forced to 1. If ~CLR=0, Q is forced to 0. Setting both ~PR=~CLR=0 creates a forbidden indeterminate condition.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flow-explainer-card circuit-flow-card" id="flow-ff76" style="display: none;">
+      <h3>IC 74LS76 Dual Master-Slave J-K Flip-Flop Architecture</h3>
+      <div class="flow-steps">
+        <div class="flow-step-item">
+          <div class="flow-step-title">1. Eliminating the Race-Around Condition</div>
+          <div>Two internal latches (Master and Slave) isolate input sampling from output switching. The Master samples J and K while the clock pulse is high, and the Slave updates the outputs Q and ~Q on the falling edge (↓).</div>
+        </div>
+        <div class="flow-step-item">
+          <div class="flow-step-title">2. The Toggle State (J=1, K=1)</div>
+          <div>Unlike SR flip-flops where S=R=1 is forbidden, the JK flip-flop inverts its output state on every clock pulse ($Q_{n+1} = \overline{Q}_n$), serving as the fundamental building block for frequency dividers and binary ripple counters.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flow-explainer-card circuit-flow-card" id="flow-sr194" style="display: none;">
+      <h3>IC 74LS194 4-Bit Bidirectional Universal Shift Register Architecture</h3>
+      <div class="flow-steps">
+        <div class="flow-step-item">
+          <div class="flow-step-title">1. 4 Operational Modes via Mode Select</div>
+          <div>The control lines S₁ and S₀ determine register behavior: 00 = Hold (no clock effect), 01 = Shift Right ($Q_A \leftarrow SR\_IN$), 10 = Shift Left ($Q_D \leftarrow SL\_IN$), 11 = Parallel Load ($Q_A..Q_D \leftarrow A..D$).</div>
+        </div>
+        <div class="flow-step-item">
+          <div class="flow-step-title">2. Multi-Purpose System Roles</div>
+          <div>Implements SISO (digital delay line), SIPO (UART serial receiver), PISO (UART serial transmitter), PIPO (high-speed CPU data bus buffer), Ring Counters, and Johnson (Twisted-Ring) Counters.</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <footer>
+    <p>ADE Made Easy • Segment 2: Sequential Logic Track</p>
+  </footer>
+
+  <script src="../config.js"></script>
+  <script src="../shared/auth.js"></script>
+  <script src="../user-menu.js"></script>
+  <script src="../circuit-viewer.js"></script>
+</body>
+</html>

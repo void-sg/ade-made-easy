@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sequential Applications, FSMs &amp; VLSI Timing | ADE Made Easy</title>
+  <link rel="stylesheet" href="../shared/ui-components.css">
+  <link rel="stylesheet" href="../style.css">
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
+</head>
+<body class="track-seq">
+
+  <!-- Symmetrical Global Header -->
+  <header class="ade-global-header">
+    <div class="ade-header-wrap">
+      <!-- 1. Brand Identity (Left) -->
+      <a class="ade-brand" href="../index.html">
+        <span class="ade-brand-badge">ADE</span>
+        <span class="ade-brand-text">
+          <strong>ADE Made Easy</strong>
+          <small>Concept to Silicon</small>
+        </span>
+      </a>
+
+      <!-- 2. Segment Switcher (Center - Prominent Pill Toggle) -->
+      <nav class="ade-segment-switcher">
+        <a href="../combinational/index.html" class="segment-toggle-btn">
+          <span class="icon">🔷</span>
+          <span>Combinational Track</span>
+        </a>
+        <a href="index.html" class="segment-toggle-btn active-sequential">
+          <span class="icon">🔶</span>
+          <span>Sequential Track</span>
+        </a>
+      </nav>
+
+      <!-- 3. User Profile & Hub Link (Right) -->
+      <div class="ade-header-right">
+        <a href="../index.html" class="hub-nav-link">🏠 Main Hub</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- 4-Part Subsystem Sub-Navigation -->
+  <nav class="subsystem-subnav">
+    <div class="subsystem-nav-wrap">
+      <div class="subsystem-tabs">
+        <a href="index.html" class="subsystem-tab-link">
+          <span class="step-num">0</span>
+          <span>Track Overview</span>
+        </a>
+        <a href="theory.html" class="subsystem-tab-link">
+          <span class="step-num">1</span>
+          <span>Theory &amp; Excitation</span>
+        </a>
+        <a href="schematic.html" class="subsystem-tab-link">
+          <span class="step-num">2</span>
+          <span>Vector Schematics</span>
+        </a>
+        <a href="workbench.html" class="subsystem-tab-link">
+          <span class="step-num">3</span>
+          <span>Clocked Workbench &amp; Scope</span>
+        </a>
+        <a href="applications.html" class="subsystem-tab-link active">
+          <span class="step-num">4</span>
+          <span>Practical &amp; FSM</span>
+        </a>
+      </div>
+      <div class="subsystem-track-indicator indicator-seq">
+        🔶 PART 4 &bull; SEQUENTIAL APPLICATIONS, FSMS &amp; VLSI TIMING
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="ref-container" style="max-width: 1240px; margin: 36px auto; padding: 0 24px;">
+    <div style="margin-bottom: 28px;">
+      <p class="meta-tag" style="background: #fef3c7; color: #92400e; border: 1px solid #fde68a;">
+        PART 4 OF 4 &bull; SYSTEM SYNTHESIS &bull; SILICON TIMING &amp; REAL-WORLD CONTROL
+      </p>
+      <h1 style="font-size: 30px; color: var(--navy); margin-bottom: 8px;">
+        Sequential Applications, FSMs &amp; VLSI Timing Physics
+      </h1>
+      <p style="color: var(--muted); font-size: 15px; max-width: 860px; line-height: 1.6;">
+        Explore finite state machine (FSM) synthesis, setup/hold constraints, metastability recovery in silicon, SPDT latch switch debouncers, 1-bit SRAM 6T cells, and stepper motor controllers.
+      </p>
+    </div>
+
+    <!-- Section 1: Finite State Machine (FSM) Synthesis -->
+    <section class="ref-card">
+      <div class="card-header">
+        <span class="meta-tag">STATE MACHINE DESIGN</span>
+        <h2>1. Finite State Machine (FSM) Synthesis: Mealy vs. Moore</h2>
+      </div>
+      <p>
+        Sequential circuits with feedback are mathematically modeled as <strong>Finite State Machines (FSMs)</strong>.
+      </p>
+
+      <table class="ref-table">
+        <thead>
+          <tr>
+            <th>Parameter</th>
+            <th>Mealy Model</th>
+            <th>Moore Model</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Output Equation</strong></td>
+            <td>\(Z = f(\text{Present State}, \text{Current Inputs})\)</td>
+            <td>\(Z = f(\text{Present State})\)</td>
+          </tr>
+          <tr>
+            <td><strong>State Requirement</strong></td>
+            <td>Often requires fewer states (outputs change on inputs immediately).</td>
+            <td>May require one extra state for each output condition.</td>
+          </tr>
+          <tr>
+            <td><strong>Clock Edge Synchronization</strong></td>
+            <td>Outputs can change asynchronously between clock edges if inputs change.</td>
+            <td>Outputs change <em>strictly</em> on active clock edges (glitch-free).</td>
+          </tr>
+          <tr>
+            <td><strong>Silicon Vulnerability</strong></td>
+            <td>Prone to combinational glitches and race conditions passing to outputs.</td>
+            <td>Preferred in high-speed VLSI datapaths and microcontrollers.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>5-Step FSM Synthesis Workflow</h3>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin: 16px 0;">
+        <div style="background: #f8fafc; border: 1px solid var(--line); border-radius: 8px; padding: 12px;">
+          <strong style="color: #d97706; font-size: 11px; font-family: var(--font-mono);">STEP 1</strong>
+          <h4 style="margin: 4px 0; font-size: 14px;">State Diagram</h4>
+          <p style="font-size: 12px; color: var(--muted); margin: 0;">Construct directed graph showing states, transitions (\(X/Z\)), and reset state.</p>
+        </div>
+        <div style="background: #f8fafc; border: 1px solid var(--line); border-radius: 8px; padding: 12px;">
+          <strong style="color: #d97706; font-size: 11px; font-family: var(--font-mono);">STEP 2</strong>
+          <h4 style="margin: 4px 0; font-size: 14px;">State Reduction</h4>
+          <p style="font-size: 12px; color: var(--muted); margin: 0;">Eliminate redundant states using Implication Table or row equivalence.</p>
+        </div>
+        <div style="background: #f8fafc; border: 1px solid var(--line); border-radius: 8px; padding: 12px;">
+          <strong style="color: #d97706; font-size: 11px; font-family: var(--font-mono);">STEP 3</strong>
+          <h4 style="margin: 4px 0; font-size: 14px;">State Assignment</h4>
+          <p style="font-size: 12px; color: var(--muted); margin: 0;">Assign binary codes (Binary, Gray code, or One-Hot for FPGAs) to each state.</p>
+        </div>
+        <div style="background: #f8fafc; border: 1px solid var(--line); border-radius: 8px; padding: 12px;">
+          <strong style="color: #d97706; font-size: 11px; font-family: var(--font-mono);">STEP 4</strong>
+          <h4 style="margin: 4px 0; font-size: 14px;">K-Map Minimization</h4>
+          <p style="font-size: 12px; color: var(--muted); margin: 0;">Solve next-state excitation equations (\(D_n\) or \(J_n, K_n\)) and output logic.</p>
+        </div>
+        <div style="background: #f8fafc; border: 1px solid var(--line); border-radius: 8px; padding: 12px;">
+          <strong style="color: #d97706; font-size: 11px; font-family: var(--font-mono);">STEP 5</strong>
+          <h4 style="margin: 4px 0; font-size: 14px;">RTL / Schematic</h4>
+          <p style="font-size: 12px; color: var(--muted); margin: 0;">Instantiate flip-flops and gate networks or synthesize Verilog RTL.</p>
+        </div>
+      </div>
+
+      <h3>Solved Example: 1010 Serial Sequence Detector</h3>
+      <p>
+        <strong>Specification:</strong> Detect the serial bit pattern <code>1010</code> arriving on input line \(X\). When detected, output \(Z=1\).
+      </p>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; margin-top: 14px;">
+        <div class="viva-card">
+          <h4 style="margin: 0 0 6px; color: #92400e; font-size: 14px;">Overlapping vs. Non-Overlapping Detection</h4>
+          <p style="font-size: 13px; color: #1e293b; margin: 0; line-height: 1.5;">
+            Input Stream: <code>1 0 1 0 1 0</code><br>
+            &bull; <strong>Overlapping:</strong> Output pulses twice (at index 4 and index 6) because the suffix <code>10</code> of the first match serves as the prefix <code>10</code> of the next.<br>
+            &bull; <strong>Non-Overlapping:</strong> Output pulses once; machine resets to idle state \(S_0\) after detection.
+          </p>
+        </div>
+
+        <div class="viva-card">
+          <h4 style="margin: 0 0 6px; color: #92400e; font-size: 14px;">Mealy State Encoding &amp; Equations</h4>
+          <p style="font-size: 13px; color: #1e293b; margin: 0; line-height: 1.5;">
+            States: \(S_0\) (Reset, \(00\)), \(S_1\) (Got 1, \(01\)), \(S_2\) (Got 10, \(10\)), \(S_3\) (Got 101, \(11\)).<br>
+            Using D Flip-Flops:
+            \[D_1 = X \cdot Q_0 + \overline{X} \cdot Q_1 \cdot \overline{Q}_0\]
+            \[D_0 = X \cdot \overline{Q}_1 \cdot \overline{Q}_0 + X \cdot Q_1 \cdot Q_0\]
+            \[Z = \overline{X} \cdot Q_1 \cdot Q_0 \quad (\text{Asserts when in } S_3 \text{ and } X=0)\]
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 2: VLSI Timing Constraints & Physical Limits -->
+    <section class="ref-card">
+      <div class="card-header">
+        <span class="meta-tag">SILICON PHYSICS</span>
+        <h2>2. VLSI Timing Constraints, Metastability &amp; Clock Skew</h2>
+      </div>
+
+      <div class="callout-box danger">
+        <strong>The Golden Rules of Edge-Triggered Flip-Flops:</strong>
+        <br>&bull; <strong>Setup Time (\(t_s\)):</strong> Data input \(D\) must remain absolutely constant for at least \(t_s\) <em>before</em> the clock transition.
+        <br>&bull; <strong>Hold Time (\(t_h\)):</strong> Data input \(D\) must remain absolutely constant for at least \(t_h\) <em>after</em> the clock transition.
+        <br>&bull; <strong>Propagation Delay (\(t_{cq}\)):</strong> Time elapsed from the clock active edge until output \(Q\) updates.
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin: 20px 0;">
+        <div style="background: #f8fafc; border: 1px solid var(--line); border-radius: 8px; padding: 16px;">
+          <h4 style="margin: 0 0 6px; color: var(--navy); font-size: 15px;">Metastability &amp; MTBF</h4>
+          <p style="font-size: 13px; color: var(--muted); margin: 0; line-height: 1.5;">
+            When \(t_s\) or \(t_h\) is violated (e.g., asynchronous pushbutton pressed right on clock edge), the internal feedback transistors enter an unstable balance point (\(V_{DD}/2\)). The time to resolve exponentially follows:
+            \[\text{MTBF} = \frac{e^{t_r / \tau}}{T_0 \cdot f_{clk} \cdot f_{data}}\]
+            <strong>Industry Solution:</strong> Use a two-stage synchronizer flip-flop chain to provide settling time \(t_r\).
+          </p>
+        </div>
+
+        <div style="background: #f8fafc; border: 1px solid var(--line); border-radius: 8px; padding: 16px;">
+          <h4 style="margin: 0 0 6px; color: var(--navy); font-size: 15px;">Clock Skew (\(\Delta t_{skew}\))</h4>
+          <p style="font-size: 13px; color: var(--muted); margin: 0; line-height: 1.5;">
+            Difference in clock arrival times at two flip-flops due to trace length or buffer delay: \(\Delta t_{skew} = t_{clk2} - t_{clk1}\).
+            <br>&bull; <strong>Hold Time Race:</strong> If \(t_{cq} < t_h + \Delta t_{skew}\), new data races into the receiving flop before it held the old value!
+          </p>
+        </div>
+
+        <div style="background: #f8fafc; border: 1px solid var(--line); border-radius: 8px; padding: 16px;">
+          <h4 style="margin: 0 0 6px; color: var(--navy); font-size: 15px;">Maximum Clock Frequency (\(f_{max}\))</h4>
+          <p style="font-size: 13px; color: var(--muted); margin: 0; line-height: 1.5;">
+            The clock period must accommodate the slowest datapath:
+            \[T_{clk} \ge t_{cq} + t_{comb(max)} + t_s - t_{skew}\]
+            \[f_{max} = \frac{1}{T_{clk(min)}}\]
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 3: Hardware Physics & Real-World Lab Circuits -->
+    <section class="ref-card">
+      <div class="card-header">
+        <span class="meta-tag">PHYSICAL CIRCUITS</span>
+        <h2>3. Real-World Applications &amp; Circuit Physics</h2>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 18px; margin-top: 14px;">
+        <!-- Circuit 1: SPDT Debouncer -->
+        <div style="background: #ffffff; border: 1px solid var(--line); border-radius: 8px; padding: 16px; box-shadow: 0 2px 4px rgba(0,0,0,0.02);">
+          <div style="font-size: 20px; margin-bottom: 6px;">🔘</div>
+          <h4 style="margin: 0 0 6px; color: var(--navy); font-size: 15px;">1. SPDT Switch Debouncer (IC 74279)</h4>
+          <p style="font-size: 13px; color: var(--muted); margin: 0; line-height: 1.5;">
+            Mechanical switch contacts bounce mechanically for \(5\text{ms} - 20\text{ms}\) before settling. Connecting an un-debounced switch to a clock input produces 10 to 50 unintended clock pulses!
+            <br><br>
+            <strong>SR Latch Solution:</strong> The first mechanical closure flips the bistable latch immediately to the SET state. Subsequent bounces release the input, but the latch memory holds the output firmly HIGH until the switch contacts the alternate position.
+          </p>
+        </div>
+
+        <!-- Circuit 2: 1-Bit SRAM 6T Cell -->
+        <div style="background: #ffffff; border: 1px solid var(--line); border-radius: 8px; padding: 16px; box-shadow: 0 2px 4px rgba(0,0,0,0.02);">
+          <div style="font-size: 20px; margin-bottom: 6px;">💾</div>
+          <h4 style="margin: 0 0 6px; color: var(--navy); font-size: 15px;">2. 1-Bit SRAM 6T CMOS Cell</h4>
+          <p style="font-size: 13px; color: var(--muted); margin: 0; line-height: 1.5;">
+            Static Random Access Memory (SRAM) stores bits using cross-coupled CMOS inverters without requiring refresh cycles.
+            <br><br>
+            <strong>Architecture:</strong> Two cross-coupled inverters (4 transistors) store \(Q\) and \(\overline{Q}\). Two NMOS access transistors gated by the Word Line (\(WL\)) couple the internal nodes to complementary Bit Lines (\(BL\) and \(\overline{BL}\)) for high-speed differential read and write operations.
+          </p>
+        </div>
+
+        <!-- Circuit 3: 4-Phase Stepper Motor -->
+        <div style="background: #ffffff; border: 1px solid var(--line); border-radius: 8px; padding: 16px; box-shadow: 0 2px 4px rgba(0,0,0,0.02);">
+          <div style="font-size: 20px; margin-bottom: 6px;">🔄</div>
+          <h4 style="margin: 0 0 6px; color: var(--navy); font-size: 15px;">3. 4-Phase Stepper Motor Controller</h4>
+          <p style="font-size: 13px; color: var(--muted); margin: 0; line-height: 1.5;">
+            Unipolar stepper motors require rotating energization sequences across 4 stator coils (Phases A, B, C, D).
+            <br><br>
+            <strong>Sequencing with Shift Registers:</strong>
+            <br>&bull; <strong>Wave Drive:</strong> 4-bit Ring Counter circulating <code>1000 &rarr; 0100 &rarr; 0010 &rarr; 0001</code>.
+            <br>&bull; <strong>Full Step:</strong> Dual-phase drive <code>1100 &rarr; 0110 &rarr; 0011 &rarr; 1001</code> (maximum holding torque).
+            <br>&bull; <strong>Power Interface:</strong> Outputs drive ULN2003 high-current Darlington transistor arrays with inductive flyback suppression diodes.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 4: Synthesizable Verilog RTL -->
+    <section class="ref-card">
+      <div class="card-header">
+        <span class="meta-tag">RTL DESCRIPTION</span>
+        <h2>4. Synthesizable Verilog RTL: Sequential Blocks</h2>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 16px;">
+        <!-- Code 1: D Flip-Flop with Async Reset -->
+        <div>
+          <h4 style="margin: 0 0 6px; color: var(--navy); font-size: 14px;">D Flip-Flop with Asynchronous Reset (IC 7474)</h4>
+          <div class="formula-banner" style="font-size: 12px; line-height: 1.5; color: #cbd5e1; text-align: left; overflow-x: auto;">
+<span style="color: #38bdf8;">module</span> d_flip_flop_async (
+    <span style="color: #38bdf8;">input</span>  clk,
+    <span style="color: #38bdf8;">input</span>  rst_n,      <span style="color: #64748b;">// Active-low asynchronous reset</span>
+    <span style="color: #38bdf8;">input</span>  d,
+    <span style="color: #38bdf8;">output</span> <span style="color: #38bdf8;">reg</span> q
+);
+    <span style="color: #38bdf8;">always</span> @(<span style="color: #38bdf8;">posedge</span> clk <span style="color: #38bdf8;">or negedge</span> rst_n) <span style="color: #38bdf8;">begin</span>
+        <span style="color: #38bdf8;">if</span> (!rst_n)
+            q &lt;= 1'b0;  <span style="color: #64748b;">// Immediate async override</span>
+        <span style="color: #38bdf8;">else</span>
+            q &lt;= d;     <span style="color: #64748b;">// Clock synchronous transfer</span>
+    <span style="color: #38bdf8;">end</span>
+<span style="color: #38bdf8;">endmodule</span>
+          </div>
+        </div>
+
+        <!-- Code 2: 1010 Sequence Detector FSM -->
+        <div>
+          <h4 style="margin: 0 0 6px; color: var(--navy); font-size: 14px;">1010 Overlapping Sequence Detector (3-Process FSM)</h4>
+          <div class="formula-banner" style="font-size: 12px; line-height: 1.5; color: #cbd5e1; text-align: left; overflow-x: auto;">
+<span style="color: #38bdf8;">module</span> seq_detector_1010 (
+    <span style="color: #38bdf8;">input</span>  clk, rst_n, x,
+    <span style="color: #38bdf8;">output</span> <span style="color: #38bdf8;">reg</span> z
+);
+    <span style="color: #38bdf8;">typedef enum</span> {S0, S1, S2, S3} state_t;
+    state_t state, next_state;
+
+    <span style="color: #64748b;">// 1. State Register (Clocked)</span>
+    <span style="color: #38bdf8;">always</span> @(<span style="color: #38bdf8;">posedge</span> clk <span style="color: #38bdf8;">or negedge</span> rst_n)
+        <span style="color: #38bdf8;">if</span> (!rst_n) state &lt;= S0;
+        <span style="color: #38bdf8;">else</span>        state &lt;= next_state;
+
+    <span style="color: #64748b;">// 2. Next State Logic &amp; Output</span>
+    <span style="color: #38bdf8;">always</span> @(*) <span style="color: #38bdf8;">begin</span>
+        z = 1'b0;
+        <span style="color: #38bdf8;">case</span> (state)
+            S0: next_state = x ? S1 : S0;
+            S1: next_state = x ? S1 : S2;
+            S2: next_state = x ? S3 : S0;
+            S3: <span style="color: #38bdf8;">begin</span>
+                z = ~x; <span style="color: #64748b;">// Pulse HIGH on 1010</span>
+                next_state = x ? S1 : S2; <span style="color: #64748b;">// Overlap loop</span>
+            <span style="color: #38bdf8;">end</span>
+        <span style="color: #38bdf8;">endcase</span>
+    <span style="color: #38bdf8;">end</span>
+<span style="color: #38bdf8;">endmodule</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Navigation Stepper Footer -->
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 40px; padding-top: 20px; border-top: 1px solid var(--line);">
+      <a href="workbench.html" style="display: inline-flex; align-items: center; gap: 8px; background: #ffffff; border: 1px solid var(--line); color: var(--navy); padding: 10px 18px; border-radius: 8px; font-weight: 600; text-decoration: none;">
+        <span>⬅ Back to Part 3: Clocked Workbench &amp; Scope</span>
+      </a>
+      <a href="../combinational/index.html" style="display: inline-flex; align-items: center; gap: 8px; background: #2c6ee8; color: #ffffff; padding: 12px 24px; border-radius: 8px; font-weight: 700; text-decoration: none; box-shadow: 0 2px 8px rgba(44, 110, 232, 0.3);">
+        <span>Switch to Segment 1: Combinational Track</span>
+        <span>🔷 ➔</span>
+      </a>
+    </div>
+  </main>
+
+  <footer>
+    <p>ADE Made Easy &bull; Segment 2: Sequential Logic &amp; Systems Track</p>
+  </footer>
+
+  <script src="../config.js"></script>
+  <script src="../shared/auth.js"></script>
+  <script src="../user-menu.js"></script>
+</body>
+</html>

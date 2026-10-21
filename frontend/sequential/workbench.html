@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sequential Clocked Workbench &amp; Scope | ADE Made Easy</title>
+  <link rel="stylesheet" href="../shared/ui-components.css">
+  <link rel="stylesheet" href="../workbench.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,400;0,500;0,700;1,400&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    /* Scope Drawer & Clock Strip Enhancements */
+    .clock-generator-bar {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      background: #111827;
+      color: #f8fafc;
+      padding: 6px 18px;
+      border-bottom: 1px solid #1f2937;
+      font-family: 'DM Mono', monospace;
+      font-size: 12px;
+      flex-shrink: 0;
+      z-index: 10;
+      flex-wrap: wrap;
+    }
+    .clock-bar-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 700;
+      color: #fbbf24;
+    }
+    .clock-led-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #374151;
+      box-shadow: 0 0 0 1px #4b5563;
+      transition: background 0.08s, box-shadow 0.08s;
+    }
+    .clock-led-dot.on {
+      background: #f59e0b;
+      box-shadow: 0 0 8px #f59e0b, 0 0 14px rgba(245, 158, 11, 0.7);
+    }
+    .clock-freq-group {
+      display: inline-flex;
+      gap: 2px;
+      background: #1f2937;
+      padding: 2px;
+      border-radius: 6px;
+      border: 1px solid #374151;
+    }
+    .clock-freq-btn {
+      background: transparent;
+      border: none;
+      color: #9ca3af;
+      padding: 3px 8px;
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+      border-radius: 4px;
+      transition: all 0.15s;
+    }
+    .clock-freq-btn.active {
+      background: #d97706;
+      color: #ffffff;
+    }
+    .clock-freq-btn:hover:not(.active) {
+      color: #f3f4f6;
+    }
+    .btn-step-pulse {
+      background: #d97706;
+      color: #ffffff;
+      border: 1px solid #f59e0b;
+      padding: 4px 12px;
+      border-radius: 6px;
+      font-family: 'DM Mono', monospace;
+      font-weight: 700;
+      font-size: 12px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.15s;
+    }
+    .btn-step-pulse:hover {
+      background: #b45309;
+    }
+    .btn-step-pulse:active {
+      transform: translateY(1px);
+    }
+
+    /* Logic Analyzer Scope Dock Drawer */
+    .scope-dock-drawer {
+      background: #090d16;
+      border-top: 2px solid #d97706;
+      color: #f8fafc;
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 0;
+      z-index: 25;
+      height: 250px;
+      transition: height 0.25s ease;
+      position: relative;
+    }
+    .scope-dock-drawer.collapsed {
+      height: 38px !important;
+    }
+    .scope-dock-drawer.collapsed #scope-canvas-wrap {
+      display: none !important;
+    }
+    .scope-header-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 6px 16px;
+      background: #0f172a;
+      border-bottom: 1px solid #1e293b;
+      font-size: 12px;
+      font-family: 'DM Mono', monospace;
+      user-select: none;
+    }
+    .scope-legend-group {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .scope-legend-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 11px;
+    }
+    .scope-legend-color {
+      width: 9px;
+      height: 9px;
+      border-radius: 2px;
+    }
+    .scope-btn {
+      background: #1e293b;
+      border: 1px solid #334155;
+      color: #cbd5e1;
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .scope-btn:hover {
+      background: #334155;
+      color: #ffffff;
+    }
+    .scope-btn.active {
+      background: #d97706;
+      border-color: #f59e0b;
+      color: #ffffff;
+    }
+    #scope-canvas {
+      display: block;
+      width: 100%;
+      height: 212px;
+      background: #090d16;
+    }
+  </style>
+</head>
+<body class="workbench-body track-seq">
+
+  <!-- Symmetrical Global Header -->
+  <header class="ade-global-header">
+    <div class="ade-header-wrap">
+      <a class="ade-brand" href="../index.html">
+        <span class="ade-brand-badge">ADE</span>
+        <span class="ade-brand-text">
+          <strong>ADE Made Easy</strong>
+          <small>Concept to Silicon</small>
+        </span>
+      </a>
+
+      <nav class="ade-segment-switcher">
+        <a href="../combinational/index.html" class="segment-toggle-btn">
+          <span class="icon">🔷</span>
+          <span>Combinational Track</span>
+        </a>
+        <a href="index.html" class="segment-toggle-btn active-sequential">
+          <span class="icon">🔶</span>
+          <span>Sequential Track</span>
+        </a>
+      </nav>
+
+      <div class="ade-header-right">
+        <a href="../index.html" class="hub-nav-link">🏠 Main Hub</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- 4-Part Subsystem Navigation -->
+  <nav class="subsystem-subnav">
+    <div class="subsystem-nav-wrap">
+      <div class="subsystem-tabs">
+        <a href="index.html" class="subsystem-tab-link">
+          <span class="step-num">0</span>
+          <span>Track Overview</span>
+        </a>
+        <a href="theory.html" class="subsystem-tab-link">
+          <span class="step-num">1</span>
+          <span>Theory &amp; Excitation</span>
+        </a>
+        <a href="schematic.html" class="subsystem-tab-link">
+          <span class="step-num">2</span>
+          <span>Vector Schematics</span>
+        </a>
+        <a href="workbench.html" class="subsystem-tab-link active">
+          <span class="step-num">3</span>
+          <span>Clocked Workbench &amp; Scope</span>
+        </a>
+        <a href="applications.html" class="subsystem-tab-link">
+          <span class="step-num">4</span>
+          <span>FSMs &amp; VLSI Timing</span>
+        </a>
+      </div>
+      <div class="subsystem-track-indicator indicator-seq">
+        🔶 PART 3 &bull; SEQUENTIAL CLOCKED WORKBENCH &bull; 7-CHANNEL LOGIC ANALYZER SCOPE
+      </div>
+    </div>
+  </nav>
+
+  <!-- KiCad-Style Workbench Toolbar -->
+  <div class="wb-toolbar">
+    <!-- Component Placement & Tools -->
+    <div class="wb-toolbar-group">
+      <button class="wb-btn wb-btn-primary" id="btn-add-symbol" title="Choose and Place Symbol (Shortcut: A)">
+        <span style="font-size: 15px; font-weight: 800;">+</span>
+        <span>Choose Symbol [A]</span>
+      </button>
+
+      <button class="wb-btn wb-btn-blank" id="btn-blank-canvas" title="New Blank Canvas / Clear Workstation">
+        <span>✨ Blank Canvas</span>
+      </button>
+
+      <button class="wb-btn wb-btn-save" id="btn-save-exp" title="Save Current Experiment (Title + Objective + Wires)">
+        <span>💾 Save Exp</span>
+      </button>
+
+      <button class="wb-btn wb-btn-library" id="btn-saved-library" title="Open My Saved Experiments Library">
+        <span>📁 Saved Exps</span>
+      </button>
+
+      <div class="wb-toolbar-divider"></div>
+
+      <button class="wb-btn tool-btn active" id="btn-tool-select" title="Select & Move Tool (Shortcut: S)">
+        <span>↖ Select [S]</span>
+      </button>
+
+      <button class="wb-btn tool-btn" id="btn-tool-wire" title="Draw Manhattan Wire (Shortcut: W)">
+        <span>⚡ Wire [W]</span>
+      </button>
+
+      <button class="wb-btn tool-btn wb-btn-danger" id="btn-tool-delete" title="Delete Selected Item (Shortcut: Del)">
+        <span>🗑 Delete [Del]</span>
+      </button>
+
+      <div class="wb-toolbar-divider"></div>
+
+      <button class="wb-btn" id="btn-undo" title="Undo Action (Shortcut: Ctrl+Z)" disabled>
+        <span>↩ Undo</span>
+      </button>
+
+      <button class="wb-btn" id="btn-redo" title="Redo Action (Shortcut: Ctrl+Y)" disabled>
+        <span>↪ Redo</span>
+      </button>
+
+      <div class="wb-toolbar-divider"></div>
+
+      <button class="wb-btn" id="btn-toggle-palette" title="Slide / Toggle Component Palette (Shortcut: P)">
+        <span id="btn-palette-icon">◀</span>
+        <span>Palette [P]</span>
+      </button>
+    </div>
+
+    <!-- Presets & Simulation Controls -->
+    <div class="wb-toolbar-group">
+      <select class="wb-select" id="preset-select" title="Load Standard Sequential Experiment">
+        <option value="">-- Load Sequential Experiment Preset --</option>
+        <option value="7490_decade" selected>Exp 1: 7490 BCD Decade Counter (Mod-10, 0..9)</option>
+        <option value="7490_mod6">Exp 2: 7490 Mod-6 Counter (Reset at 6: QC·QB)</option>
+        <option value="7493_mod16">Exp 3: 7493 4-Bit Binary Counter (Mod-16, 0..15)</option>
+        <option value="7493_mod12">Exp 4: 7493 Mod-12 Counter (Reset at 12: QD·QC)</option>
+        <option value="7474_d_ff">Exp 5: 7474 Dual D Flip-Flop Latch / Frequency Divider</option>
+        <option value="7476_jk_ff">Exp 6: 7476 Master-Slave JK Toggle Flip-Flop</option>
+        <option value="74194_shift">Exp 7: 74194 4-Bit Universal Shift Register</option>
+        <option value="7400_nand">Exp 8: 7400 Quad NAND Gate Verification</option>
+        <option value="7483_adder">Exp 9: 7483 4-Bit Binary Full Adder Test</option>
+        <option value="7485_comparator">Exp 10: 7485 4-Bit Magnitude Comparator Test</option>
+        <option value="74151_mux">Exp 11: 74151 8:1 Multiplexer Experiment</option>
+        <option value="74153_mux">Exp 12: 74153 4:1 Multiplexer Experiment</option>
+      </select>
+
+      <div class="wb-toolbar-divider"></div>
+
+      <button class="wb-btn wb-btn-success" id="btn-sim-toggle" title="Toggle Real-Time Logic Propagation">
+        <span>⏸ Pause Sim</span>
+      </button>
+
+      <div class="wb-sim-status">
+        <div class="wb-status-dot" id="sim-status-dot"></div>
+        <span id="sim-status-text">SIMULATION LIVE</span>
+      </div>
+    </div>
+
+    <!-- View & Canvas Controls -->
+    <div class="wb-toolbar-group">
+      <button class="wb-btn" id="btn-zoom-in" title="Zoom In (+)">🔍 +</button>
+      <button class="wb-btn" id="btn-zoom-out" title="Zoom Out (-)">🔍 -</button>
+      <button class="wb-btn" id="btn-zoom-reset" title="Reset Zoom">1:1</button>
+      <button class="wb-btn wb-btn-danger" id="btn-clear-canvas" title="Clear all components from canvas">Clear All</button>
+    </div>
+  </div>
+
+  <!-- Dedicated Clock Frequency Generator Strip -->
+  <div class="clock-generator-bar">
+    <div class="clock-bar-title">
+      <div class="clock-led-dot" id="clock-indicator-led"></div>
+      <span>CLOCK EXCITATION &bull; SYSTEM CLOCK BUS:</span>
+    </div>
+
+    <button class="btn-step-pulse" id="btn-step-pulse" title="Trigger a single clean low-to-high clock step pulse">
+      <span>⚡ Step Clock Pulse (0 ➔ 1 ➔ 0)</span>
+    </button>
+
+    <div class="clock-freq-group">
+      <button class="clock-freq-btn" data-freq="0.5">0.5 Hz</button>
+      <button class="clock-freq-btn active" data-freq="1.0">1.0 Hz</button>
+      <button class="clock-freq-btn" data-freq="2.0">2.0 Hz</button>
+      <button class="clock-freq-btn" data-freq="5.0">5.0 Hz</button>
+      <button class="clock-freq-btn" data-freq="10.0">10.0 Hz</button>
+    </div>
+
+    <button class="scope-btn" id="btn-clock-auto-toggle" title="Toggle automatic continuous clock pulse generator">
+      <span>⏸ Pause Auto Clock</span>
+    </button>
+
+    <div style="margin-left: auto; display: flex; align-items: center; gap: 8px;">
+      <span style="color: #9ca3af; font-size: 11px;">Waveform Scope:</span>
+      <button class="scope-btn active" id="btn-toggle-scope-dock" title="Toggle Bottom Scope Drawer">
+        <span>📊 Logic Analyzer Scope ▼</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Main Workspace -->
+  <div class="wb-main-container">
+
+    <!-- Left Quick Palette Sidebar with Slide Controls -->
+    <aside class="wb-palette-sidebar" id="palette-sidebar">
+      <div class="wb-palette-header" style="background: #111827; border-bottom: 2px solid #d97706;">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span style="color: #fbbf24; font-weight: 700;">SEQUENTIAL PALETTE</span>
+          <span style="font-family: 'DM Mono', monospace; font-size: 11px; color: #fbbf24;">Click to Add</span>
+        </div>
+        <button class="wb-palette-collapse-btn" id="btn-collapse-palette" title="Slide / Hide Component Palette (Shortcut: P)">◀</button>
+      </div>
+
+      <div class="wb-palette-scroll">
+        <!-- Sequential ICs -->
+        <div>
+          <div class="wb-palette-category-title">Sequential &amp; Counter ICs</div>
+          <div style="display: flex; flex-direction: column; gap: 6px;">
+            <div class="wb-palette-item" data-type="7490">
+              <div class="wb-palette-item-info">
+                <span class="wb-palette-item-name">7490</span>
+                <span class="wb-palette-item-desc">Decade / BCD Counter</span>
+              </div>
+              <span class="wb-palette-tag tag-msi" style="background:#fef3c7; color:#92400e;">MOD-10</span>
+            </div>
+
+            <div class="wb-palette-item" data-type="7493">
+              <div class="wb-palette-item-info">
+                <span class="wb-palette-item-name">7493</span>
+                <span class="wb-palette-item-desc">4-Bit Binary Ripple Ctr</span>
+              </div>
+              <span class="wb-palette-tag tag-msi" style="background:#ecfdf5; color:#065f46;">MOD-16</span>
+            </div>
+
+            <div class="wb-palette-item" data-type="7474">
+              <div class="wb-palette-item-info">
+                <span class="wb-palette-item-name">7474</span>
+                <span class="wb-palette-item-desc">Dual D Flip-Flop</span>
+              </div>
+              <span class="wb-palette-tag tag-msi" style="background:#e0f2fe; color:#0369a1;">D-TYPE</span>
+            </div>
+
+            <div class="wb-palette-item" data-type="7476">
+              <div class="wb-palette-item-info">
+                <span class="wb-palette-item-name">7476</span>
+                <span class="wb-palette-item-desc">Dual MS-JK Flip-Flop</span>
+              </div>
+              <span class="wb-palette-tag tag-msi" style="background:#f3e8ff; color:#6b21a8;">JK-FF</span>
+            </div>
+
+            <div class="wb-palette-item" data-type="74194">
+              <div class="wb-palette-item-info">
+                <span class="wb-palette-item-name">74194</span>
+                <span class="wb-palette-item-desc">Universal Shift Register</span>
+              </div>
+              <span class="wb-palette-tag tag-msi" style="background:#ffedd5; color:#9a3412;">4-BIT REG</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Clock & Input Stimulus -->
+        <div>
+          <div class="wb-palette-category-title">Clock &amp; Input Stimulus</div>
+          <div style="display: flex; flex-direction: column; gap: 6px;">
+            <div class="wb-palette-item" data-type="CLOCK">
+              <div class="wb-palette-item-info">
+                <span class="wb-palette-item-name">CLOCK</span>
+                <span class="wb-palette-item-desc">Square Pulse Generator</span>
+              </div>
+              <span class="wb-palette-tag tag-io" style="background:#fef3c7; color:#b45309;">CLK</span>
+            </div>
+
+            <div class="wb-palette-item" data-type="SWITCH">
+              <div class="wb-palette-item-info">
+                <span class="wb-palette-item-name">SWITCH</span>
+                <span class="wb-palette-item-desc">Single Logic Toggle</span>
+              </div>
+              <span class="wb-palette-tag tag-io">IN</span>
+            </div>
+
+            <div class="wb-palette-item" data-type="SW_RAIL_8">
+              <div class="wb-palette-item-info">
+                <span class="wb-palette-item-name">8-BIT SWITCH RAIL</span>
+                <span class="wb-palette-item-desc">8x Input Toggle Bank</span>
+              </div>
+              <span class="wb-palette-tag tag-io">8-IN</span>
+            </div>
+
+            <div class="wb-palette-item" data-type="POWER_RAIL">
+              <div class="wb-palette-item-info">
+                <span class="wb-palette-item-name">POWER_RAIL</span>
+                <span class="wb-palette-item-desc">VCC / GND Distribution</span>
+              </div>
+              <span class="wb-palette-tag tag-pwr">BUS</span>
+            </div>
+
+            <div class="wb-palette-item" data-type="VCC">
+              <div class="wb-palette-item-info">
+                <span class="wb-palette-item-name">+5V (VCC)</span>
+                <span class="wb-palette-item-desc">Power Terminal (1)</span>
+              </div>
+              <span class="wb-palette-tag tag-io">PWR</span>
+            </div>
+
+            <div class="wb-palette-item" data-type="GND">
+              <div class="wb-palette-item-info">
+                <span class="wb-palette-item-name">GND</span>
+                <span class="wb-palette-item-desc">Ground Terminal (0)</span>
+              </div>
+              <span class="wb-palette-tag tag-io">GND</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Indicators & LED Rail -->
+        <div>
+          <div class="wb-palette-category-title">Indicators &amp; Probes</div>
+          <div style="display: flex; flex-direction: column; gap: 6px;">
+            <div class="wb-palette-item" data-type="LED_RAIL_8">
+              <div class="wb-palette-item-info">
+                <span class="wb-palette-item-name">8-BIT LED RAIL</span>
+                <span class="wb-palette-item-desc">8-Channel Bus Readout</span>
+              </div>
+              <span class="wb-palette-tag tag-gate">8-LED</span>
+            </div>
+
+            <div class="wb-palette-item" data-type="LED">
+              <div class="wb-palette-item-info">
+                <span class="wb-palette-item-name">LED</span>
+                <span class="wb-palette-item-desc">Single Logic Output LED</span>
+              </div>
+              <span class="wb-palette-tag tag-io">OUT</span>
+            </div>
+
+            <div class="wb-palette-item" data-type="PROBE">
+              <div class="wb-palette-item-info">
+                <span class="wb-palette-item-name">PROBE</span>
+                <span class="wb-palette-item-desc">Voltmeter / Logic Probe</span>
+              </div>
+              <span class="wb-palette-tag tag-io">TEST</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Logic Gates (DIP-14) -->
+        <div>
+          <div class="wb-palette-category-title">Logic Gate ICs (DIP-14)</div>
+          <div style="display: flex; flex-direction: column; gap: 6px;">
+            <div class="wb-palette-item" data-type="7400">
+              <div class="wb-palette-item-info">
+                <span class="wb-palette-item-name">7400</span>
+                <span class="wb-palette-item-desc">Quad 2-In NAND</span>
+              </div>
+              <span class="wb-palette-tag tag-gate">NAND</span>
+            </div>
+
+            <div class="wb-palette-item" data-type="7408">
+              <div class="wb-palette-item-info">
+                <span class="wb-palette-item-name">7408</span>
+                <span class="wb-palette-item-desc">Quad 2-In AND</span>
+              </div>
+              <span class="wb-palette-tag tag-gate">AND</span>
+            </div>
+
+            <div class="wb-palette-item" data-type="7432">
+              <div class="wb-palette-item-info">
+                <span class="wb-palette-item-name">7432</span>
+                <span class="wb-palette-item-desc">Quad 2-In OR</span>
+              </div>
+              <span class="wb-palette-tag tag-gate">OR</span>
+            </div>
+
+            <div class="wb-palette-item" data-type="7486">
+              <div class="wb-palette-item-info">
+                <span class="wb-palette-item-name">7486</span>
+                <span class="wb-palette-item-desc">Quad 2-In XOR</span>
+              </div>
+              <span class="wb-palette-tag tag-gate">XOR</span>
+            </div>
+
+            <div class="wb-palette-item" data-type="7404">
+              <div class="wb-palette-item-info">
+                <span class="wb-palette-item-name">7404</span>
+                <span class="wb-palette-item-desc">Hex Inverter</span>
+              </div>
+              <span class="wb-palette-tag tag-gate">NOT</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Edge Slider Tab Handle to open/close palette -->
+    <button class="wb-palette-slider-tab" id="palette-slider-tab" title="Slide / Toggle Component Palette (Shortcut: P)">
+      <span id="palette-tab-icon">◀</span>
+    </button>
+
+    <!-- KiCad Schematic Canvas with authentic dotted grid background -->
+    <div class="wb-canvas-wrap tool-select" id="canvas-wrap">
+      <!-- Experiment Title & Objective Metadata Header Banner -->
+      <div class="wb-experiment-banner" id="experiment-banner">
+        <div class="wb-exp-badge">EXPERIMENT</div>
+        <div class="wb-exp-fields">
+          <input type="text" class="wb-exp-title-input" id="exp-banner-title" value="Exp 1: 7490 BCD Decade Counter (Mod-10, 0..9)" placeholder="Experiment Title (e.g., 7490 Decade Counter)..." title="Click to edit experiment title">
+          <span class="wb-exp-divider">•</span>
+          <input type="text" class="wb-exp-obj-input" id="exp-banner-obj" value="Asynchronous BCD decade counter (Mod-10) with QA connected to CP1 input." placeholder="Objective / Notes..." title="Click to edit experiment objective">
+        </div>
+        <div class="wb-exp-banner-actions">
+          <button class="wb-exp-quick-save-btn" id="btn-banner-save" title="Save / Update Experiment">💾 Save</button>
+        </div>
+      </div>
+
+      <svg id="workbench-svg">
+        <!-- Zoom group, wires, components dynamically rendered here -->
+      </svg>
+
+      <!-- Bottom Hint Bar -->
+      <div class="wb-hint-bar">
+        <span class="wb-hint-badge">HELP</span>
+        <span id="tool-hint-text">SELECT MODE: Click clock buttons or toggle switches to trigger sequential logic transitions.</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Integrated Real-Time 7-Channel Digital Waveform Analyzer Scope Drawer -->
+  <div class="scope-dock-drawer" id="scope-dock">
+    <div class="scope-header-bar">
+      <div style="display: flex; align-items: center; gap: 14px;">
+        <span style="font-weight: 700; color: #fbbf24;">⚡ DIGITAL LOGIC ANALYZER (7-CHANNEL SCOPE)</span>
+        <div class="scope-legend-group">
+          <div class="scope-legend-item"><span class="scope-legend-color" style="background:#e9bd4f;"></span><span>CLK</span></div>
+          <div class="scope-legend-item"><span class="scope-legend-color" style="background:#38bdf8;"></span><span>IN1 (D/J)</span></div>
+          <div class="scope-legend-item"><span class="scope-legend-color" style="background:#a855f7;"></span><span>IN2 (K/S0)</span></div>
+          <div class="scope-legend-item"><span class="scope-legend-color" style="background:#10b981;"></span><span>Q0 (QA)</span></div>
+          <div class="scope-legend-item"><span class="scope-legend-color" style="background:#34d399;"></span><span>Q1 (QB)</span></div>
+          <div class="scope-legend-item"><span class="scope-legend-color" style="background:#06b6d4;"></span><span>Q2 (QC)</span></div>
+          <div class="scope-legend-item"><span class="scope-legend-color" style="background:#6366f1;"></span><span>Q3 (QD)</span></div>
+        </div>
+      </div>
+
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <button class="scope-btn active" id="btn-scope-record">⏸ Pause Scope</button>
+        <button class="scope-btn" id="btn-scope-clear">🗑 Clear</button>
+        <button class="scope-btn" id="btn-scope-zoom-in">🔍 +</button>
+        <button class="scope-btn" id="btn-scope-zoom-out">🔍 -</button>
+        <button class="scope-btn" id="btn-scope-collapse" title="Collapse / Expand Scope">▲ Collapse</button>
+      </div>
+    </div>
+    <div id="scope-canvas-wrap" style="flex: 1; overflow: hidden; position: relative;">
+      <canvas id="scope-canvas"></canvas>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       KiCad "Choose Symbol" Modal
+       ========================================================================= -->
+  <div class="modal-backdrop" id="kicad-modal">
+    <div class="kicad-modal-window">
+      
+      <!-- Modal Header -->
+      <div class="modal-header-bar">
+        <div class="modal-title-group">
+          <h2 class="modal-title">Choose Symbol</h2>
+          <span class="modal-badge">Sequential IC Library Loaded</span>
+        </div>
+        <button class="modal-close-btn" id="btn-modal-close" title="Close">&times;</button>
+      </div>
+
+      <!-- Search Bar -->
+      <div class="modal-search-row">
+        <span class="modal-search-icon">🔍 Q:</span>
+        <input type="text" class="modal-search-input" id="modal-search" placeholder="Filter symbols (e.g., 7490, 7493, 7474, 7476, 74194, clock, switch)..." autocomplete="off">
+      </div>
+
+      <!-- Split Body: Left Tree vs Right Previews -->
+      <div class="modal-split-body">
+        
+        <!-- Left: Categories and Items -->
+        <div class="modal-component-list" id="modal-tree-container">
+          <!-- Populated dynamically by workbench.js -->
+        </div>
+
+        <!-- Right: Dual Preview (Symbol on Top, Footprint on Bottom) -->
+        <div class="modal-preview-panel">
+          
+          <!-- Symbol Schematic Preview -->
+          <div class="preview-box">
+            <span class="preview-label-tag">SCHEMATIC SYMBOL</span>
+            <div class="preview-svg-container" id="preview-symbol-svg">
+              <!-- SVG preview rendered here -->
+            </div>
+          </div>
+
+          <!-- Footprint PCB Preview -->
+          <div class="preview-box">
+            <span class="preview-label-tag">DIP PACKAGE FOOTPRINT</span>
+            <div class="preview-svg-container" id="preview-footprint-svg">
+              <!-- PCB footprint rendered here -->
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="modal-footer-bar">
+        <div class="modal-desc-text" id="modal-desc-box">
+          Select an IC or component to view its pinout details, truth table, and DIP packaging.
+        </div>
+        <div class="modal-actions">
+          <button class="wb-btn" id="btn-modal-cancel">Cancel</button>
+          <button class="wb-btn wb-btn-primary" id="btn-modal-place">Place Symbol [OK]</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       Save Experiment Modal (Title, Objective, Mode & Stats)
+       ========================================================================= -->
+  <div class="modal-backdrop" id="modal-save-experiment">
+    <div class="save-modal-window">
+      <!-- Modal Header -->
+      <div class="modal-header-bar">
+        <div class="modal-title-group">
+          <h2 class="modal-title">💾 Save Experiment</h2>
+          <span class="modal-badge">Local Storage</span>
+        </div>
+        <button class="modal-close-btn" id="btn-close-save-modal" title="Close">&times;</button>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="save-modal-body">
+        <div class="form-group">
+          <label class="form-label" for="save-exp-title">Experiment Title <span class="required">*</span></label>
+          <input type="text" id="save-exp-title" class="form-control" placeholder="e.g. Practical: 7490 BCD Decade Counter Verification" autocomplete="off" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="save-exp-obj">Objective / Lab Notes</label>
+          <textarea id="save-exp-obj" class="form-control form-textarea" rows="3" placeholder="e.g. To verify BCD decade count 0000 to 1001 with asynchronous resets..."></textarea>
+        </div>
+
+        <!-- Cloud Storage Sync Indicator -->
+        <div id="save-cloud-indicator" style="display: flex; align-items: center; justify-content: space-between; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 6px; padding: 8px 12px; margin-bottom: 14px; font-size: 12px; color: #166534;">
+          <span id="save-cloud-text">☁️ Saving to your Cloud Account (Synced across devices)</span>
+        </div>
+
+        <!-- Component and Wire Statistics Pill Counter -->
+        <div class="save-exp-stats">
+          <span class="stat-pill" id="save-stat-comps">Components: 0</span>
+          <span class="stat-pill" id="save-stat-wires">Wires: 0</span>
+          <span class="stat-pill" id="save-stat-mode">Mode: New Experiment</span>
+        </div>
+
+        <!-- Overwrite vs New Copy Selector -->
+        <div class="form-group" id="save-overwrite-group" style="display: none;">
+          <label class="form-label">Save Mode</label>
+          <div class="radio-group">
+            <label class="radio-label">
+              <input type="radio" name="save-mode" value="overwrite" checked id="radio-save-overwrite">
+              <span>Update / Overwrite current experiment (<strong id="overwrite-exp-name"></strong>)</span>
+            </label>
+            <label class="radio-label">
+              <input type="radio" name="save-mode" value="new" id="radio-save-new">
+              <span>Save as a new copy</span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="modal-footer-bar">
+        <span class="save-status-msg" id="save-status-msg"></span>
+        <div class="modal-actions">
+          <button class="wb-btn" id="btn-cancel-save-modal">Cancel</button>
+          <button class="wb-btn wb-btn-primary" id="btn-confirm-save-exp">💾 Save Experiment</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       My Saved Experiments Manager Modal (Library, Import & Export)
+       ========================================================================= -->
+  <div class="modal-backdrop" id="modal-saved-experiments">
+    <div class="library-modal-window">
+      <!-- Modal Header -->
+      <div class="modal-header-bar">
+        <div class="modal-title-group">
+          <h2 class="modal-title">📁 Project Library</h2>
+          <span class="modal-badge" id="library-count-badge">0 saved</span>
+        </div>
+        <button class="modal-close-btn" id="btn-close-library-modal" title="Close">&times;</button>
+      </div>
+
+      <!-- Cloud vs Local Tab Toggle -->
+      <div class="library-tabs-row" style="display: flex; gap: 8px; margin: 12px 24px 0; border-bottom: 1px solid #e2e8f0; padding-bottom: 8px;">
+        <button type="button" class="library-tab-btn active" id="tab-cloud-projects" style="display: inline-flex; align-items: center; gap: 6px; padding: 7px 14px; border-radius: 6px; border: 1px solid #d97706; background: #d97706; color: #ffffff; font-weight: 700; font-size: 13px; cursor: pointer;">
+          <span>☁️ Cloud Projects (My Account)</span>
+        </button>
+        <button type="button" class="library-tab-btn" id="tab-local-projects" style="display: inline-flex; align-items: center; gap: 6px; padding: 7px 14px; border-radius: 6px; border: 1px solid #cbd5e1; background: #f8fafc; color: #475569; font-weight: 600; font-size: 13px; cursor: pointer;">
+          <span>💻 Local Browser Cache</span>
+        </button>
+      </div>
+
+      <!-- Library Action Toolbar -->
+      <div class="library-toolbar">
+        <div class="modal-search-row" style="flex: 1; border: 1px solid #cbd5e1; border-radius: 6px; padding: 4px 10px; background: #ffffff;">
+          <span class="modal-search-icon">🔍</span>
+          <input type="text" class="modal-search-input" id="library-search" placeholder="Search saved projects by title or notes..." autocomplete="off">
+        </div>
+        <button class="wb-btn" id="btn-library-import-trigger" title="Import Experiment from JSON file">
+          <span>📥 Import JSON</span>
+        </button>
+        <input type="file" id="library-file-input" accept=".json,application/json" style="display: none;">
+        <button class="wb-btn" id="btn-library-export-all" title="Backup all saved experiments to a JSON file">
+          <span>📦 Export All</span>
+        </button>
+      </div>
+
+      <!-- Dynamic Experiments List -->
+      <div class="library-cards-scroll" id="saved-experiments-list">
+        <!-- Dynamically rendered via renderSavedExperimentsList() -->
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="modal-footer-bar">
+        <div class="modal-desc-text">
+          Experiments are stored locally in your browser (<code>logic_sim_saved_experiments</code>). Export JSON files to submit lab reports or transfer across computers.
+        </div>
+        <div class="modal-actions">
+          <button class="wb-btn" id="btn-close-library">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="../auth-guard.js"></script>
+  <script src="../config.js"></script>
+  <script src="../auth.js"></script>
+  <script src="../user-menu.js"></script>
+  <script src="waveform-analyzer.js"></script>
+  <script src="../workbench.js"></script>
+  <script>
+    // Initialize Logic Analyzer Scope
+    document.addEventListener("DOMContentLoaded", () => {
+      const scopeDrawer = document.getElementById("scope-dock");
+      const scopeCollapseBtn = document.getElementById("btn-scope-collapse");
+      const toggleScopeDockBtn = document.getElementById("btn-toggle-scope-dock");
+
+      window.waveformAnalyzer = new DigitalWaveformAnalyzer("scope-canvas", { maxSamples: 140 });
+
+      // Scope Controls
+      const recBtn = document.getElementById("btn-scope-record");
+      recBtn?.addEventListener("click", () => {
+        if (!window.waveformAnalyzer) return;
+        const newState = !window.waveformAnalyzer.isRecording;
+        window.waveformAnalyzer.setRecording(newState);
+        recBtn.textContent = newState ? "⏸ Pause Scope" : "▶ Run Scope";
+        recBtn.classList.toggle("active", newState);
+      });
+
+      document.getElementById("btn-scope-clear")?.addEventListener("click", () => {
+        window.waveformAnalyzer?.clear();
+      });
+
+      document.getElementById("btn-scope-zoom-in")?.addEventListener("click", () => {
+        if (!window.waveformAnalyzer) return;
+        window.waveformAnalyzer.timeScale = Math.min(3.0, window.waveformAnalyzer.timeScale * 1.25);
+        window.waveformAnalyzer.draw();
+      });
+
+      document.getElementById("btn-scope-zoom-out")?.addEventListener("click", () => {
+        if (!window.waveformAnalyzer) return;
+        window.waveformAnalyzer.timeScale = Math.max(0.4, window.waveformAnalyzer.timeScale * 0.8);
+        window.waveformAnalyzer.draw();
+      });
+
+      function toggleDrawer() {
+        const isCollapsed = scopeDrawer.classList.toggle("collapsed");
+        scopeCollapseBtn.textContent = isCollapsed ? "▲ Expand" : "▼ Collapse";
+        if (!isCollapsed) {
+          setTimeout(() => {
+            window.waveformAnalyzer?.initCanvasSize();
+            window.waveformAnalyzer?.draw();
+          }, 260);
+        }
+      }
+
+      scopeCollapseBtn?.addEventListener("click", toggleDrawer);
+      toggleScopeDockBtn?.addEventListener("click", toggleDrawer);
+    });
+  </script>
+</body>
+</html>

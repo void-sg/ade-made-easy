@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Combinational Schematics | ADE Made Easy</title>
+  <link rel="stylesheet" href="../shared/ui-components.css">
+  <link rel="stylesheet" href="../circuit-viewer.css">
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body class="track-comb">
+
+  <!-- Symmetrical Global Header -->
+  <header class="ade-global-header">
+    <div class="ade-header-wrap">
+      <a class="ade-brand" href="../index.html">
+        <span class="ade-brand-badge">ADE</span>
+        <span class="ade-brand-text">
+          <strong>ADE Made Easy</strong>
+          <small>Concept to Silicon</small>
+        </span>
+      </a>
+
+      <nav class="ade-segment-switcher">
+        <a href="index.html" class="segment-toggle-btn active-combinational">
+          <span class="icon">🔷</span>
+          <span>Combinational Track</span>
+        </a>
+        <a href="../sequential/index.html" class="segment-toggle-btn">
+          <span class="icon">🔶</span>
+          <span>Sequential Track</span>
+        </a>
+      </nav>
+
+      <div class="ade-header-right">
+        <a href="../index.html" class="hub-nav-link">🏠 Main Hub</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- 4-Part Subsystem Navigation -->
+  <nav class="subsystem-subnav">
+    <div class="subsystem-nav-wrap">
+      <div class="subsystem-tabs">
+        <a href="index.html" class="subsystem-tab-link">
+          <span class="step-num">0</span>
+          <span>Overview</span>
+        </a>
+        <a href="theory.html" class="subsystem-tab-link">
+          <span class="step-num">1</span>
+          <span>Theory &amp; K-Maps</span>
+        </a>
+        <a href="schematic.html" class="subsystem-tab-link active">
+          <span class="step-num">2</span>
+          <span>Vector Schematics</span>
+        </a>
+        <a href="workbench.html" class="subsystem-tab-link">
+          <span class="step-num">3</span>
+          <span>IC Workbench</span>
+        </a>
+        <a href="applications.html" class="subsystem-tab-link">
+          <span class="step-num">4</span>
+          <span>Practical &amp; ALU</span>
+        </a>
+      </div>
+      <div class="subsystem-track-indicator indicator-comb">
+        🔷 PART 2 &bull; COMBINATIONAL VECTOR SCHEMATICS
+      </div>
+    </div>
+  </nav>
+
+  <div class="schematic-page-container" style="max-width: 1240px; margin: 24px auto; padding: 0 20px;">
+    <!-- Title & Description -->
+    <div class="schematic-header-intro" style="margin-bottom: 20px;">
+      <p class="label" style="font-family: 'DM Mono', monospace; font-size: 11px; font-weight: 700; color: var(--blue); letter-spacing: 1px; margin-bottom: 4px;">
+        PART 2 OF 4 • ANSI/IEEE VECTOR SCHEMATICS &bull; LOGIC NET TRACING
+      </p>
+      <h1 style="font-size: 28px; color: var(--navy); margin-bottom: 6px;">Combinational Circuit Schematic Blueprint</h1>
+      <p style="color: var(--muted); font-size: 14px;">
+        Interactive, data-driven vector schematics with live logic tracing, gate symbols, and pinout callouts for standard TTL MSI logic.
+      </p>
+    </div>
+
+    <!-- Circuit Selector Tabs (Combinational Only) -->
+    <div class="circuit-tabs-nav">
+      <button class="circuit-tab-btn active" data-circuit="mux_8to1">
+        <span>8:1 Multiplexer</span>
+        <span class="tab-badge">Dual 74LS153</span>
+      </button>
+      <button class="circuit-tab-btn" data-circuit="mux_4to1">
+        <span>4:1 Multiplexer</span>
+        <span class="tab-badge">Single 74LS153</span>
+      </button>
+      <button class="circuit-tab-btn" data-circuit="comparator_4bit">
+        <span>4-Bit Comparator</span>
+        <span class="tab-badge">IC 74LS85</span>
+      </button>
+      <button class="circuit-tab-btn" data-circuit="adder_subtractor_4bit">
+        <span>4-Bit Adder/Subtractor</span>
+        <span class="tab-badge">74LS83 + 74LS86</span>
+      </button>
+    </div>
+
+    <!-- CONTROL DECK 1: 8:1 MUX -->
+    <div class="circuit-control-deck circuit-deck-section" id="deck-mux8">
+      <div class="deck-row">
+        <div class="deck-group">
+          <span class="deck-group-label">SELECT (S₂ S₁ S₀)</span>
+          <div class="bit-btn-group">
+            <button class="bit-btn" id="s2-btn" data-bit="s2">S₂: 0</button>
+            <button class="bit-btn" id="s1-btn" data-bit="s1">S₁: 0</button>
+            <button class="bit-btn" id="s0-btn" data-bit="s0">S₀: 0</button>
+          </div>
+        </div>
+        <div class="deck-group">
+          <span class="deck-group-label">ACTIVE-LOW STROBE (~E)</span>
+          <div class="bit-btn-group">
+            <button class="bit-btn strobe-btn" id="strobe-btn">~E: 0 (ACTIVE)</button>
+          </div>
+        </div>
+        <div class="deck-group">
+          <span class="deck-group-label">ACTIVE DATA LINE</span>
+          <span class="data-indicator-pill" id="active-data-pill">D₀ selected</span>
+        </div>
+      </div>
+      <div class="deck-row" style="margin-top: 10px;">
+        <div class="deck-group" style="width: 100%;">
+          <span class="deck-group-label">DATA INPUTS (D₀ – D₇)</span>
+          <div class="data-inputs-grid" id="data-inputs-container"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CONTROL DECK 2: 4:1 MUX -->
+    <div class="circuit-control-deck circuit-deck-section" id="deck-mux4" style="display: none;">
+      <div class="deck-row">
+        <div class="deck-group">
+          <span class="deck-group-label">SELECT LINES (B A / S₁ S₀)</span>
+          <div class="bit-btn-group">
+            <button class="bit-btn" id="m4-s1-btn">S₁ (B): 0</button>
+            <button class="bit-btn" id="m4-s0-btn">S₀ (A): 0</button>
+          </div>
+        </div>
+        <div class="deck-group">
+          <span class="deck-group-label">STROBE (~1G)</span>
+          <button class="bit-btn strobe-btn" id="m4-strobe-btn">~1G: 0 (ACTIVE)</button>
+        </div>
+        <div class="deck-group">
+          <span class="deck-group-label">SELECTED CHANNEL</span>
+          <span class="data-indicator-pill" id="m4-active-pill">1C₀ selected</span>
+        </div>
+      </div>
+      <div class="deck-row" style="margin-top: 10px;">
+        <div class="deck-group" style="width: 100%;">
+          <span class="deck-group-label">DATA INPUTS (1C₀ – 1C₃)</span>
+          <div class="data-inputs-grid" id="m4-inputs-container"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CONTROL DECK 3: COMPARATOR -->
+    <div class="circuit-control-deck circuit-deck-section" id="deck-comp4" style="display: none;">
+      <div class="deck-row">
+        <div class="deck-group">
+          <span class="deck-group-label">WORD A (A₃ A₂ A₁ A₀)</span>
+          <div class="bit-btn-group" id="comp-a-group">
+            <button class="bit-btn" data-bus="A" data-idx="3">A₃: 0</button>
+            <button class="bit-btn" data-bus="A" data-idx="2">A₂: 0</button>
+            <button class="bit-btn" data-bus="A" data-idx="1">A₁: 0</button>
+            <button class="bit-btn" data-bus="A" data-idx="0">A₀: 0</button>
+          </div>
+        </div>
+        <div class="deck-group">
+          <span class="deck-group-label">WORD B (B₃ B₂ B₁ B₀)</span>
+          <div class="bit-btn-group" id="comp-b-group">
+            <button class="bit-btn" data-bus="B" data-idx="3">B₃: 0</button>
+            <button class="bit-btn" data-bus="B" data-idx="2">B₂: 0</button>
+            <button class="bit-btn" data-bus="B" data-idx="1">B₁: 0</button>
+            <button class="bit-btn" data-bus="B" data-idx="0">B₀: 0</button>
+          </div>
+        </div>
+      </div>
+      <div class="deck-row" style="margin-top: 10px;">
+        <div class="deck-group">
+          <span class="deck-group-label">CASCADING INPUTS (FROM LOWER STAGE)</span>
+          <div class="bit-btn-group">
+            <button class="bit-btn" id="casc-gt">I(A&gt;B): 0</button>
+            <button class="bit-btn active" id="casc-eq">I(A=B): 1</button>
+            <button class="bit-btn" id="casc-lt">I(A&lt;B): 0</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CONTROL DECK 4: ADDER/SUBTRACTOR -->
+    <div class="circuit-control-deck circuit-deck-section" id="deck-addsub" style="display: none;">
+      <div class="deck-row">
+        <div class="deck-group">
+          <span class="deck-group-label">OPERAND A (A₃ A₂ A₁ A₀)</span>
+          <div class="bit-btn-group" id="addsub-a-group">
+            <button class="bit-btn" data-bus="A" data-idx="3">A₃: 0</button>
+            <button class="bit-btn" data-bus="A" data-idx="2">A₂: 0</button>
+            <button class="bit-btn" data-bus="A" data-idx="1">A₁: 0</button>
+            <button class="bit-btn" data-bus="A" data-idx="0">A₀: 0</button>
+          </div>
+        </div>
+        <div class="deck-group">
+          <span class="deck-group-label">OPERAND B (B₃ B₂ B₁ B₀)</span>
+          <div class="bit-btn-group" id="addsub-b-group">
+            <button class="bit-btn" data-bus="B" data-idx="3">B₃: 0</button>
+            <button class="bit-btn" data-bus="B" data-idx="2">B₂: 0</button>
+            <button class="bit-btn" data-bus="B" data-idx="1">B₁: 0</button>
+            <button class="bit-btn" data-bus="B" data-idx="0">B₀: 0</button>
+          </div>
+        </div>
+        <div class="deck-group">
+          <span class="deck-group-label">MODE CONTROL (M)</span>
+          <button class="bit-btn" id="mode-btn" style="min-width: 130px; font-weight: 700;">M: 0 (ADD)</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Canvas Frame -->
+    <div class="schematic-canvas-frame">
+      <div class="schematic-canvas-toolbar">
+        <div class="canvas-title-group">
+          <span class="canvas-dot"></span>
+          <span class="canvas-title-text" id="circuit-title-display">8:1 Multiplexer (Dual 74LS153)</span>
+        </div>
+        <div class="zoom-controls">
+          <button class="zoom-btn" id="btn-zoom-out" title="Zoom Out">−</button>
+          <button class="zoom-btn" id="btn-zoom-reset" title="Reset View">100%</button>
+          <button class="zoom-btn" id="btn-zoom-in" title="Zoom In">+</button>
+        </div>
+      </div>
+
+      <div class="schematic-viewport">
+        <svg id="schematic-svg" class="schematic-svg" viewBox="0 0 1200 740" preserveAspectRatio="xMidYMid meet"></svg>
+      </div>
+    </div>
+
+    <!-- Logic Explainer Cards -->
+    <div class="flow-explainer-card circuit-flow-card" id="flow-mux8">
+      <h3>8:1 Multiplexer Architecture (Dual IC 74LS153 Sections + Inverter + OR)</h3>
+      <div class="flow-steps">
+        <div class="flow-step-item">
+          <div class="flow-step-title">1. Section Steering</div>
+          <div>Inverter U1 (74LS04) inverts MSB S₂ to steer active-low strobes: Section 1 enabled when S₂=0, Section 2 enabled when S₂=1.</div>
+        </div>
+        <div class="flow-step-item">
+          <div class="flow-step-title">2. Shared Select Bus</div>
+          <div>Lines S₁ and S₀ route to shared inputs B and A on both dual 74LS153 sections simultaneously.</div>
+        </div>
+        <div class="flow-step-item">
+          <div class="flow-step-title">3. OR Gate Combining</div>
+          <div>U3 (74LS32) combines section outputs (1Y OR 2Y). Disabled section is held at 0, passing only the selected channel to Y.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flow-explainer-card circuit-flow-card" id="flow-mux4" style="display: none;">
+      <h3>4:1 Multiplexer Architecture (Single IC 74LS153 Section)</h3>
+      <div class="flow-steps">
+        <div class="flow-step-item">
+          <div class="flow-step-title">1. Data Selection</div>
+          <div>Select lines B (S₁) and A (S₀) decode one of the four data lines (1C₀..1C₃) using internal AND-OR gating.</div>
+        </div>
+        <div class="flow-step-item">
+          <div class="flow-step-title">2. Active-Low Strobe (~1G)</div>
+          <div>When ~1G = 0, the multiplexer is enabled. When ~1G = 1, output 1Y is forced to 0 regardless of data or select lines.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flow-explainer-card circuit-flow-card" id="flow-comp4" style="display: none;">
+      <h3>4-Bit Magnitude Comparator Architecture (IC 74LS85)</h3>
+      <div class="flow-steps">
+        <div class="flow-step-item">
+          <div class="flow-step-title">1. MSB Priority</div>
+          <div>Bits are compared from A₃/B₃ (MSB) down to A₀/B₀ (LSB). The first mismatched bit pair decisively determines inequality.</div>
+        </div>
+        <div class="flow-step-item">
+          <div class="flow-step-title">2. Cascade Expansion</div>
+          <div>If all 4 bits are equal, the decision falls through to cascade inputs (IA&gt;B, IA=B, IA&lt;B) for modular multi-chip chaining.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flow-explainer-card circuit-flow-card" id="flow-addsub" style="display: none;">
+      <h3>4-Bit Binary Adder / Subtractor Architecture (IC 74LS83 + 74LS86)</h3>
+      <div class="flow-steps">
+        <div class="flow-step-item">
+          <div class="flow-step-title">1. 2's Complement Trick</div>
+          <div>When M=0, B bits pass through XOR gates unchanged and C₀=0 (Addition: A + B). When M=1, B bits are inverted and C₀=1 (Subtraction: A + B' + 1 = A − B).</div>
+        </div>
+        <div class="flow-step-item">
+          <div class="flow-step-title">2. Carry-Out &amp; Borrow Flag</div>
+          <div>For addition, C₄ is the carry-out (overflow). For subtraction, C₄=1 indicates no borrow (positive result); C₄=0 indicates a borrow occurred.</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <footer>
+    <p>ADE Made Easy • Segment 1: Combinational Logic Track</p>
+  </footer>
+
+  <script src="../config.js"></script>
+  <script src="../shared/auth.js"></script>
+  <script src="../user-menu.js"></script>
+  <script src="../circuit-viewer.js"></script>
+</body>
+</html>

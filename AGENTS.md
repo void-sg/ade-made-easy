@@ -3,7 +3,25 @@
 > **Vision & Tagline:** *"Master Analog & Digital Electronics from Concept to Silicon"*
 
 ## What this product does
-An interactive, high-performance web application and Electronic Design Automation (EDA) simulation suite for digital and analog electronics education and engineering design. Enables students and designers to simulate standard TTL 74LSxx logic ICs, modular code converters, magnitude comparators, multiplexers, 4-bit binary adders, and ripple/decade counters with real-time signal propagation, SVG breadboard wiring, schematic generation, and cloud-backed project persistence.
+An interactive, high-performance web application and Electronic Design Automation (EDA) simulation suite for digital and analog electronics education and engineering design. Bridges dry textbook theory with physical breadboard simulation and real-world semiconductor/embedded industry practice.
+
+## Curriculum Architecture: Two Specialized Tracks
+1. **Track 1: Combinational Logic**:
+   - Zero-memory Boolean switching networks, gate-level SOP/POS synthesis, and K-Maps with don't-cares.
+   - Core ICs: 7400 (Quad NAND), 7404 (NOT), 7408 (AND), 7432 (OR), 7483 (4-Bit Adder), 7485 (Comparator), 74151 (8:1 MUX), 74153 (Dual 4:1 MUX), 74184, 74185A.
+2. **Track 2: Sequential Logic (The 6 Essential Pillars)**:
+   - **Pillar 1: Foundations & 1-Bit Memory Storage**: Combinational vs Sequential, Synchronous vs Asynchronous, Level-triggered latches vs Edge-triggered flip-flops, S-R NAND/NOR implementations, Forbidden state ($S=R=1$ for NOR, $\bar{S}=\bar{R}=0$ for NAND), Asynchronous Preset ($\overline{Pr}$) and Clear ($\overline{Cr}$) overrides.
+   - **Pillar 2: The Core 4 Flip-Flops & Internal Physics**: Clocked SR ($Q_{n+1}=S+\overline{R}Q_n$), JK Flip-Flop with toggle state ($J=K=1$), Race-Around condition ($t_p > \Delta t$), Master-Slave JK (IC 7476), D-Type data latch (IC 7474), T-Type toggle ($Q_{n+1}=T \oplus Q_n$).
+   - **Pillar 3: Excitation Tables & Flip-Flop Conversions**: Characteristic Table vs Excitation Table, Master Excitation Table with Don't Cares ($X$), Universal 3-Step Flip-Flop Conversion Algorithm (JK to D, JK to T, SR to JK).
+   - **Pillar 4: Shift Registers & IC 74194**: SISO (Digital delay line), SIPO (UART/SPI RX), PISO (UART/SPI TX), PIPO (CPU bus registers), IC 74194 4-bit Universal Shift Register (Hold, Shift Right, Shift Left, Parallel Load), Ring Counter, Johnson (Twisted-Ring) Counter with glitch-free decoding.
+   - **Pillar 5: Counters (Ripple vs. Synchronous)**: Asynchronous ripple delay accumulation ($f_{max} \le \frac{1}{N \cdot t_{pd} + T_s}$), decoding glitches, IC 7490 Decade/Mod-6, IC 7493 Binary/Mod-12, 3-bit Synchronous UP Counter derivation ($J_0 K_0, J_1 K_1, J_2 K_2$), Synchronous UP/DOWN with mode $M$, Presettable MSI counters (IC 74160/163, 74190/191).
+   - **Pillar 6: Finite State Machines (FSMs) & Real-World Physics**: Mealy vs Moore models, FSM synthesis workflow, `1010` sequence detector (overlapping vs non-overlapping), VLSI timing constraints (Setup $t_s$, Hold $t_h$, Metastability, Clock Skew), SPDT switch debouncer (IC 74279), 1-bit SRAM 6T cell, 4-phase stepper motor controllers.
+
+## 4-Step Guided Pedagogical Flow
+- **Step 1: Theory & Foundations**: Mathematical equations, interactive truth/excitation tables, and DIP pinout data.
+- **Step 2: Schematic Blueprint**: ANSI/IEEE vector schematics with interactive net tracing and key checkpoints.
+- **Step 3: Interactive Simulation Workbench**: 60 FPS breadboard canvas, stimulus controls, live logic probes, and multi-channel waveform analyzer.
+- **Step 4: Actual Practical Use**: Real-world challenges, synthesizable Verilog RTL generator, hardware physics (bounce, fan-out), and microcontroller interfacing (Arduino, STM32, 8051).
 
 ## Tech Stack
 - **Frontend**: HTML5, Modern CSS3, Vanilla ES6+ JavaScript, SVG Interactive Canvas for IC Breadboard Workbench & KiCad-style Schematics.
@@ -37,5 +55,6 @@ An interactive, high-performance web application and Electronic Design Automatio
 
 ## Project Memory & Context Transfer
 For comprehensive system specifications, all 12 implemented IC lab presets, detailed EDA simulation capabilities, live production endpoints, and the Phase 2 engineering roadmap, see:
+- [`PRODUCT_SPECIFICATION.md`](file:///c:/Users/Sagar/Documents/GitHub/ade-made-easy/PRODUCT_SPECIFICATION.md)
 - [`PROJECT_HISTORY.md`](file:///c:/Users/Sagar/Documents/GitHub/ade-made-easy/PROJECT_HISTORY.md)
 - [`HANDOFF.md`](file:///c:/Users/Sagar/Documents/GitHub/ade-made-easy/HANDOFF.md)

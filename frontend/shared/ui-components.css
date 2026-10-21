@@ -1,0 +1,349 @@
+/**
+ * frontend/shared/ui-components.css — Shared Navigation, Headers & Theme System
+ * ADE Made Easy: Concept to Silicon
+ * Editorial Dark Mode + Technical Engineering Notebook Aesthetic
+ */
+
+@import url("https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,400;0,500;0,700;1,400&family=Manrope:wght@400;500;600;700;800&display=swap");
+
+:root {
+  /* 1. Editorial Obsidian / Charcoal Dark Theme Base (Linear / Vercel inspired) */
+  --obsidian-base: #0f1115;
+  --obsidian-surface: #161920;
+  --obsidian-card: #1a1d24;
+  --obsidian-card-hover: #222630;
+  
+  /* Fine, low-opacity hairline borders */
+  --border-subtle: rgba(255, 255, 255, 0.08);
+  --border-medium: rgba(255, 255, 255, 0.14);
+  
+  /* 2. Technical Engineering Notebook Parchment & Surfaces */
+  --paper: #faf8f5;
+  --paper-card: #ffffff;
+  --line: #e2e8f0;
+  --line-slate: #cbd5e1;
+  --line-technical: #334155;
+  --ink: #0f172a;
+  --muted: #64748b;
+  --text-secondary: #94a3b8;
+  
+  /* 3. Muted Functional Color Coding (Restrained & Purposeful) */
+  /* Combinational Track: Restrained Slate-Blue with soft tints */
+  --slate-blue: #3b82f6;
+  --comb-tint-bg: rgba(59, 130, 246, 0.10);
+  --comb-tint-border: rgba(59, 130, 246, 0.28);
+  --comb-text: #2563eb;
+  --comb-dark-text: #93c5fd;
+
+  /* Sequential Track: Burnt Orange / Terracotta with soft tints */
+  --terracotta: #c2410c;
+  --seq-tint-bg: rgba(194, 65, 12, 0.10);
+  --seq-tint-border: rgba(194, 65, 12, 0.28);
+  --seq-text: #c2410c;
+  --seq-dark-text: #fdba74;
+
+  /* 4. Industrial Active State Accents */
+  --accent-gold: #f59e0b;
+  --accent-amber: #d97706;
+  --accent-mint: #10b981;
+
+  /* Backward Compatibility Aliases */
+  --navy: var(--obsidian-base);
+  --navy-dark: #0b0d11;
+  --navy-light: var(--obsidian-surface);
+  --blue: var(--slate-blue);
+  --blue-subtle: var(--comb-tint-bg);
+  --blue-border: var(--comb-tint-border);
+  --amber: var(--accent-amber);
+  --amber-subtle: var(--seq-tint-bg);
+  --amber-border: var(--seq-tint-border);
+  --line-dark: var(--border-subtle);
+  --white: #ffffff;
+  --green: var(--accent-mint);
+
+  --font-mono: "DM Mono", monospace;
+  --font-sans: "Manrope", sans-serif;
+}
+
+/* --- Global Clean Reset --- */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  line-height: 1.6;
+}
+
+/* --- Global ADE Symmetrical Header (Obsidian Technical Shell) --- */
+.ade-global-header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: var(--obsidian-base);
+  border-bottom: 1px solid var(--border-subtle);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.35);
+}
+
+.ade-header-wrap {
+  max-width: 1380px;
+  margin: 0 auto;
+  padding: 0 28px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+/* 1. Brand Identity (Left) */
+.ade-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  flex-shrink: 0;
+}
+
+.ade-brand-badge {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 6px;
+  background: var(--obsidian-card);
+  border: 1px solid var(--border-medium);
+  color: var(--accent-gold);
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 0.8px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+}
+
+.ade-brand-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.ade-brand-text strong {
+  color: #f8fafc;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: -0.2px;
+  line-height: 1.2;
+}
+
+.ade-brand-text small {
+  color: #94a3b8;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+/* 2. Symmetrical Segment Switcher (Center - Refined Muted Pill Toggle) */
+.ade-segment-switcher {
+  display: flex;
+  align-items: center;
+  background: var(--obsidian-surface);
+  padding: 3px;
+  border-radius: 20px;
+  border: 1px solid var(--border-subtle);
+}
+
+.segment-toggle-btn {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 16px;
+  border-radius: 16px;
+  text-decoration: none;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  white-space: nowrap;
+  border: 1px solid transparent;
+}
+
+.segment-toggle-btn .icon {
+  font-size: 13px;
+}
+
+.segment-toggle-btn:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+/* Active Combinational Pill (Subtle Slate-Blue Tint) */
+.segment-toggle-btn.active-combinational {
+  background: var(--comb-tint-bg);
+  color: var(--comb-dark-text);
+  border-color: var(--comb-tint-border);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+/* Active Sequential Pill (Subtle Terracotta Tint) */
+.segment-toggle-btn.active-sequential {
+  background: var(--seq-tint-bg);
+  color: var(--seq-dark-text);
+  border-color: var(--seq-tint-border);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+/* 3. User Profile & Global Controls (Right) */
+.ade-header-right {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-shrink: 0;
+}
+
+.hub-nav-link {
+  color: #cbd5e1;
+  text-decoration: none;
+  font-size: 12.5px;
+  font-weight: 600;
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  transition: all 0.15s ease;
+}
+
+.hub-nav-link:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: var(--border-subtle);
+  color: #ffffff;
+}
+
+/* --- Dedicated 4-Subsystem Navigation Bar (Technical Parchment Line) --- */
+.subsystem-subnav {
+  background: var(--paper);
+  border-bottom: 1px solid var(--line);
+  position: sticky;
+  top: 64px;
+  z-index: 990;
+}
+
+.subsystem-nav-wrap {
+  max-width: 1380px;
+  margin: 0 auto;
+  padding: 0 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  overflow-x: auto;
+}
+
+.subsystem-tabs {
+  display: flex;
+  gap: 2px;
+}
+
+.subsystem-tab-link {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  text-decoration: none;
+  color: #475569;
+  font-size: 13px;
+  font-weight: 600;
+  border-bottom: 2px solid transparent;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+.subsystem-tab-link .step-num {
+  display: grid;
+  place-items: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
+  background: #f1f5f9;
+  color: #64748b;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  border: 1px solid var(--line);
+}
+
+.subsystem-tab-link:hover {
+  color: var(--ink);
+  background: rgba(0, 0, 0, 0.02);
+}
+
+/* Combinational Active Tab */
+.track-comb .subsystem-tab-link.active {
+  color: var(--comb-text);
+  border-bottom-color: var(--slate-blue);
+  background: rgba(59, 130, 246, 0.04);
+}
+
+.track-comb .subsystem-tab-link.active .step-num {
+  background: var(--slate-blue);
+  color: #ffffff;
+  border-color: var(--slate-blue);
+}
+
+/* Sequential Active Tab */
+.track-seq .subsystem-tab-link.active {
+  color: var(--seq-text);
+  border-bottom-color: var(--terracotta);
+  background: rgba(194, 65, 12, 0.04);
+}
+
+.track-seq .subsystem-tab-link.active .step-num {
+  background: var(--terracotta);
+  color: #ffffff;
+  border-color: var(--terracotta);
+}
+
+/* Track Indicators (Muted Translucent Badges) */
+.subsystem-track-indicator {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 12px;
+  border-radius: 6px;
+  white-space: nowrap;
+}
+
+.indicator-comb {
+  background: var(--comb-tint-bg);
+  color: var(--comb-text);
+  border: 1px solid var(--comb-tint-border);
+}
+
+.indicator-seq {
+  background: var(--seq-tint-bg);
+  color: var(--seq-text);
+  border: 1px solid var(--seq-tint-border);
+}
+
+/* Responsive Rules */
+@media (max-width: 900px) {
+  .ade-header-wrap {
+    height: auto;
+    padding: 10px 16px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  
+  .ade-brand-text {
+    display: none;
+  }
+
+  .subsystem-nav-wrap {
+    padding: 0 16px;
+  }
+
+  .subsystem-track-indicator {
+    display: none;
+  }
+}

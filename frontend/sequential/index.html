@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sequential Logic Track | ADE Made Easy</title>
+  <link rel="stylesheet" href="../shared/ui-components.css">
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body class="track-seq">
+
+  <!-- Symmetrical Global Header -->
+  <header class="ade-global-header">
+    <div class="ade-header-wrap">
+      <!-- 1. Brand Identity (Left) -->
+      <a class="ade-brand" href="../index.html">
+        <span class="ade-brand-badge">ADE</span>
+        <span class="ade-brand-text">
+          <strong>ADE Made Easy</strong>
+          <small>Concept to Silicon</small>
+        </span>
+      </a>
+
+      <!-- 2. Segment Switcher (Center - Prominent Pill Toggle) -->
+      <nav class="ade-segment-switcher">
+        <a href="../combinational/index.html" class="segment-toggle-btn">
+          <span class="icon">🔷</span>
+          <span>Combinational Track</span>
+        </a>
+        <a href="index.html" class="segment-toggle-btn active-sequential">
+          <span class="icon">🔶</span>
+          <span>Sequential Track</span>
+        </a>
+      </nav>
+
+      <!-- 3. User Profile & Hub Link (Right) -->
+      <div class="ade-header-right">
+        <a href="../index.html" class="hub-nav-link">🏠 Main Hub</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- 4-Part Subsystem Sub-Navigation -->
+  <nav class="subsystem-subnav">
+    <div class="subsystem-nav-wrap">
+      <div class="subsystem-tabs">
+        <a href="index.html" class="subsystem-tab-link active">
+          <span class="step-num">0</span>
+          <span>Track Overview</span>
+        </a>
+        <a href="theory.html" class="subsystem-tab-link">
+          <span class="step-num">1</span>
+          <span>Theory &amp; Excitation</span>
+        </a>
+        <a href="schematic.html" class="subsystem-tab-link">
+          <span class="step-num">2</span>
+          <span>Vector Schematics</span>
+        </a>
+        <a href="workbench.html" class="subsystem-tab-link">
+          <span class="step-num">3</span>
+          <span>Clocked Workbench &amp; Scope</span>
+        </a>
+        <a href="applications.html" class="subsystem-tab-link">
+          <span class="step-num">4</span>
+          <span>FSMs &amp; VLSI Timing</span>
+        </a>
+      </div>
+      <div class="subsystem-track-indicator indicator-seq">
+        🔶 SEGMENT 2 • SEQUENTIAL LOGIC &amp; SYSTEMS
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="ref-container" style="max-width: 1240px; margin: 36px auto; padding: 0 24px;">
+    <div style="margin-bottom: 32px;">
+      <p class="meta-tag" style="background: #fef3c7; color: #92400e; border: 1px solid #fde68a;">
+        SEGMENT 2 OF 2 • CLOCKED BISTABLE SYSTEMS &bull; THE 6 PILLARS
+      </p>
+      <h1 style="font-size: 32px; color: var(--navy); margin-bottom: 8px;">
+        Sequential Logic Circuits &amp; Systems
+      </h1>
+      <p style="color: var(--muted); font-size: 16px; max-width: 860px; line-height: 1.6;">
+        Unlike combinational networks, sequential circuits incorporate feedback memory elements where outputs depend on present inputs and past history ($Y = f(X, Q_n)$). Master 1-bit bistable latches, master-slave flip-flops, Master Excitation Tables, universal shift registers, ripple &amp; synchronous counters, and finite state machines.
+      </p>
+
+      <!-- 4-Step Stepper Cards -->
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 18px; margin: 28px 0 36px;">
+        <a href="theory.html" style="background: #ffffff; border: 1px solid #fde68a; border-radius: 10px; padding: 20px; text-decoration: none; color: inherit; transition: all 0.25s ease; box-shadow: 0 2px 6px rgba(0,0,0,0.03);">
+          <div style="font-size: 24px; margin-bottom: 8px;">📖</div>
+          <div style="font-size: 11px; font-family: var(--font-mono); font-weight: 700; color: var(--amber);">PART 1</div>
+          <h3 style="font-size: 17px; color: var(--navy); margin: 4px 0 6px;">Theory &amp; Excitation</h3>
+          <p style="font-size: 13px; color: var(--muted); margin: 0;">Flip-flop internal physics, race-around resolution, Master Excitation Matrix with Don't Cares, and 3-step conversions.</p>
+        </a>
+
+        <a href="schematic.html" style="background: #ffffff; border: 1px solid #fde68a; border-radius: 10px; padding: 20px; text-decoration: none; color: inherit; transition: all 0.25s ease; box-shadow: 0 2px 6px rgba(0,0,0,0.03);">
+          <div style="font-size: 24px; margin-bottom: 8px;">📐</div>
+          <div style="font-size: 11px; font-family: var(--font-mono); font-weight: 700; color: var(--amber);">PART 2</div>
+          <h3 style="font-size: 17px; color: var(--navy); margin: 4px 0 6px;">Sequential Schematics</h3>
+          <p style="font-size: 13px; color: var(--muted); margin: 0;">KiCad-style vector schematics for 7474, 7476, 7490, 7493, and 74194 with active-low Preset/Clear pin labeling.</p>
+        </a>
+
+        <a href="workbench.html" style="background: #ffffff; border: 1px solid #fde68a; border-radius: 10px; padding: 20px; text-decoration: none; color: inherit; transition: all 0.25s ease; box-shadow: 0 2px 6px rgba(0,0,0,0.03);">
+          <div style="font-size: 24px; margin-bottom: 8px;">⚡</div>
+          <div style="font-size: 11px; font-family: var(--font-mono); font-weight: 700; color: var(--amber);">PART 3</div>
+          <h3 style="font-size: 17px; color: var(--navy); margin: 4px 0 6px;">Clocked Lab &amp; Scope</h3>
+          <p style="font-size: 13px; color: var(--muted); margin: 0;">60 FPS breadboard with adjustable frequency clock generator and live multi-channel digital waveform analyzer.</p>
+        </a>
+
+        <a href="applications.html" style="background: #ffffff; border: 1px solid #fde68a; border-radius: 10px; padding: 20px; text-decoration: none; color: inherit; transition: all 0.25s ease; box-shadow: 0 2px 6px rgba(0,0,0,0.03);">
+          <div style="font-size: 24px; margin-bottom: 8px;">🚀</div>
+          <div style="font-size: 11px; font-family: var(--font-mono); font-weight: 700; color: var(--amber);">PART 4</div>
+          <h3 style="font-size: 17px; color: var(--navy); margin: 4px 0 6px;">FSMs &amp; VLSI Timing</h3>
+          <p style="font-size: 13px; color: var(--muted); margin: 0;">Mealy/Moore models, 1010 sequence detector, setup/hold times, metastability, and SPDT switch debouncers.</p>
+        </a>
+      </div>
+    </div>
+
+    <!-- The 6 Pillars Breakdown -->
+    <h2 style="font-size: 22px; color: var(--navy); margin-bottom: 16px;">The 6 Essential Pillars</h2>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px; margin-bottom: 48px;">
+      <!-- Pillar 1 -->
+      <div class="ref-card" style="margin-bottom: 0;">
+        <span class="meta-tag">PILLAR 01 &bull; FOUNDATIONS</span>
+        <h3 style="margin-top: 0;">1-Bit Memory &amp; S-R Latches</h3>
+        <p style="font-size: 13px; color: var(--muted); line-height: 1.6;">
+          Combinational vs. Sequential, Level vs. Edge triggering, NOR vs. NAND latches, the forbidden state (\(S=R=1\)), and active-low \(\overline{Preset}\) / \(\overline{Clear}\) overrides.
+        </p>
+        <a href="theory.html#pillar1" class="reference-link">Study Latch Physics &amp; Overrides <span>↗</span></a>
+      </div>
+
+      <!-- Pillar 2 -->
+      <div class="ref-card" style="margin-bottom: 0;">
+        <span class="meta-tag">PILLAR 02 &bull; FLIP-FLOPS</span>
+        <h3 style="margin-top: 0;">The Core 4 Flip-Flops &amp; Physics</h3>
+        <p style="font-size: 13px; color: var(--muted); line-height: 1.6;">
+          Clocked SR, JK with toggle state (\(J=K=1 \implies \overline{Q}_n\)), the Race-Around condition (\(t_p > \Delta t\)), Master-Slave JK (IC 7476), and D-Type (IC 7474).
+        </p>
+        <a href="theory.html#pillar2" class="reference-link">Master-Slave JK &amp; Race-Around <span>↗</span></a>
+      </div>
+
+      <!-- Pillar 3 -->
+      <div class="ref-card" style="margin-bottom: 0;">
+        <span class="meta-tag">PILLAR 03 &bull; DESIGN CORE</span>
+        <h3 style="margin-top: 0;">Excitation Tables &amp; Conversions</h3>
+        <p style="font-size: 13px; color: var(--muted); line-height: 1.6;">
+          The Master Excitation Matrix with Don't Cares (\(X\)), and the Universal 3-Step Flip-Flop Conversion Algorithm (JK to D, JK to T, SR to JK).
+        </p>
+        <a href="theory.html#pillar3" class="reference-link">Open Master Excitation Solver <span>↗</span></a>
+      </div>
+
+      <!-- Pillar 4 -->
+      <div class="ref-card" style="margin-bottom: 0;">
+        <span class="meta-tag">PILLAR 04 &bull; SHIFT REGISTERS</span>
+        <h3 style="margin-top: 0;">Shift Registers &amp; IC 74194</h3>
+        <p style="font-size: 13px; color: var(--muted); line-height: 1.6;">
+          SISO delay line, SIPO deserializer, PISO serializer, PIPO bus buffers, IC 74194 4-bit Universal Shift Register, Ring Counters, and Johnson Counters.
+        </p>
+        <a href="theory.html#pillar4" class="reference-link">IC 74194 Operating Modes <span>↗</span></a>
+      </div>
+
+      <!-- Pillar 5 -->
+      <div class="ref-card" style="margin-bottom: 0;">
+        <span class="meta-tag">PILLAR 05 &bull; COUNTERS</span>
+        <h3 style="margin-top: 0;">Ripple vs. Synchronous Counters</h3>
+        <p style="font-size: 13px; color: var(--muted); line-height: 1.6;">
+          Cumulative delay accumulation, \(f_{max}\) calculation, decoding glitches, IC 7490 Decade/Mod-6, IC 7493 Binary/Mod-12, and 3-bit Synchronous UP/DOWN counters.
+        </p>
+        <a href="theory.html#pillar5" class="reference-link">Ripple Delays &amp; Modulo Resets <span>↗</span></a>
+      </div>
+
+      <!-- Pillar 6 -->
+      <div class="ref-card" style="margin-bottom: 0;">
+        <span class="meta-tag">PILLAR 06 &bull; FSM &amp; TIMING</span>
+        <h3 style="margin-top: 0;">FSMs &amp; Real-World VLSI Physics</h3>
+        <p style="font-size: 13px; color: var(--muted); line-height: 1.6;">
+          Mealy vs. Moore models, `1010` sequence detector, setup &amp; hold times, metastability, clock skew, SPDT switch debouncers (IC 74279), and 1-bit SRAM cells.
+        </p>
+        <a href="theory.html#fsm-physics" class="reference-link">FSM Workflow &amp; Debouncers <span>↗</span></a>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <p>ADE Made Easy • Segment 2: Sequential Logic &amp; Systems Track</p>
+  </footer>
+
+  <script src="../config.js"></script>
+  <script src="../shared/auth.js"></script>
+  <script src="../user-menu.js"></script>
+</body>
+</html>

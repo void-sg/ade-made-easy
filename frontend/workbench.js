@@ -649,6 +649,255 @@
       }
     },
 
+    "7474": {
+      id: "7474",
+      name: "7474 (Dual D-Type Positive-Edge-Triggered Flip-Flop)",
+      category: "counters",
+      package: "DIP-14",
+      pinsCount: 14,
+      refPrefix: "U",
+      desc: "Dual D-type flip-flop with individual data (D), clock (CLK), active-low preset (~PR), and active-low clear (~CLR) overrides.",
+      datasheet: "VCC: Pin 14, GND: Pin 7. Unit 1: ~1CLR(1), 1D(2), 1CLK(3), ~1PR(4), 1Q(5), ~1Q(6). Unit 2: ~2CLR(13), 2D(12), 2CLK(11), ~2PR(10), 2Q(9), ~2Q(8).",
+      vccPin: 14,
+      gndPin: 7,
+      pins: [
+        { num: 1, name: "~1CLR", type: "in", side: "left" },
+        { num: 2, name: "1D", type: "in", side: "left" },
+        { num: 3, name: "1CLK", type: "in", side: "left" },
+        { num: 4, name: "~1PR", type: "in", side: "left" },
+        { num: 5, name: "1Q", type: "out", side: "left" },
+        { num: 6, name: "~1Q", type: "out", side: "left" },
+        { num: 7, name: "GND", type: "pwr", side: "left" },
+        { num: 14, name: "VCC", type: "pwr", side: "right" },
+        { num: 13, name: "~2CLR", type: "in", side: "right" },
+        { num: 12, name: "2D", type: "in", side: "right" },
+        { num: 11, name: "2CLK", type: "in", side: "right" },
+        { num: 10, name: "~2PR", type: "in", side: "right" },
+        { num: 9, name: "2Q", type: "out", side: "right" },
+        { num: 8, name: "~2Q", type: "out", side: "right" }
+      ],
+      customState: { q1: 0, qbar1: 1, lastClk1: 0, q2: 0, qbar2: 1, lastClk2: 0 },
+      evaluate: (inputs, comp) => {
+        if (!comp.state) comp.state = { q1: 0, qbar1: 1, lastClk1: 0, q2: 0, qbar2: 1, lastClk2: 0 };
+        const s = comp.state;
+
+        // Unit 1
+        const pr1 = inputs["4"] !== undefined ? inputs["4"] : 1;
+        const clr1 = inputs["1"] !== undefined ? inputs["1"] : 1;
+        const clk1 = inputs["3"] !== undefined ? inputs["3"] : 0;
+        const d1 = inputs["2"] || 0;
+
+        if (pr1 === 0 && clr1 === 0) {
+          s.q1 = 1; s.qbar1 = 1;
+        } else if (pr1 === 0) {
+          s.q1 = 1; s.qbar1 = 0;
+        } else if (clr1 === 0) {
+          s.q1 = 0; s.qbar1 = 1;
+        } else {
+          if (s.lastClk1 === 0 && clk1 === 1) {
+            s.q1 = d1;
+            s.qbar1 = 1 - d1;
+          }
+        }
+        s.lastClk1 = clk1;
+
+        // Unit 2
+        const pr2 = inputs["10"] !== undefined ? inputs["10"] : 1;
+        const clr2 = inputs["13"] !== undefined ? inputs["13"] : 1;
+        const clk2 = inputs["11"] !== undefined ? inputs["11"] : 0;
+        const d2 = inputs["12"] || 0;
+
+        if (pr2 === 0 && clr2 === 0) {
+          s.q2 = 1; s.qbar2 = 1;
+        } else if (pr2 === 0) {
+          s.q2 = 1; s.qbar2 = 0;
+        } else if (clr2 === 0) {
+          s.q2 = 0; s.qbar2 = 1;
+        } else {
+          if (s.lastClk2 === 0 && clk2 === 1) {
+            s.q2 = d2;
+            s.qbar2 = 1 - d2;
+          }
+        }
+        s.lastClk2 = clk2;
+
+        return { "5": s.q1, "6": s.qbar1, "9": s.q2, "8": s.qbar2 };
+      }
+    },
+
+    "7476": {
+      id: "7476",
+      name: "7476 (Dual Master-Slave JK Flip-Flop)",
+      category: "counters",
+      package: "DIP-16",
+      pinsCount: 16,
+      refPrefix: "U",
+      desc: "Dual Master-Slave JK Flip-Flop with Preset & Clear overrides. Falling-edge triggered to eliminate the Race-Around condition.",
+      datasheet: "VCC: Pin 5, GND: Pin 13. Unit 1: 1CLK(1), ~1PR(2), ~1CLR(3), 1J(4), 1K(16), 1Q(15), ~1Q(14). Unit 2: 2CLK(6), ~2PR(7), ~2CLR(8), 2J(9), 2K(10), 2Q(11), ~2Q(12).",
+      vccPin: 5,
+      gndPin: 13,
+      pins: [
+        { num: 1, name: "1CLK", type: "in", side: "left" },
+        { num: 2, name: "~1PR", type: "in", side: "left" },
+        { num: 3, name: "~1CLR", type: "in", side: "left" },
+        { num: 4, name: "1J", type: "in", side: "left" },
+        { num: 5, name: "VCC", type: "pwr", side: "left" },
+        { num: 6, name: "2CLK", type: "in", side: "left" },
+        { num: 7, name: "~2PR", type: "in", side: "left" },
+        { num: 8, name: "~2CLR", type: "in", side: "left" },
+        { num: 16, name: "1K", type: "in", side: "right" },
+        { num: 15, name: "1Q", type: "out", side: "right" },
+        { num: 14, name: "~1Q", type: "out", side: "right" },
+        { num: 13, name: "GND", type: "pwr", side: "right" },
+        { num: 12, name: "~2Q", type: "out", side: "right" },
+        { num: 11, name: "2Q", type: "out", side: "right" },
+        { num: 10, name: "2K", type: "in", side: "right" },
+        { num: 9, name: "2J", type: "in", side: "right" }
+      ],
+      customState: { q1: 0, qbar1: 1, lastClk1: 1, q2: 0, qbar2: 1, lastClk2: 1 },
+      evaluate: (inputs, comp) => {
+        if (!comp.state) comp.state = { q1: 0, qbar1: 1, lastClk1: 1, q2: 0, qbar2: 1, lastClk2: 1 };
+        const s = comp.state;
+
+        // Unit 1
+        const pr1 = inputs["2"] !== undefined ? inputs["2"] : 1;
+        const clr1 = inputs["3"] !== undefined ? inputs["3"] : 1;
+        const clk1 = inputs["1"] !== undefined ? inputs["1"] : 1;
+        const j1 = inputs["4"] || 0;
+        const k1 = inputs["16"] || 0;
+
+        if (pr1 === 0 && clr1 === 0) {
+          s.q1 = 1; s.qbar1 = 1;
+        } else if (pr1 === 0) {
+          s.q1 = 1; s.qbar1 = 0;
+        } else if (clr1 === 0) {
+          s.q1 = 0; s.qbar1 = 1;
+        } else {
+          // Falling-edge pulse trigger
+          if (s.lastClk1 === 1 && clk1 === 0) {
+            if (j1 === 1 && k1 === 1) {
+              s.q1 = 1 - s.q1;
+              s.qbar1 = 1 - s.q1;
+            } else if (j1 === 1 && k1 === 0) {
+              s.q1 = 1; s.qbar1 = 0;
+            } else if (j1 === 0 && k1 === 1) {
+              s.q1 = 0; s.qbar1 = 1;
+            }
+          }
+        }
+        s.lastClk1 = clk1;
+
+        // Unit 2
+        const pr2 = inputs["7"] !== undefined ? inputs["7"] : 1;
+        const clr2 = inputs["8"] !== undefined ? inputs["8"] : 1;
+        const clk2 = inputs["6"] !== undefined ? inputs["6"] : 1;
+        const j2 = inputs["9"] || 0;
+        const k2 = inputs["10"] || 0;
+
+        if (pr2 === 0 && clr2 === 0) {
+          s.q2 = 1; s.qbar2 = 1;
+        } else if (pr2 === 0) {
+          s.q2 = 1; s.qbar2 = 0;
+        } else if (clr2 === 0) {
+          s.q2 = 0; s.qbar2 = 1;
+        } else {
+          if (s.lastClk2 === 1 && clk2 === 0) {
+            if (j2 === 1 && k2 === 1) {
+              s.q2 = 1 - s.q2;
+              s.qbar2 = 1 - s.q2;
+            } else if (j2 === 1 && k2 === 0) {
+              s.q2 = 1; s.qbar2 = 0;
+            } else if (j2 === 0 && k2 === 1) {
+              s.q2 = 0; s.qbar2 = 1;
+            }
+          }
+        }
+        s.lastClk2 = clk2;
+
+        return { "15": s.q1, "14": s.qbar1, "11": s.q2, "12": s.qbar2 };
+      }
+    },
+
+    "74194": {
+      id: "74194",
+      name: "74194 (4-Bit Universal Shift Register)",
+      category: "counters",
+      package: "DIP-16",
+      pinsCount: 16,
+      refPrefix: "U",
+      desc: "4-bit bidirectional universal shift register. S1S0 modes: 00=Hold, 01=Shift Right, 10=Shift Left, 11=Parallel Load.",
+      datasheet: "VCC: Pin 16, GND: Pin 8. Mode: S1(9), S0(10). Clock: CLK(11). Clear: ~CLR(1). Serial: SR(2), SL(7). Parallel In: A(3), B(4), C(5), D(6). Outputs: QA(15), QB(14), QC(13), QD(12).",
+      vccPin: 16,
+      gndPin: 8,
+      pins: [
+        { num: 1, name: "~CLR", type: "in", side: "left" },
+        { num: 2, name: "SR_SER", type: "in", side: "left" },
+        { num: 3, name: "A", type: "in", side: "left" },
+        { num: 4, name: "B", type: "in", side: "left" },
+        { num: 5, name: "C", type: "in", side: "left" },
+        { num: 6, name: "D", type: "in", side: "left" },
+        { num: 7, name: "SL_SER", type: "in", side: "left" },
+        { num: 8, name: "GND", type: "pwr", side: "left" },
+        { num: 16, name: "VCC", type: "pwr", side: "right" },
+        { num: 15, name: "QA", type: "out", side: "right" },
+        { num: 14, name: "QB", type: "out", side: "right" },
+        { num: 13, name: "QC", type: "out", side: "right" },
+        { num: 12, name: "QD", type: "out", side: "right" },
+        { num: 11, name: "CLK", type: "in", side: "right" },
+        { num: 10, name: "S0", type: "in", side: "right" },
+        { num: 9, name: "S1", type: "in", side: "right" }
+      ],
+      customState: { qa: 0, qb: 0, qc: 0, qd: 0, lastClk: 0 },
+      evaluate: (inputs, comp) => {
+        if (!comp.state) comp.state = { qa: 0, qb: 0, qc: 0, qd: 0, lastClk: 0 };
+        const s = comp.state;
+
+        const clr = inputs["1"] !== undefined ? inputs["1"] : 1;
+        const clk = inputs["11"] !== undefined ? inputs["11"] : 0;
+        const s1 = inputs["9"] || 0;
+        const s0 = inputs["10"] || 0;
+        const srIn = inputs["2"] || 0;
+        const slIn = inputs["7"] || 0;
+        const a = inputs["3"] || 0;
+        const b = inputs["4"] || 0;
+        const c = inputs["5"] || 0;
+        const d = inputs["6"] || 0;
+
+        if (clr === 0) {
+          s.qa = 0; s.qb = 0; s.qc = 0; s.qd = 0;
+        } else {
+          // Low-to-high clock transition
+          if (s.lastClk === 0 && clk === 1) {
+            const mode = (s1 << 1) | s0;
+            if (mode === 0) {
+              // Hold - do nothing
+            } else if (mode === 1) {
+              // Shift Right: SR_IN -> QA -> QB -> QC -> QD
+              s.qd = s.qc;
+              s.qc = s.qb;
+              s.qb = s.qa;
+              s.qa = srIn;
+            } else if (mode === 2) {
+              // Shift Left: QA <- QB <- QC <- QD <- SL_IN
+              s.qa = s.qb;
+              s.qb = s.qc;
+              s.qc = s.qd;
+              s.qd = slIn;
+            } else if (mode === 3) {
+              // Parallel Load: A, B, C, D -> QA, QB, QC, QD
+              s.qa = a;
+              s.qb = b;
+              s.qc = c;
+              s.qd = d;
+            }
+          }
+        }
+        s.lastClk = clk;
+
+        return { "15": s.qa, "14": s.qb, "13": s.qc, "12": s.qd };
+      }
+    },
+
     // --- Power & Logic Terminals ---
     "VCC": {
       id: "VCC",
@@ -990,8 +1239,11 @@
     initPanZoom();
     initClock();
 
-    // Load default introductory lab circuit (Exp 1: 7400 NAND Verification)
-    loadLabPreset("7400_nand");
+    // Load default introductory lab circuit (Exp 1: 7400 NAND or Exp 9: 7490 Decade)
+    const isSeq = document.body.classList.contains("track-seq");
+    const defaultPreset = isSeq ? "7490_decade" : "7400_nand";
+    const urlPreset = new URLSearchParams(window.location.search).get("preset");
+    loadLabPreset(urlPreset || defaultPreset);
 
     // Continuous simulation heartbeat
     setInterval(() => {
@@ -1192,20 +1444,74 @@
   }
 
   function initClock() {
-    state.clockInterval = setInterval(() => {
-      if (!state.isSimRunning) return;
-      state.clockTick = state.clockTick === 0 ? 1 : 0;
-      let hasClock = false;
-      state.components.forEach((c) => {
-        if (c.type === "CLOCK") {
-          c.state.value = state.clockTick;
-          hasClock = true;
+    state.clockIntervalMs = 1000;
+    state.autoClockRunning = true;
+
+    function restartClock() {
+      if (state.clockInterval) clearInterval(state.clockInterval);
+      if (!state.autoClockRunning) return;
+      state.clockInterval = setInterval(() => {
+        if (!state.isSimRunning) return;
+        state.clockTick = state.clockTick === 0 ? 1 : 0;
+        let hasClock = false;
+        state.components.forEach((c) => {
+          if (c.type === "CLOCK") {
+            c.state.value = state.clockTick;
+            hasClock = true;
+          }
+        });
+        const clkLed = document.getElementById("clock-indicator-led");
+        if (clkLed) {
+          clkLed.classList.toggle("on", state.clockTick === 1);
         }
-      });
-      if (hasClock) {
-        runSimulation();
+        if (hasClock) {
+          runSimulation();
+        }
+      }, state.clockIntervalMs);
+    }
+
+    restartClock();
+
+    // Clock generator UI controls
+    document.getElementById("btn-clock-auto-toggle")?.addEventListener("click", () => {
+      state.autoClockRunning = !state.autoClockRunning;
+      const btn = document.getElementById("btn-clock-auto-toggle");
+      if (btn) {
+        btn.textContent = state.autoClockRunning ? "⏸ Pause Auto Clock" : "▶ Start Auto Clock";
+        btn.classList.toggle("wb-btn-primary", !state.autoClockRunning);
       }
-    }, 1000);
+      restartClock();
+    });
+
+    document.getElementById("btn-step-pulse")?.addEventListener("click", () => {
+      // Manual single step pulse 0 -> 1 -> 0
+      state.clockTick = 1;
+      state.components.forEach((c) => {
+        if (c.type === "CLOCK") c.state.value = 1;
+      });
+      const clkLed = document.getElementById("clock-indicator-led");
+      if (clkLed) clkLed.classList.add("on");
+      runSimulation();
+
+      setTimeout(() => {
+        state.clockTick = 0;
+        state.components.forEach((c) => {
+          if (c.type === "CLOCK") c.state.value = 0;
+        });
+        if (clkLed) clkLed.classList.remove("on");
+        runSimulation();
+      }, 180);
+    });
+
+    document.querySelectorAll(".clock-freq-btn").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll(".clock-freq-btn").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        const freq = parseFloat(btn.getAttribute("data-freq") || "1.0");
+        state.clockIntervalMs = Math.round(1000 / freq);
+        restartClock();
+      });
+    });
   }
 
   // =========================================================================
@@ -2216,6 +2522,51 @@
 
     state.pinVoltages = pinVoltages;
     updateVisualSimulation(pinVoltages);
+    sampleWaveforms();
+  }
+
+  function sampleWaveforms() {
+    if (!window.waveformAnalyzer) return;
+
+    let clkVal = state.clockTick;
+    let in1 = 0, in2 = 0;
+    let q0 = 0, q1 = 0, q2 = 0, q3 = 0;
+
+    state.components.forEach((c) => {
+      if (c.type === "CLOCK") {
+        clkVal = c.state?.value ? 1 : 0;
+      }
+      if (c.type === "SWITCH") {
+        if (c.ref === "SW_D" || c.ref === "1D" || c.ref === "SW_J" || c.ref === "1J") in1 = c.state?.value ? 1 : 0;
+        if (c.ref === "SW_K" || c.ref === "1K" || c.ref === "SW_S0") in2 = c.state?.value ? 1 : 0;
+      }
+      if (c.type === "7490" || c.type === "7493") {
+        q0 = c.state?.qa || 0;
+        q1 = c.state?.qb || 0;
+        q2 = c.state?.qc || 0;
+        q3 = c.state?.qd || 0;
+      } else if (c.type === "7474" || c.type === "7476") {
+        q0 = c.state?.q1 !== undefined ? c.state.q1 : 0;
+        q1 = c.state?.qbar1 !== undefined ? c.state.qbar1 : 0;
+        q2 = c.state?.q2 !== undefined ? c.state.q2 : 0;
+        q3 = c.state?.qbar2 !== undefined ? c.state.qbar2 : 0;
+      } else if (c.type === "74194") {
+        q0 = c.state?.qa || 0;
+        q1 = c.state?.qb || 0;
+        q2 = c.state?.qc || 0;
+        q3 = c.state?.qd || 0;
+      }
+    });
+
+    window.waveformAnalyzer.pushSample({
+      clk: clkVal,
+      in1: in1,
+      in2: in2,
+      q0: q0,
+      q1: q1,
+      q2: q2,
+      q3: q3,
+    });
   }
 
   function updateVisualSimulation(pinVoltages) {
@@ -3742,6 +4093,18 @@
     "7493_mod12": {
       title: "Exp 12: 7493 Mod-12 Counter (Reset at 12: QD·QC)",
       objective: "Mod-12 binary counter with reset feedback at count 12 (1100)."
+    },
+    "7474_d_ff": {
+      title: "Exp 13: 7474 D Flip-Flop Data Latch & Divider",
+      objective: "Edge-triggered D flip-flop data transfer and frequency division with ~PR/~CLR overrides."
+    },
+    "7476_jk_ff": {
+      title: "Exp 14: 7476 Master-Slave JK Toggle Flip-Flop",
+      objective: "Master-slave JK flip-flop in toggle mode (J=K=1) to eliminate race-around."
+    },
+    "74194_shift": {
+      title: "Exp 15: 74194 4-Bit Universal Shift Register",
+      objective: "Universal shift register operation: parallel load, shift right, shift left, and hold."
     }
   };
 
@@ -4199,6 +4562,90 @@
       state.wires.push({ id: "w_out_qb", from: { compId: ic.id, pinNum: 9 },  to: { compId: ledRail.id, pinNum: 2 }, state: 0 });
       state.wires.push({ id: "w_out_qc", from: { compId: ic.id, pinNum: 8 },  to: { compId: ledRail.id, pinNum: 3 }, state: 0 });
       state.wires.push({ id: "w_out_qd", from: { compId: ic.id, pinNum: 11 }, to: { compId: ledRail.id, pinNum: 4 }, state: 0 });
+
+    } else if (presetKey === "7474_d_ff") {
+      // Preset 13: 7474 Dual D Flip-Flop Latch
+      const pwrRail = addComponentAt("POWER_RAIL", 460, 100);
+      const clk = addComponentAt("CLOCK", 160, 320);
+      const swD = addComponentAt("SWITCH", 160, 240);
+      const ic = addComponentAt("7474", 460, 300);
+      const ledQ = addComponentAt("LED", 760, 240);
+      const ledQbar = addComponentAt("LED", 760, 340);
+
+      // Power: VCC to Pin 14, GND to Pin 7
+      state.wires.push({ id: "w_pwr_vcc", from: { compId: pwrRail.id, pinNum: 1 }, to: { compId: ic.id, pinNum: 14 }, state: 1 });
+      state.wires.push({ id: "w_pwr_gnd", from: { compId: pwrRail.id, pinNum: 5 }, to: { compId: ic.id, pinNum: 7 }, state: 0 });
+
+      // Inactive overrides: ~1PR (Pin 4) and ~1CLR (Pin 1) tied to VCC
+      state.wires.push({ id: "w_pr", from: { compId: pwrRail.id, pinNum: 2 }, to: { compId: ic.id, pinNum: 4 }, state: 1 });
+      state.wires.push({ id: "w_clr", from: { compId: pwrRail.id, pinNum: 3 }, to: { compId: ic.id, pinNum: 1 }, state: 1 });
+
+      // Data and Clock
+      state.wires.push({ id: "w_d", from: { compId: swD.id, pinNum: 1 }, to: { compId: ic.id, pinNum: 2 }, state: 0 });
+      state.wires.push({ id: "w_clk", from: { compId: clk.id, pinNum: 1 }, to: { compId: ic.id, pinNum: 3 }, state: 0 });
+
+      // Outputs: 1Q (Pin 5) -> ledQ, ~1Q (Pin 6) -> ledQbar
+      state.wires.push({ id: "w_q", from: { compId: ic.id, pinNum: 5 }, to: { compId: ledQ.id, pinNum: 1 }, state: 0 });
+      state.wires.push({ id: "w_qbar", from: { compId: ic.id, pinNum: 6 }, to: { compId: ledQbar.id, pinNum: 1 }, state: 1 });
+
+    } else if (presetKey === "7476_jk_ff") {
+      // Preset 14: 7476 Master-Slave JK Toggle Flip-Flop
+      const pwrRail = addComponentAt("POWER_RAIL", 460, 100);
+      const clk = addComponentAt("CLOCK", 160, 300);
+      const ic = addComponentAt("7476", 460, 300);
+      const ledQ = addComponentAt("LED", 760, 240);
+      const ledQbar = addComponentAt("LED", 760, 340);
+
+      // Power: VCC to Pin 5, GND to Pin 13
+      state.wires.push({ id: "w_pwr_vcc", from: { compId: pwrRail.id, pinNum: 1 }, to: { compId: ic.id, pinNum: 5 }, state: 1 });
+      state.wires.push({ id: "w_pwr_gnd", from: { compId: pwrRail.id, pinNum: 5 }, to: { compId: ic.id, pinNum: 13 }, state: 0 });
+
+      // J (Pin 4) and K (Pin 16) tied to VCC for Toggle mode
+      state.wires.push({ id: "w_j", from: { compId: pwrRail.id, pinNum: 2 }, to: { compId: ic.id, pinNum: 4 }, state: 1 });
+      state.wires.push({ id: "w_k", from: { compId: pwrRail.id, pinNum: 3 }, to: { compId: ic.id, pinNum: 16 }, state: 1 });
+
+      // Inactive overrides: ~1PR (Pin 2) and ~1CLR (Pin 3) tied to VCC
+      state.wires.push({ id: "w_pr", from: { compId: pwrRail.id, pinNum: 2 }, to: { compId: ic.id, pinNum: 2 }, state: 1 });
+      state.wires.push({ id: "w_clr", from: { compId: pwrRail.id, pinNum: 3 }, to: { compId: ic.id, pinNum: 3 }, state: 1 });
+
+      // Clock
+      state.wires.push({ id: "w_clk", from: { compId: clk.id, pinNum: 1 }, to: { compId: ic.id, pinNum: 1 }, state: 0 });
+
+      // Outputs: 1Q (Pin 15) -> ledQ, ~1Q (Pin 14) -> ledQbar
+      state.wires.push({ id: "w_q", from: { compId: ic.id, pinNum: 15 }, to: { compId: ledQ.id, pinNum: 1 }, state: 0 });
+      state.wires.push({ id: "w_qbar", from: { compId: ic.id, pinNum: 14 }, to: { compId: ledQbar.id, pinNum: 1 }, state: 1 });
+
+    } else if (presetKey === "74194_shift") {
+      // Preset 15: 74194 4-Bit Universal Shift Register
+      const pwrRail = addComponentAt("POWER_RAIL", 460, 100);
+      const clk = addComponentAt("CLOCK", 160, 360);
+      const swS0 = addComponentAt("SWITCH", 160, 240); // S0 = 1 for Shift Right
+      swS0.state = { value: 1 };
+      const ic = addComponentAt("74194", 460, 340);
+      const ledRail = addComponentAt("LED_RAIL_8", 780, 340);
+
+      // Power: VCC to Pin 16, GND to Pin 8
+      state.wires.push({ id: "w_pwr_vcc", from: { compId: pwrRail.id, pinNum: 1 }, to: { compId: ic.id, pinNum: 16 }, state: 1 });
+      state.wires.push({ id: "w_pwr_gnd", from: { compId: pwrRail.id, pinNum: 5 }, to: { compId: ic.id, pinNum: 8 }, state: 0 });
+
+      // ~CLR (Pin 1) tied to VCC (inactive)
+      state.wires.push({ id: "w_clr", from: { compId: pwrRail.id, pinNum: 2 }, to: { compId: ic.id, pinNum: 1 }, state: 1 });
+
+      // SR_SER (Pin 2) tied to VCC (feeding '1' into shift register)
+      state.wires.push({ id: "w_srin", from: { compId: pwrRail.id, pinNum: 3 }, to: { compId: ic.id, pinNum: 2 }, state: 1 });
+
+      // S1 (Pin 9) tied to GND (0), S0 (Pin 10) connected to swS0 (1) -> Shift Right
+      state.wires.push({ id: "w_s1", from: { compId: pwrRail.id, pinNum: 6 }, to: { compId: ic.id, pinNum: 9 }, state: 0 });
+      state.wires.push({ id: "w_s0", from: { compId: swS0.id, pinNum: 1 }, to: { compId: ic.id, pinNum: 10 }, state: 1 });
+
+      // Clock
+      state.wires.push({ id: "w_clk", from: { compId: clk.id, pinNum: 1 }, to: { compId: ic.id, pinNum: 11 }, state: 0 });
+
+      // Outputs QA..QD (Pins 15, 14, 13, 12) -> LED Rail (L0..L3)
+      state.wires.push({ id: "w_out_qa", from: { compId: ic.id, pinNum: 15 }, to: { compId: ledRail.id, pinNum: 1 }, state: 0 });
+      state.wires.push({ id: "w_out_qb", from: { compId: ic.id, pinNum: 14 }, to: { compId: ledRail.id, pinNum: 2 }, state: 0 });
+      state.wires.push({ id: "w_out_qc", from: { compId: ic.id, pinNum: 13 }, to: { compId: ledRail.id, pinNum: 3 }, state: 0 });
+      state.wires.push({ id: "w_out_qd", from: { compId: ic.id, pinNum: 12 }, to: { compId: ledRail.id, pinNum: 4 }, state: 0 });
     }
   } finally {
     isBatchOperation = false;

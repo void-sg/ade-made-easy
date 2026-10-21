@@ -77,6 +77,38 @@
       mode: "mod16", // "mod16", "mod12", "mod8", "mod2"
     },
 
+    // Circuit 7: Dual D Flip-Flop (IC 74LS74)
+    flipflop74: {
+      clk: 0,
+      d: 0,
+      pr_n: 1, // Active-Low Preset (1=inactive)
+      clr_n: 1, // Active-Low Clear (1=inactive)
+      q: 0,
+      q_bar: 1,
+    },
+
+    // Circuit 8: Dual Master-Slave JK Flip-Flop (IC 74LS76)
+    flipflop76: {
+      clk: 0,
+      j: 0,
+      k: 0,
+      pr_n: 1,
+      clr_n: 1,
+      q: 0,
+      q_bar: 1,
+    },
+
+    // Circuit 9: 4-Bit Universal Shift Register (IC 74LS194)
+    shiftreg194: {
+      s1: 0,
+      s0: 0, // 00=Hold, 01=Shift Right, 10=Shift Left, 11=Parallel Load
+      clr_n: 1,
+      sr_in: 0,
+      sl_in: 0,
+      d: [0, 0, 0, 0], // A, B, C, D parallel inputs
+      q: [0, 0, 0, 0], // QA, QB, QC, QD outputs
+    },
+
     // Pan & Zoom
     viewBox: { x: 0, y: 0, w: 1200, h: 740 },
     initialViewBox: { x: 0, y: 0, w: 1200, h: 740 },
@@ -98,8 +130,14 @@
     bindEvents();
     const urlParams = new URLSearchParams(window.location.search);
     const cParam = urlParams.get("circuit");
-    const valid = ["mux_8to1", "mux_4to1", "comparator_4bit", "adder_subtractor_4bit", "counter_74ls90", "counter_74ls93"];
-    switchCircuit(valid.includes(cParam) ? cParam : "mux_8to1");
+    const valid = [
+      "mux_8to1", "mux_4to1", "comparator_4bit", "adder_subtractor_4bit",
+      "counter_74ls90", "counter_74ls93", "flipflop_74ls74", "flipflop_74ls76", "shiftreg_74ls194"
+    ];
+    const activeTab = document.querySelector(".circuit-tab-btn.active") || document.querySelector(".circuit-tab-btn");
+    const fallback = document.body.classList.contains("track-seq") ? "counter_74ls90" : "mux_8to1";
+    const initialCircuit = (cParam && valid.includes(cParam)) ? cParam : (activeTab ? activeTab.getAttribute("data-circuit") : fallback);
+    switchCircuit(initialCircuit);
   });
 
   function initDOM() {
@@ -314,6 +352,102 @@
       updateCircuit();
     });
 
+    // 74LS74 D-Type Flip-Flop Controls
+    document.getElementById("btn-clk-pulse-74")?.addEventListener("click", () => {
+      state.flipflop74.clk = 1;
+      evalFF74(true);
+      updateCircuit();
+      setTimeout(() => {
+        state.flipflop74.clk = 0;
+        updateCircuit();
+      }, 200);
+    });
+    document.getElementById("btn-d-74")?.addEventListener("click", () => {
+      state.flipflop74.d = 1 - state.flipflop74.d;
+      evalFF74(false);
+      updateCircuit();
+    });
+    document.getElementById("btn-pr-74")?.addEventListener("click", () => {
+      state.flipflop74.pr_n = 1 - state.flipflop74.pr_n;
+      evalFF74(false);
+      updateCircuit();
+    });
+    document.getElementById("btn-clr-74")?.addEventListener("click", () => {
+      state.flipflop74.clr_n = 1 - state.flipflop74.clr_n;
+      evalFF74(false);
+      updateCircuit();
+    });
+
+    // 74LS76 Master-Slave JK Flip-Flop Controls
+    document.getElementById("btn-clk-pulse-76")?.addEventListener("click", () => {
+      state.flipflop76.clk = 1;
+      updateCircuit();
+      setTimeout(() => {
+        state.flipflop76.clk = 0;
+        evalFF76(true);
+        updateCircuit();
+      }, 200);
+    });
+    document.getElementById("btn-j-76")?.addEventListener("click", () => {
+      state.flipflop76.j = 1 - state.flipflop76.j;
+      evalFF76(false);
+      updateCircuit();
+    });
+    document.getElementById("btn-k-76")?.addEventListener("click", () => {
+      state.flipflop76.k = 1 - state.flipflop76.k;
+      evalFF76(false);
+      updateCircuit();
+    });
+    document.getElementById("btn-pr-76")?.addEventListener("click", () => {
+      state.flipflop76.pr_n = 1 - state.flipflop76.pr_n;
+      evalFF76(false);
+      updateCircuit();
+    });
+    document.getElementById("btn-clr-76")?.addEventListener("click", () => {
+      state.flipflop76.clr_n = 1 - state.flipflop76.clr_n;
+      evalFF76(false);
+      updateCircuit();
+    });
+
+    // 74LS194 4-Bit Universal Shift Register Controls
+    document.getElementById("btn-clk-pulse-194")?.addEventListener("click", () => {
+      state.shiftreg194.clk = 1;
+      evalSR194(true);
+      updateCircuit();
+      setTimeout(() => {
+        state.shiftreg194.clk = 0;
+        updateCircuit();
+      }, 200);
+    });
+    document.getElementById("btn-s1-194")?.addEventListener("click", () => {
+      state.shiftreg194.s1 = 1 - state.shiftreg194.s1;
+      updateCircuit();
+    });
+    document.getElementById("btn-s0-194")?.addEventListener("click", () => {
+      state.shiftreg194.s0 = 1 - state.shiftreg194.s0;
+      updateCircuit();
+    });
+    document.getElementById("btn-srin-194")?.addEventListener("click", () => {
+      state.shiftreg194.sr_in = 1 - state.shiftreg194.sr_in;
+      updateCircuit();
+    });
+    document.getElementById("btn-slin-194")?.addEventListener("click", () => {
+      state.shiftreg194.sl_in = 1 - state.shiftreg194.sl_in;
+      updateCircuit();
+    });
+    document.getElementById("btn-clr-194")?.addEventListener("click", () => {
+      state.shiftreg194.clr_n = 1 - state.shiftreg194.clr_n;
+      evalSR194(false);
+      updateCircuit();
+    });
+    document.querySelectorAll("#deck-sr194 [data-parallel-in]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const idx = parseInt(btn.getAttribute("data-parallel-in"), 10);
+        state.shiftreg194.d[idx] = 1 - state.shiftreg194.d[idx];
+        updateCircuit();
+      });
+    });
+
     // Presets
     document.querySelectorAll("[data-preset]").forEach((btn) => {
       btn.addEventListener("click", () => {
@@ -321,6 +455,60 @@
         applyPreset(preset);
       });
     });
+  }
+
+  function evalFF74(edge = false) {
+    const ff = state.flipflop74;
+    if (ff.pr_n === 0 && ff.clr_n === 0) {
+      ff.q = 1; ff.q_bar = 1;
+    } else if (ff.pr_n === 0) {
+      ff.q = 1; ff.q_bar = 0;
+    } else if (ff.clr_n === 0) {
+      ff.q = 0; ff.q_bar = 1;
+    } else if (edge) {
+      ff.q = ff.d;
+      ff.q_bar = 1 - ff.d;
+    }
+  }
+
+  function evalFF76(edge = false) {
+    const ff = state.flipflop76;
+    if (ff.pr_n === 0 && ff.clr_n === 0) {
+      ff.q = 1; ff.q_bar = 1;
+    } else if (ff.pr_n === 0) {
+      ff.q = 1; ff.q_bar = 0;
+    } else if (ff.clr_n === 0) {
+      ff.q = 0; ff.q_bar = 1;
+    } else if (edge) {
+      if (ff.j === 0 && ff.k === 0) {
+        // Hold
+      } else if (ff.j === 0 && ff.k === 1) {
+        ff.q = 0; ff.q_bar = 1;
+      } else if (ff.j === 1 && ff.k === 0) {
+        ff.q = 1; ff.q_bar = 0;
+      } else if (ff.j === 1 && ff.k === 1) {
+        ff.q = 1 - ff.q;
+        ff.q_bar = 1 - ff.q;
+      }
+    }
+  }
+
+  function evalSR194(edge = false) {
+    const sr = state.shiftreg194;
+    if (sr.clr_n === 0) {
+      sr.q = [0, 0, 0, 0];
+    } else if (edge) {
+      const mode = `${sr.s1}${sr.s0}`;
+      if (mode === "00") {
+        // Hold
+      } else if (mode === "01") {
+        sr.q = [sr.sr_in, sr.q[0], sr.q[1], sr.q[2]];
+      } else if (mode === "10") {
+        sr.q = [sr.q[1], sr.q[2], sr.q[3], sr.sl_in];
+      } else if (mode === "11") {
+        sr.q = [...sr.d];
+      }
+    }
   }
 
   function advanceDiv5_90() {
@@ -456,6 +644,9 @@
     if (circuitId === "adder_subtractor_4bit") return "addsub";
     if (circuitId === "counter_74ls90") return "counter90";
     if (circuitId === "counter_74ls93") return "counter93";
+    if (circuitId === "flipflop_74ls74") return "ff74";
+    if (circuitId === "flipflop_74ls76") return "ff76";
+    if (circuitId === "shiftreg_74ls194") return "sr194";
     return "mux8";
   }
 
@@ -535,6 +726,48 @@
         state.counter93.qa = 0; state.counter93.qb = 0; state.counter93.qc = 0; state.counter93.qd = 0;
       } else if (preset === "c93-reset-count") {
         state.counter93.qa = 0; state.counter93.qb = 0; state.counter93.qc = 0; state.counter93.qd = 0;
+      }
+    } else if (c === "flipflop_74ls74") {
+      if (preset === "ff74-d-high") {
+        state.flipflop74.d = 1; state.flipflop74.pr_n = 1; state.flipflop74.clr_n = 1;
+      } else if (preset === "ff74-d-low") {
+        state.flipflop74.d = 0; state.flipflop74.pr_n = 1; state.flipflop74.clr_n = 1;
+      } else if (preset === "ff74-pr-assert") {
+        state.flipflop74.pr_n = 0; state.flipflop74.clr_n = 1; evalFF74(false);
+      } else if (preset === "ff74-clr-assert") {
+        state.flipflop74.clr_n = 0; state.flipflop74.pr_n = 1; evalFF74(false);
+      } else if (preset === "ff74-forbidden") {
+        state.flipflop74.pr_n = 0; state.flipflop74.clr_n = 0; evalFF74(false);
+      } else if (preset === "ff74-reset") {
+        state.flipflop74.d = 0; state.flipflop74.pr_n = 1; state.flipflop74.clr_n = 1; state.flipflop74.q = 0; state.flipflop74.q_bar = 1;
+      }
+    } else if (c === "flipflop_74ls76") {
+      if (preset === "ff76-toggle") {
+        state.flipflop76.j = 1; state.flipflop76.k = 1; state.flipflop76.pr_n = 1; state.flipflop76.clr_n = 1;
+      } else if (preset === "ff76-set") {
+        state.flipflop76.j = 1; state.flipflop76.k = 0; state.flipflop76.pr_n = 1; state.flipflop76.clr_n = 1;
+      } else if (preset === "ff76-reset") {
+        state.flipflop76.j = 0; state.flipflop76.k = 1; state.flipflop76.pr_n = 1; state.flipflop76.clr_n = 1;
+      } else if (preset === "ff76-hold") {
+        state.flipflop76.j = 0; state.flipflop76.k = 0; state.flipflop76.pr_n = 1; state.flipflop76.clr_n = 1;
+      } else if (preset === "ff76-pr-assert") {
+        state.flipflop76.pr_n = 0; state.flipflop76.clr_n = 1; evalFF76(false);
+      } else if (preset === "ff76-clr-assert") {
+        state.flipflop76.clr_n = 0; state.flipflop76.pr_n = 1; evalFF76(false);
+      } else if (preset === "ff76-reset-all") {
+        state.flipflop76.j = 0; state.flipflop76.k = 0; state.flipflop76.pr_n = 1; state.flipflop76.clr_n = 1; state.flipflop76.q = 0; state.flipflop76.q_bar = 1;
+      }
+    } else if (c === "shiftreg_74ls194") {
+      if (preset === "sr194-load-1010") {
+        state.shiftreg194.s1 = 1; state.shiftreg194.s0 = 1; state.shiftreg194.d = [1, 0, 1, 0]; state.shiftreg194.clr_n = 1; evalSR194(true);
+      } else if (preset === "sr194-shift-right") {
+        state.shiftreg194.s1 = 0; state.shiftreg194.s0 = 1; state.shiftreg194.sr_in = 1; state.shiftreg194.clr_n = 1; evalSR194(true);
+      } else if (preset === "sr194-shift-left") {
+        state.shiftreg194.s1 = 1; state.shiftreg194.s0 = 0; state.shiftreg194.sl_in = 1; state.shiftreg194.clr_n = 1; evalSR194(true);
+      } else if (preset === "sr194-hold") {
+        state.shiftreg194.s1 = 0; state.shiftreg194.s0 = 0;
+      } else if (preset === "sr194-clear") {
+        state.shiftreg194.clr_n = 0; evalSR194(false); state.shiftreg194.clr_n = 1;
       }
     }
     updateCircuit();
@@ -736,6 +969,40 @@
       if (btnAuto) {
         btnAuto.classList.toggle("active", state.counter93.autoRunning);
         btnAuto.textContent = state.counter93.autoRunning ? "⏹ Stop 1Hz" : "▶ Auto 1Hz";
+      }
+    } else if (c === "flipflop_74ls74") {
+      const dBtn = document.getElementById("btn-d-74");
+      if (dBtn) { dBtn.classList.toggle("active", state.flipflop74.d === 1); dBtn.querySelector(".bit-val").textContent = state.flipflop74.d; }
+      const prBtn = document.getElementById("btn-pr-74");
+      if (prBtn) { prBtn.classList.toggle("active", state.flipflop74.pr_n === 0); prBtn.querySelector(".bit-val").textContent = state.flipflop74.pr_n; }
+      const clrBtn = document.getElementById("btn-clr-74");
+      if (clrBtn) { clrBtn.classList.toggle("active", state.flipflop74.clr_n === 0); clrBtn.querySelector(".bit-val").textContent = state.flipflop74.clr_n; }
+    } else if (c === "flipflop_74ls76") {
+      const jBtn = document.getElementById("btn-j-76");
+      if (jBtn) { jBtn.classList.toggle("active", state.flipflop76.j === 1); jBtn.querySelector(".bit-val").textContent = state.flipflop76.j; }
+      const kBtn = document.getElementById("btn-k-76");
+      if (kBtn) { kBtn.classList.toggle("active", state.flipflop76.k === 1); kBtn.querySelector(".bit-val").textContent = state.flipflop76.k; }
+      const prBtn = document.getElementById("btn-pr-76");
+      if (prBtn) { prBtn.classList.toggle("active", state.flipflop76.pr_n === 0); prBtn.querySelector(".bit-val").textContent = state.flipflop76.pr_n; }
+      const clrBtn = document.getElementById("btn-clr-76");
+      if (clrBtn) { clrBtn.classList.toggle("active", state.flipflop76.clr_n === 0); clrBtn.querySelector(".bit-val").textContent = state.flipflop76.clr_n; }
+    } else if (c === "shiftreg_74ls194") {
+      const s1Btn = document.getElementById("btn-s1-194");
+      if (s1Btn) { s1Btn.classList.toggle("active", state.shiftreg194.s1 === 1); s1Btn.querySelector(".bit-val").textContent = state.shiftreg194.s1; }
+      const s0Btn = document.getElementById("btn-s0-194");
+      if (s0Btn) { s0Btn.classList.toggle("active", state.shiftreg194.s0 === 1); s0Btn.querySelector(".bit-val").textContent = state.shiftreg194.s0; }
+      const srBtn = document.getElementById("btn-srin-194");
+      if (srBtn) { srBtn.classList.toggle("active", state.shiftreg194.sr_in === 1); srBtn.querySelector(".bit-val").textContent = state.shiftreg194.sr_in; }
+      const slBtn = document.getElementById("btn-slin-194");
+      if (slBtn) { slBtn.classList.toggle("active", state.shiftreg194.sl_in === 1); slBtn.querySelector(".bit-val").textContent = state.shiftreg194.sl_in; }
+      const clrBtn = document.getElementById("btn-clr-194");
+      if (clrBtn) { clrBtn.classList.toggle("active", state.shiftreg194.clr_n === 0); clrBtn.querySelector(".bit-val").textContent = state.shiftreg194.clr_n; }
+      for (let i = 0; i < 4; i++) {
+        const dBtn = document.querySelector(`#deck-sr194 [data-parallel-in="${i}"]`);
+        if (dBtn) {
+          dBtn.classList.toggle("active", state.shiftreg194.d[i] === 1);
+          dBtn.querySelector(".bit-val").textContent = state.shiftreg194.d[i];
+        }
       }
     }
   }
@@ -1181,6 +1448,77 @@
 
       const modBadge = document.getElementById("c93-mod-badge");
       if (modBadge) modBadge.textContent = modName;
+    } else if (c === "flipflop_74ls74") {
+      const q = state.flipflop74.q;
+      const qBar = state.flipflop74.q_bar;
+      const qLed = document.getElementById("ff74-q-led");
+      if (qLed) { qLed.textContent = q; qLed.className = `output-led ${q === 1 ? "on" : ""}`; }
+      const qbarLed = document.getElementById("ff74-qbar-led");
+      if (qbarLed) { qbarLed.textContent = qBar; qbarLed.className = `output-led ${qBar === 1 ? "on" : ""}`; }
+      const desc = document.getElementById("ff74-status-desc");
+      if (desc) {
+        if (state.flipflop74.pr_n === 0 && state.flipflop74.clr_n === 0) {
+          desc.textContent = "⚠️ FORBIDDEN INDETERMINATE STATE (~PR=~CLR=0 -> Q=Q'=1)";
+        } else if (state.flipflop74.pr_n === 0) {
+          desc.textContent = "⚡ ASYNC PRESET OVERRIDE: Q forced to 1";
+        } else if (state.flipflop74.clr_n === 0) {
+          desc.textContent = "⚡ ASYNC CLEAR OVERRIDE: Q forced to 0";
+        } else {
+          desc.textContent = `Active Data State: D=${state.flipflop74.d} -> Q=${q} on Clock Edge`;
+        }
+      }
+    } else if (c === "flipflop_74ls76") {
+      const q = state.flipflop76.q;
+      const qBar = state.flipflop76.q_bar;
+      const qLed = document.getElementById("ff76-q-led");
+      if (qLed) { qLed.textContent = q; qLed.className = `output-led ${q === 1 ? "on" : ""}`; }
+      const qbarLed = document.getElementById("ff76-qbar-led");
+      if (qbarLed) { qbarLed.textContent = qBar; qbarLed.className = `output-led ${qBar === 1 ? "on" : ""}`; }
+      const desc = document.getElementById("ff76-status-desc");
+      if (desc) {
+        if (state.flipflop76.pr_n === 0 && state.flipflop76.clr_n === 0) {
+          desc.textContent = "⚠️ FORBIDDEN STATE (~PR=~CLR=0)";
+        } else if (state.flipflop76.pr_n === 0) {
+          desc.textContent = "⚡ ASYNC PRESET: Q=1";
+        } else if (state.flipflop76.clr_n === 0) {
+          desc.textContent = "⚡ ASYNC CLEAR: Q=0";
+        } else if (state.flipflop76.j === 1 && state.flipflop76.k === 1) {
+          desc.textContent = `🔄 TOGGLE MODE (J=1, K=1): Current Q=${q}`;
+        } else if (state.flipflop76.j === 1 && state.flipflop76.k === 0) {
+          desc.textContent = `SET MODE (J=1, K=0): Q=1 on Falling Edge`;
+        } else if (state.flipflop76.j === 0 && state.flipflop76.k === 1) {
+          desc.textContent = `RESET MODE (J=0, K=1): Q=0 on Falling Edge`;
+        } else {
+          desc.textContent = `HOLD NO-CHANGE (J=0, K=0): Q=${q} preserved`;
+        }
+      }
+    } else if (c === "shiftreg_74ls194") {
+      const q = state.shiftreg194.q;
+      const qStr = q.join("");
+      const led = document.getElementById("sr194-q-led");
+      if (led) led.textContent = qStr;
+      const mode = `${state.shiftreg194.s1}${state.shiftreg194.s0}`;
+      const modeBadge = document.getElementById("sr194-mode-badge");
+      const desc = document.getElementById("sr194-status-desc");
+      if (modeBadge) {
+        if (mode === "00") modeBadge.textContent = "Hold (00)";
+        else if (mode === "01") modeBadge.textContent = "Shift Right (01)";
+        else if (mode === "10") modeBadge.textContent = "Shift Left (10)";
+        else if (mode === "11") modeBadge.textContent = "Parallel Load (11)";
+      }
+      if (desc) {
+        if (state.shiftreg194.clr_n === 0) {
+          desc.textContent = "⚡ ASYNC RESET: Clear active (~CLR=0) -> QA..QD=0000";
+        } else if (mode === "00") {
+          desc.textContent = `HOLD: State [${qStr}] unchanged on clock pulse`;
+        } else if (mode === "01") {
+          desc.textContent = `SHIFT RIGHT: SR_IN (${state.shiftreg194.sr_in}) enters QA on next clock`;
+        } else if (mode === "10") {
+          desc.textContent = `SHIFT LEFT: SL_IN (${state.shiftreg194.sl_in}) enters QD on next clock`;
+        } else if (mode === "11") {
+          desc.textContent = `PARALLEL LOAD: A..D [${state.shiftreg194.d.join("")}] latches to QA..QD`;
+        }
+      }
     }
   }
 
@@ -1205,6 +1543,21 @@
         state.counter93.qa, state.counter93.qb, state.counter93.qc, state.counter93.qd,
         state.counter93.r0_1, state.counter93.r0_2,
         state.counter93.cascade, state.counter93.mode
+      );
+    } else if (circuitId === "flipflop_74ls74") {
+      return fallbackFlipFlop74LS74(
+        state.flipflop74.clk, state.flipflop74.d, state.flipflop74.pr_n, state.flipflop74.clr_n,
+        state.flipflop74.q, state.flipflop74.q_bar
+      );
+    } else if (circuitId === "flipflop_74ls76") {
+      return fallbackFlipFlop74LS76(
+        state.flipflop76.clk, state.flipflop76.j, state.flipflop76.k, state.flipflop76.pr_n, state.flipflop76.clr_n,
+        state.flipflop76.q, state.flipflop76.q_bar
+      );
+    } else if (circuitId === "shiftreg_74ls194") {
+      return fallbackShiftReg74LS194(
+        state.shiftreg194.s1, state.shiftreg194.s0, state.shiftreg194.clr_n,
+        state.shiftreg194.sr_in, state.shiftreg194.sl_in, state.shiftreg194.d, state.shiftreg194.q
       );
     }
   }
@@ -1905,6 +2258,303 @@
         qa, qb, qc, qd, r0_1, r0_2, cascade, mode,
         details: { decimal: decVal, binary: binStr, mod_title: modTitle },
       },
+    };
+  }
+
+  function fallbackFlipFlop74LS74(clk, d, pr_n, clr_n, q, q_bar) {
+    const components = [];
+    const wires = [];
+    const junctions = [];
+
+    // Left Input Ports
+    components.push({
+      id: "PORT_PR", ref: "~1PR", value: String(pr_n), type: "port_select",
+      x: 80, y: 150, width: 60, height: 20,
+      pins: { out: { name: "~1PR", pin_number: "", x: 140, y: 160, dx: 1.0, dy: 0.0, value: pr_n, direction: "output" } },
+    });
+    wires.push({ id: "w_pr", net: "1PR_N", path: "M 140,160 L 420,160", value: pr_n });
+
+    components.push({
+      id: "PORT_D", ref: "1D", value: String(d), type: "port_input",
+      x: 80, y: 230, width: 60, height: 20,
+      pins: { out: { name: "1D", pin_number: "", x: 140, y: 240, dx: 1.0, dy: 0.0, value: d, direction: "output" } },
+    });
+    wires.push({ id: "w_d", net: "1D", path: "M 140,240 L 420,240", value: d });
+
+    components.push({
+      id: "PORT_CLK", ref: "1CLK", value: String(clk), type: "port_input",
+      x: 80, y: 310, width: 60, height: 20,
+      pins: { out: { name: "1CLK", pin_number: "", x: 140, y: 320, dx: 1.0, dy: 0.0, value: clk, direction: "output" } },
+    });
+    wires.push({ id: "w_clk", net: "1CLK", path: "M 140,320 L 420,320", value: clk });
+
+    components.push({
+      id: "PORT_CLR", ref: "~1CLR", value: String(clr_n), type: "port_select",
+      x: 80, y: 390, width: 60, height: 20,
+      pins: { out: { name: "~1CLR", pin_number: "", x: 140, y: 400, dx: 1.0, dy: 0.0, value: clr_n, direction: "output" } },
+    });
+    wires.push({ id: "w_clr", net: "1CLR_N", path: "M 140,400 L 420,400", value: clr_n });
+
+    components.push({
+      id: "PORT_VCC", ref: "+5V", value: "1", type: "port_select",
+      x: 80, y: 470, width: 60, height: 20,
+      pins: { out: { name: "+5V", pin_number: "", x: 140, y: 480, dx: 1.0, dy: 0.0, value: 1, direction: "output" } },
+    });
+    wires.push({ id: "w_vcc", net: "VCC", path: "M 140,480 L 420,480", value: 1 });
+
+    // Center IC U1: 74LS74
+    components.push({
+      id: "U1", ref: "U1A", value: "74LS74", type: "ic_block",
+      x: 420, y: 120, width: 220, height: 400,
+      pins: {
+        PR:   { name: "~1PR", pin_number: "4",  x: 420, y: 160, dx: -1.0, dy: 0.0, value: pr_n, direction: "input" },
+        D:    { name: "1D",   pin_number: "2",  x: 420, y: 240, dx: -1.0, dy: 0.0, value: d,    direction: "input" },
+        CLK:  { name: "1CLK", pin_number: "3",  x: 420, y: 320, dx: -1.0, dy: 0.0, value: clk,  direction: "input" },
+        CLR:  { name: "~1CLR",pin_number: "1",  x: 420, y: 400, dx: -1.0, dy: 0.0, value: clr_n,direction: "input" },
+        VCC:  { name: "VCC",  pin_number: "14", x: 420, y: 480, dx: -1.0, dy: 0.0, value: 1,    direction: "input" },
+        Q:    { name: "1Q",   pin_number: "5",  x: 640, y: 220, dx: 1.0,  dy: 0.0, value: q,    direction: "output" },
+        QBAR: { name: "~1Q",  pin_number: "6",  x: 640, y: 340, dx: 1.0,  dy: 0.0, value: q_bar,direction: "output" },
+        GND:  { name: "GND",  pin_number: "7",  x: 640, y: 480, dx: 1.0,  dy: 0.0, value: 0,    direction: "output" },
+      },
+    });
+
+    // Right Output Ports
+    components.push({
+      id: "PORT_Q", ref: "1Q", value: String(q), type: "port_output",
+      x: 820, y: 210, width: 60, height: 20,
+      pins: { in: { name: "1Q", pin_number: "", x: 820, y: 220, dx: -1.0, dy: 0.0, value: q, direction: "input" } },
+    });
+    wires.push({ id: "w_q", net: "1Q", path: "M 640,220 L 820,220", value: q });
+
+    components.push({
+      id: "PORT_QBAR", ref: "~1Q", value: String(q_bar), type: "port_output",
+      x: 820, y: 330, width: 60, height: 20,
+      pins: { in: { name: "~1Q", pin_number: "", x: 820, y: 340, dx: -1.0, dy: 0.0, value: q_bar, direction: "input" } },
+    });
+    wires.push({ id: "w_qbar", net: "1Q_BAR", path: "M 640,340 L 820,340", value: q_bar });
+
+    components.push({
+      id: "PORT_GND", ref: "GND", value: "0", type: "port_output",
+      x: 820, y: 470, width: 60, height: 20,
+      pins: { in: { name: "GND", pin_number: "", x: 820, y: 480, dx: -1.0, dy: 0.0, value: 0, direction: "input" } },
+    });
+    wires.push({ id: "w_gnd", net: "GND", path: "M 640,480 L 820,480", value: 0 });
+
+    return {
+      circuit_id: "flipflop_74ls74",
+      title: "Dual D-Type Positive-Edge-Triggered Flip-Flop (IC 74LS74)",
+      sheet_info: { title: "IC 74LS74 D-TYPE FLIP-FLOP WITH PRESET & CLEAR", file: "ff_74ls74.kicad_sch", size: "A4", rev: "v1.0" },
+      canvas: { width: 1100, height: 680 },
+      components, wires, junctions,
+      state: { clk, d, pr_n, clr_n, q, q_bar },
+    };
+  }
+
+  function fallbackFlipFlop74LS76(clk, j, k, pr_n, clr_n, q, q_bar) {
+    const components = [];
+    const wires = [];
+    const junctions = [];
+
+    // Left Input Ports
+    components.push({
+      id: "PORT_PR", ref: "~1PR", value: String(pr_n), type: "port_select",
+      x: 80, y: 130, width: 60, height: 20,
+      pins: { out: { name: "~1PR", pin_number: "", x: 140, y: 140, dx: 1.0, dy: 0.0, value: pr_n, direction: "output" } },
+    });
+    wires.push({ id: "w_pr", net: "1PR_N", path: "M 140,140 L 420,140", value: pr_n });
+
+    components.push({
+      id: "PORT_J", ref: "1J", value: String(j), type: "port_input",
+      x: 80, y: 200, width: 60, height: 20,
+      pins: { out: { name: "1J", pin_number: "", x: 140, y: 210, dx: 1.0, dy: 0.0, value: j, direction: "output" } },
+    });
+    wires.push({ id: "w_j", net: "1J", path: "M 140,210 L 420,210", value: j });
+
+    components.push({
+      id: "PORT_CLK", ref: "1CLK", value: String(clk), type: "port_input",
+      x: 80, y: 270, width: 60, height: 20,
+      pins: { out: { name: "1CLK", pin_number: "", x: 140, y: 280, dx: 1.0, dy: 0.0, value: clk, direction: "output" } },
+    });
+    wires.push({ id: "w_clk", net: "1CLK", path: "M 140,280 L 420,280", value: clk });
+
+    components.push({
+      id: "PORT_K", ref: "1K", value: String(k), type: "port_input",
+      x: 80, y: 340, width: 60, height: 20,
+      pins: { out: { name: "1K", pin_number: "", x: 140, y: 350, dx: 1.0, dy: 0.0, value: k, direction: "output" } },
+    });
+    wires.push({ id: "w_k", net: "1K", path: "M 140,350 L 420,350", value: k });
+
+    components.push({
+      id: "PORT_CLR", ref: "~1CLR", value: String(clr_n), type: "port_select",
+      x: 80, y: 410, width: 60, height: 20,
+      pins: { out: { name: "~1CLR", pin_number: "", x: 140, y: 420, dx: 1.0, dy: 0.0, value: clr_n, direction: "output" } },
+    });
+    wires.push({ id: "w_clr", net: "1CLR_N", path: "M 140,420 L 420,420", value: clr_n });
+
+    components.push({
+      id: "PORT_VCC", ref: "+5V", value: "1", type: "port_select",
+      x: 80, y: 480, width: 60, height: 20,
+      pins: { out: { name: "+5V", pin_number: "", x: 140, y: 490, dx: 1.0, dy: 0.0, value: 1, direction: "output" } },
+    });
+    wires.push({ id: "w_vcc", net: "VCC", path: "M 140,490 L 420,490", value: 1 });
+
+    // Center IC U1: 74LS76
+    components.push({
+      id: "U1", ref: "U1A", value: "74LS76", type: "ic_block",
+      x: 420, y: 100, width: 220, height: 430,
+      pins: {
+        PR:   { name: "~1PR", pin_number: "2",  x: 420, y: 140, dx: -1.0, dy: 0.0, value: pr_n, direction: "input" },
+        J:    { name: "1J",   pin_number: "1",  x: 420, y: 210, dx: -1.0, dy: 0.0, value: j,    direction: "input" },
+        CLK:  { name: "1CLK", pin_number: "6",  x: 420, y: 280, dx: -1.0, dy: 0.0, value: clk,  direction: "input" },
+        K:    { name: "1K",   pin_number: "4",  x: 420, y: 350, dx: -1.0, dy: 0.0, value: k,    direction: "input" },
+        CLR:  { name: "~1CLR",pin_number: "3",  x: 420, y: 420, dx: -1.0, dy: 0.0, value: clr_n,direction: "input" },
+        VCC:  { name: "VCC",  pin_number: "5",  x: 420, y: 490, dx: -1.0, dy: 0.0, value: 1,    direction: "input" },
+        Q:    { name: "1Q",   pin_number: "15", x: 640, y: 210, dx: 1.0,  dy: 0.0, value: q,    direction: "output" },
+        QBAR: { name: "~1Q",  pin_number: "14", x: 640, y: 350, dx: 1.0,  dy: 0.0, value: q_bar,direction: "output" },
+        GND:  { name: "GND",  pin_number: "13", x: 640, y: 490, dx: 1.0,  dy: 0.0, value: 0,    direction: "output" },
+      },
+    });
+
+    // Right Output Ports
+    components.push({
+      id: "PORT_Q", ref: "1Q", value: String(q), type: "port_output",
+      x: 820, y: 200, width: 60, height: 20,
+      pins: { in: { name: "1Q", pin_number: "", x: 820, y: 210, dx: -1.0, dy: 0.0, value: q, direction: "input" } },
+    });
+    wires.push({ id: "w_q", net: "1Q", path: "M 640,210 L 820,210", value: q });
+
+    components.push({
+      id: "PORT_QBAR", ref: "~1Q", value: String(q_bar), type: "port_output",
+      x: 820, y: 340, width: 60, height: 20,
+      pins: { in: { name: "~1Q", pin_number: "", x: 820, y: 350, dx: -1.0, dy: 0.0, value: q_bar, direction: "input" } },
+    });
+    wires.push({ id: "w_qbar", net: "1Q_BAR", path: "M 640,350 L 820,350", value: q_bar });
+
+    components.push({
+      id: "PORT_GND", ref: "GND", value: "0", type: "port_output",
+      x: 820, y: 480, width: 60, height: 20,
+      pins: { in: { name: "GND", pin_number: "", x: 820, y: 490, dx: -1.0, dy: 0.0, value: 0, direction: "input" } },
+    });
+    wires.push({ id: "w_gnd", net: "GND", path: "M 640,490 L 820,490", value: 0 });
+
+    return {
+      circuit_id: "flipflop_74ls76",
+      title: "Dual Master-Slave J-K Flip-Flop (IC 74LS76)",
+      sheet_info: { title: "IC 74LS76 DUAL MASTER-SLAVE JK FLIP-FLOP", file: "ff_74ls76.kicad_sch", size: "A4", rev: "v1.0" },
+      canvas: { width: 1100, height: 680 },
+      components, wires, junctions,
+      state: { clk, j, k, pr_n, clr_n, q, q_bar },
+    };
+  }
+
+  function fallbackShiftReg74LS194(s1, s0, clr_n, sr_in, sl_in, d, q) {
+    const components = [];
+    const wires = [];
+    const junctions = [];
+
+    // Left Input Ports
+    components.push({
+      id: "PORT_S1", ref: "S1", value: String(s1), type: "port_select",
+      x: 80, y: 120, width: 60, height: 20,
+      pins: { out: { name: "S1", pin_number: "", x: 140, y: 130, dx: 1.0, dy: 0.0, value: s1, direction: "output" } },
+    });
+    wires.push({ id: "w_s1", net: "S1", path: "M 140,130 L 420,130", value: s1 });
+
+    components.push({
+      id: "PORT_S0", ref: "S0", value: String(s0), type: "port_select",
+      x: 80, y: 170, width: 60, height: 20,
+      pins: { out: { name: "S0", pin_number: "", x: 140, y: 180, dx: 1.0, dy: 0.0, value: s0, direction: "output" } },
+    });
+    wires.push({ id: "w_s0", net: "S0", path: "M 140,180 L 420,180", value: s0 });
+
+    components.push({
+      id: "PORT_SR", ref: "SR_SER", value: String(sr_in), type: "port_input",
+      x: 80, y: 220, width: 60, height: 20,
+      pins: { out: { name: "SR_SER", pin_number: "", x: 140, y: 230, dx: 1.0, dy: 0.0, value: sr_in, direction: "output" } },
+    });
+    wires.push({ id: "w_sr", net: "SR_SER", path: "M 140,230 L 420,230", value: sr_in });
+
+    const pLabels = ["A", "B", "C", "D"];
+    pLabels.forEach((lbl, i) => {
+      const yP = 270 + i * 40;
+      components.push({
+        id: `PORT_${lbl}`, ref: lbl, value: String(d[i]), type: "port_input",
+        x: 80, y: yP - 10, width: 60, height: 20,
+        pins: { out: { name: lbl, pin_number: "", x: 140, y: yP, dx: 1.0, dy: 0.0, value: d[i], direction: "output" } },
+      });
+      wires.push({ id: `w_${lbl}`, net: lbl, path: `M 140,${yP} L 420,${yP}`, value: d[i] });
+    });
+
+    components.push({
+      id: "PORT_SL", ref: "SL_SER", value: String(sl_in), type: "port_input",
+      x: 80, y: 440, width: 60, height: 20,
+      pins: { out: { name: "SL_SER", pin_number: "", x: 140, y: 450, dx: 1.0, dy: 0.0, value: sl_in, direction: "output" } },
+    });
+    wires.push({ id: "w_sl", net: "SL_SER", path: "M 140,450 L 420,450", value: sl_in });
+
+    components.push({
+      id: "PORT_CLK", ref: "CLK", value: "0", type: "port_input",
+      x: 80, y: 490, width: 60, height: 20,
+      pins: { out: { name: "CLK", pin_number: "", x: 140, y: 500, dx: 1.0, dy: 0.0, value: 0, direction: "output" } },
+    });
+    wires.push({ id: "w_clk", net: "CLK", path: "M 140,500 L 420,500", value: 0 });
+
+    components.push({
+      id: "PORT_CLR", ref: "~CLR", value: String(clr_n), type: "port_select",
+      x: 80, y: 540, width: 60, height: 20,
+      pins: { out: { name: "~CLR", pin_number: "", x: 140, y: 550, dx: 1.0, dy: 0.0, value: clr_n, direction: "output" } },
+    });
+    wires.push({ id: "w_clr", net: "CLR_N", path: "M 140,550 L 420,550", value: clr_n });
+
+    // Center IC U1: 74LS194
+    components.push({
+      id: "U1", ref: "U1", value: "74LS194", type: "ic_block",
+      x: 420, y: 90, width: 220, height: 500,
+      pins: {
+        S1:     { name: "S1",     pin_number: "9",  x: 420, y: 130, dx: -1.0, dy: 0.0, value: s1,    direction: "input" },
+        S0:     { name: "S0",     pin_number: "10", x: 420, y: 180, dx: -1.0, dy: 0.0, value: s0,    direction: "input" },
+        SR_SER: { name: "SR_SER", pin_number: "2",  x: 420, y: 230, dx: -1.0, dy: 0.0, value: sr_in, direction: "input" },
+        A:      { name: "A",      pin_number: "3",  x: 420, y: 270, dx: -1.0, dy: 0.0, value: d[0],  direction: "input" },
+        B:      { name: "B",      pin_number: "4",  x: 420, y: 310, dx: -1.0, dy: 0.0, value: d[1],  direction: "input" },
+        C:      { name: "C",      pin_number: "5",  x: 420, y: 350, dx: -1.0, dy: 0.0, value: d[2],  direction: "input" },
+        D:      { name: "D",      pin_number: "6",  x: 420, y: 390, dx: -1.0, dy: 0.0, value: d[3],  direction: "input" },
+        SL_SER: { name: "SL_SER", pin_number: "7",  x: 420, y: 450, dx: -1.0, dy: 0.0, value: sl_in, direction: "input" },
+        CLK:    { name: "CLK",    pin_number: "11", x: 420, y: 500, dx: -1.0, dy: 0.0, value: 0,     direction: "input" },
+        CLR:    { name: "~CLR",   pin_number: "1",  x: 420, y: 550, dx: -1.0, dy: 0.0, value: clr_n, direction: "input" },
+        QA:     { name: "QA",     pin_number: "15", x: 640, y: 220, dx: 1.0,  dy: 0.0, value: q[0],  direction: "output" },
+        QB:     { name: "QB",     pin_number: "14", x: 640, y: 280, dx: 1.0,  dy: 0.0, value: q[1],  direction: "output" },
+        QC:     { name: "QC",     pin_number: "13", x: 640, y: 340, dx: 1.0,  dy: 0.0, value: q[2],  direction: "output" },
+        QD:     { name: "QD",     pin_number: "12", x: 640, y: 400, dx: 1.0,  dy: 0.0, value: q[3],  direction: "output" },
+        GND:    { name: "GND",    pin_number: "8",  x: 640, y: 550, dx: 1.0,  dy: 0.0, value: 0,     direction: "output" },
+      },
+    });
+
+    // Right Output Ports
+    const qLabels = ["QA", "QB", "QC", "QD"];
+    qLabels.forEach((lbl, i) => {
+      const yP = 220 + i * 60;
+      components.push({
+        id: `PORT_${lbl}`, ref: lbl, value: String(q[i]), type: "port_output",
+        x: 820, y: yP - 10, width: 60, height: 20,
+        pins: { in: { name: lbl, pin_number: "", x: 820, y: yP, dx: -1.0, dy: 0.0, value: q[i], direction: "input" } },
+      });
+      wires.push({ id: `w_${lbl}`, net: lbl, path: `M 640,${yP} L 820,${yP}`, value: q[i] });
+    });
+
+    components.push({
+      id: "PORT_GND", ref: "GND", value: "0", type: "port_output",
+      x: 820, y: 540, width: 60, height: 20,
+      pins: { in: { name: "GND", pin_number: "", x: 820, y: 550, dx: -1.0, dy: 0.0, value: 0, direction: "input" } },
+    });
+    wires.push({ id: "w_gnd", net: "GND", path: "M 640,550 L 820,550", value: 0 });
+
+    return {
+      circuit_id: "shiftreg_74ls194",
+      title: "4-Bit Bidirectional Universal Shift Register (IC 74LS194)",
+      sheet_info: { title: "IC 74LS194 4-BIT BIDIRECTIONAL UNIVERSAL SHIFT REGISTER", file: "shiftreg_74ls194.kicad_sch", size: "A4", rev: "v1.0" },
+      canvas: { width: 1100, height: 680 },
+      components, wires, junctions,
+      state: { s1, s0, clr_n, sr_in, sl_in, d, q },
     };
   }
 

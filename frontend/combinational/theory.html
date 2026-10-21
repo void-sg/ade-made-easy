@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Combinational Theory &amp; Mathematical Models | ADE Made Easy</title>
+  <link rel="stylesheet" href="../shared/ui-components.css">
+  <link rel="stylesheet" href="../style.css">
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+  <link href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css" rel="stylesheet">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'\\(',right:'\\)',display:false}]});"></script>
+  <style>
+    .ref-card { background: #ffffff; border: 1px solid var(--line); border-radius: 12px; padding: 28px; margin-bottom: 32px; }
+    .formula-banner { background: #0f172a; color: #38bdf8; padding: 14px 20px; border-radius: 8px; font-family: var(--font-mono); margin: 16px 0; overflow-x: auto; }
+    .ref-table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 14px; }
+    .ref-table th, .ref-table td { border: 1px solid #e2e8f0; padding: 10px 14px; text-align: left; }
+    .ref-table th { background: #f8fafc; color: var(--navy); font-weight: 700; font-family: var(--font-mono); }
+    .callout-box { background: #f8fafc; border-left: 4px solid var(--blue); padding: 14px 18px; border-radius: 0 8px 8px 0; margin: 18px 0; font-size: 14px; }
+  </style>
+</head>
+<body class="track-comb">
+
+  <!-- Symmetrical Global Header -->
+  <header class="ade-global-header">
+    <div class="ade-header-wrap">
+      <a class="ade-brand" href="../index.html">
+        <span class="ade-brand-badge">ADE</span>
+        <span class="ade-brand-text">
+          <strong>ADE Made Easy</strong>
+          <small>Concept to Silicon</small>
+        </span>
+      </a>
+
+      <nav class="ade-segment-switcher">
+        <a href="index.html" class="segment-toggle-btn active-combinational">
+          <span class="icon">🔷</span>
+          <span>Combinational Track</span>
+        </a>
+        <a href="../sequential/index.html" class="segment-toggle-btn">
+          <span class="icon">🔶</span>
+          <span>Sequential Track</span>
+        </a>
+      </nav>
+
+      <div class="ade-header-right">
+        <a href="../index.html" class="hub-nav-link">🏠 Main Hub</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- 4-Part Subsystem Navigation -->
+  <nav class="subsystem-subnav">
+    <div class="subsystem-nav-wrap">
+      <div class="subsystem-tabs">
+        <a href="index.html" class="subsystem-tab-link">
+          <span class="step-num">0</span>
+          <span>Overview</span>
+        </a>
+        <a href="theory.html" class="subsystem-tab-link active">
+          <span class="step-num">1</span>
+          <span>Theory &amp; K-Maps</span>
+        </a>
+        <a href="schematic.html" class="subsystem-tab-link">
+          <span class="step-num">2</span>
+          <span>Vector Schematics</span>
+        </a>
+        <a href="workbench.html" class="subsystem-tab-link">
+          <span class="step-num">3</span>
+          <span>IC Workbench</span>
+        </a>
+        <a href="applications.html" class="subsystem-tab-link">
+          <span class="step-num">4</span>
+          <span>Practical &amp; ALU</span>
+        </a>
+      </div>
+      <div class="subsystem-track-indicator indicator-comb">
+        🔷 PART 1 &bull; THEORY &amp; MATHEMATICAL MODELS
+      </div>
+    </div>
+  </nav>
+
+  <main style="max-width: 1140px; margin: 36px auto 80px; padding: 0 24px;">
+    <!-- Title -->
+    <div style="margin-bottom: 28px;">
+      <span class="meta-tag" style="background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe;">
+        COMBINATIONAL LOGIC FOUNDATIONS
+      </span>
+      <h1 style="font-size: 32px; color: var(--navy); margin-bottom: 8px;">
+        Theory, Boolean Synthesis &amp; K-Map Minimization
+      </h1>
+      <p style="color: var(--muted); font-size: 16px; line-height: 1.6;">
+        Rigorous mathematical models for memoryless digital logic networks, canonical forms, prime implicant reduction, MSI arithmetic logic, and synthesizable Verilog architectures.
+      </p>
+    </div>
+
+    <!-- 1. Canonical Forms & K-Maps -->
+    <section class="ref-card">
+      <h2 style="font-size: 22px; color: var(--navy); margin-bottom: 12px;">1. Standard Forms &amp; Karnaugh Map Synthesis</h2>
+      <p>
+        Any arbitrary Boolean switching function can be represented canonically as a <strong>Sum-of-Products (SOP)</strong> of minterms or a <strong>Product-of-Sums (POS)</strong> of maxterms:
+      </p>
+
+      <div class="formula-banner">
+        Canonical SOP: \(Y = \sum m(m_1, m_2, \dots) + d(d_1, \dots) \quad \Longleftrightarrow \quad \text{Canonical POS: } Y = \prod M(M_1, M_2, \dots) \cdot d(d_1, \dots)\)
+      </div>
+
+      <div class="callout-box">
+        <strong>Gray Code Adjacency in K-Maps:</strong><br>
+        K-Maps use reflected binary Gray code (`00, 01, 11, 10`) along rows and columns so that adjacent physical cells differ in <em>exactly one literal</em>. When cells are grouped in powers of two (\(2^k\)), \(k\) variables are eliminated using the Boolean identity \(A + \overline{A} = 1\).
+      </div>
+
+      <h3>Essential Prime Implicant (EPI) Selection Algorithm</h3>
+      <ol style="margin-left: 20px; line-height: 1.8;">
+        <li>Identify all isolated 1s that cannot be grouped with any adjacent cell (single-cell PIs).</li>
+        <li>Identify 1s that can only combine in a single direction to form groups of 2, 4, or 8 (Essential Prime Implicants).</li>
+        <li>Check off minterms covered by EPIs; cover any remaining 1s using the largest possible overlapping groupings.</li>
+        <li>Leverage Don't-Care conditions (\(d\)) by treating them as 1s only when they enlarge a group, and as 0s otherwise.</li>
+      </ol>
+    </section>
+
+    <!-- 2. Core Combinational IC Subsystems -->
+    <section class="ref-card">
+      <h2 style="font-size: 22px; color: var(--navy); margin-bottom: 12px;">2. Core Combinational MSI Architectures</h2>
+      
+      <table class="ref-table">
+        <thead>
+          <tr>
+            <th>Subsystem</th>
+            <th>Standard IC</th>
+            <th>Governing Boolean Equations</th>
+            <th>Key Hardware Feature</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>4-Bit Binary Adder</strong></td>
+            <td><strong>IC 7483</strong></td>
+            <td>\(S_i = A_i \oplus B_i \oplus C_i\)<br>\(C_{i+1} = A_i B_i + C_i(A_i \oplus B_i)\)</td>
+            <td>Internal Carry Lookahead Generator eliminates ripple carry delay.</td>
+          </tr>
+          <tr>
+            <td><strong>4-Bit Magnitude Comparator</strong></td>
+            <td><strong>IC 7485</strong></td>
+            <td>\(A=B \implies \prod (A_i \odot B_i)\)<br>\(A>B \implies A_3\overline{B}_3 + (A_3\odot B_3)A_2\overline{B}_2 + \dots\)</td>
+            <td>Cascading inputs (\(I_{A>B}, I_{A=B}, I_{A<B}\)) for expanding to 8, 16, or 24-bit comparisons.</td>
+          </tr>
+          <tr>
+            <td><strong>8:1 Multiplexer</strong></td>
+            <td><strong>IC 74151</strong></td>
+            <td>\(Y = \sum_{i=0}^7 D_i \cdot m_i(S_2, S_1, S_0) \cdot \overline{E}\)</td>
+            <td>Active-low enable strobe \(\overline{E}\) with complementary outputs \(Y\) and \(W = \overline{Y}\).</td>
+          </tr>
+          <tr>
+            <td><strong>Dual 4:1 Multiplexer</strong></td>
+            <td><strong>IC 74153</strong></td>
+            <td>\(1Y = \sum_{i=0}^3 1I_i \cdot m_i(S_1, S_0) \cdot \overline{1G}\)</td>
+            <td>Dual independent 4-channel banks sharing select lines \(S_1, S_0\) for parallel word multiplexing.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>Shannon's Expansion Theorem for MUX Synthesis</h3>
+      <p>
+        Any \(n\)-variable Boolean function \(F(X_1, \dots, X_n)\) can be synthesized using an \(n-1\) select line multiplexer:
+      </p>
+      <div class="formula-banner">
+        \(F(A, B, C) = \overline{A}\overline{B} \cdot F(0,0,C) + \overline{A}B \cdot F(0,1,C) + A\overline{B} \cdot F(1,0,C) + AB \cdot F(1,1,C)\)
+      </div>
+      <p>
+        Connect select lines to \(A, B\), and tie data inputs to \(0, 1, C,\) or \(\overline{C}\).
+      </p>
+    </section>
+
+    <!-- 4. Practical Real-World Applications -->
+    <section class="ref-card" id="practical">
+      <h2 style="font-size: 22px; color: var(--navy); margin-bottom: 12px;">4. Practical Real-World Applications &amp; Hardware Reality</h2>
+
+      <h3>4.1 Arithmetic Logic Unit (ALU) Datapath: IC 74181</h3>
+      <p>
+        The 74181 is a 4-bit slice ALU that performs 16 arithmetic operations (addition, subtraction, decrement, 2's complement) and 16 logic operations (AND, OR, XOR, NOT) governed by Mode Control (\(M\)) and 4 function select lines (\(S_3, S_2, S_1, S_0\)).
+      </p>
+
+      <h3>4.2 Synthesizable Verilog RTL Architecture</h3>
+      <div class="formula-banner" style="color: #cbd5e1;">
+<span style="color: #38bdf8;">module</span> adder_subtractor_4bit (
+    <span style="color: #38bdf8;">input</span>  [3:0] A, B,
+    <span style="color: #38bdf8;">input</span>        M,        <span style="color: #64748b;">// 0: Add, 1: Subtract (2's complement)</span>
+    <span style="color: #38bdf8;">output</span> [3:0] Sum,
+    <span style="color: #38bdf8;">output</span>       Cout
+);
+    <span style="color: #38bdf8;">wire</span> [3:0] b_operand = B ^ {4{M}};
+    <span style="color: #38bdf8;">assign</span> {Cout, Sum} = A + b_operand + M;
+<span style="color: #38bdf8;">endmodule</span>
+      </div>
+
+      <h3>4.3 Hardware &amp; Bench Physics</h3>
+      <div class="callout-box">
+        <strong>TTL Floating Input Physics:</strong> Standard 74LSxx bipolar TTL inputs float to a weak logic HIGH (\(\approx 1.4\text{V} - 1.8\text{V}\)) because the multi-emitter NPN transistor base is pulled up to \(V_{CC}\) via an internal \(4\text{k}\Omega\) resistor. Leaving unused inputs floating invites noise pick-up; always tie unused pins to \(V_{CC}\) via a \(1\text{k}\Omega\) pull-up or directly to GND.
+      </div>
+    </section>
+
+    <div style="text-align: center; margin-top: 40px;">
+      <a href="schematic.html" style="display: inline-flex; align-items: center; gap: 8px; background: var(--blue); color: #ffffff; padding: 12px 24px; border-radius: 8px; font-weight: 700; text-decoration: none;">
+        <span>Continue to Part 2: Vector Schematics</span>
+        <span>➔</span>
+      </a>
+    </div>
+  </main>
+
+  <footer>
+    <p>ADE Made Easy • Segment 1: Combinational Logic Track</p>
+  </footer>
+
+  <script src="../config.js"></script>
+  <script src="../shared/auth.js"></script>
+  <script src="../user-menu.js"></script>
+</body>
+</html>

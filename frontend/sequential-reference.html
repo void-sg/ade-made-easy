@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sequential Logic Circuits & Systems | Master Engineering Reference</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+  <link href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css" rel="stylesheet">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'\\(',right:'\\)',display:false}]});"></script>
+
+  <style>
+    .meta-tag {
+      display: inline-block;
+      background: #e2e8f0;
+      color: var(--navy);
+      font-family: "DM Mono", monospace;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 5px 12px;
+      border-radius: 4px;
+      margin-bottom: 16px;
+      letter-spacing: 0.5px;
+    }
+
+    .badge-group {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin: 14px 0 22px;
+    }
+
+    .badge {
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-family: "DM Mono", monospace;
+      font-size: 13px;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .badge-blue {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border: 1.5px solid #bfdbfe;
+    }
+
+    .badge-green {
+      background: #ecfdf5;
+      color: #047857;
+      border: 1.5px solid #a7f3d0;
+    }
+
+    .badge-yellow {
+      background: #fefce8;
+      color: #854d0e;
+      border: 1.5px solid #fef08a;
+    }
+
+    .badge-purple {
+      background: #f5f3ff;
+      color: #6d28d9;
+      border: 1.5px solid #ddd6fe;
+    }
+
+    .pillar-nav {
+      position: sticky;
+      top: 76px;
+      z-index: 9;
+      background: #ffffff;
+      border-bottom: 2px solid #e2e8f0;
+      display: flex;
+      gap: 8px;
+      padding: 12px 38px;
+      overflow-x: auto;
+      max-width: 1240px;
+      margin: 0 auto;
+    }
+
+    .pillar-nav a {
+      color: #475569;
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 6px 14px;
+      border-radius: 20px;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+      border: 1px solid transparent;
+    }
+
+    .pillar-nav a:hover {
+      background: #f1f5f9;
+      color: var(--blue);
+      border-color: #cbd5e1;
+    }
+
+    .ref-container {
+      max-width: 1140px;
+      margin: 32px auto 80px;
+      padding: 0 24px;
+    }
+
+    .ref-card {
+      background: #ffffff;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 32px;
+      margin-bottom: 40px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    }
+
+    .ref-card h2 {
+      font-size: 24px;
+      color: var(--navy);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .ref-card h3 {
+      font-size: 18px;
+      color: #1e293b;
+      margin: 24px 0 12px;
+      border-bottom: 1px solid #f1f5f9;
+      padding-bottom: 6px;
+    }
+
+    .ref-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0 24px;
+      font-size: 14px;
+    }
+
+    .ref-table th, .ref-table td {
+      border: 1px solid #e2e8f0;
+      padding: 10px 14px;
+      text-align: left;
+    }
+
+    .ref-table th {
+      background: #f8fafc;
+      color: var(--navy);
+      font-weight: 700;
+      font-family: "DM Mono", monospace;
+    }
+
+    .ref-table td {
+      color: #334155;
+    }
+
+    .ref-table tr:hover {
+      background: #f8fafc;
+    }
+
+    .callout-box {
+      background: #f8fafc;
+      border-left: 4px solid var(--blue);
+      padding: 16px 20px;
+      border-radius: 0 8px 8px 0;
+      margin: 20px 0;
+      font-size: 14px;
+    }
+
+    .callout-box.warn {
+      border-left-color: #eab308;
+      background: #fefce8;
+    }
+
+    .callout-box.danger {
+      border-left-color: #ef4444;
+      background: #fef2f2;
+    }
+
+    .callout-box.success {
+      border-left-color: #10b981;
+      background: #f0fdf4;
+    }
+
+    .formula-banner {
+      background: #0f172a;
+      color: #38bdf8;
+      padding: 16px 24px;
+      border-radius: 8px;
+      font-family: "DM Mono", monospace;
+      margin: 18px 0;
+      overflow-x: auto;
+    }
+
+    .viva-card {
+      background: #fffbeb;
+      border: 1px solid #fde68a;
+      border-radius: 8px;
+      padding: 18px;
+      margin-top: 18px;
+    }
+
+    .viva-card strong {
+      color: #92400e;
+      display: block;
+      margin-bottom: 6px;
+    }
+  </style>
+</head>
+
+<body>
+  <header class="site-header">
+    <div class="nav-wrap">
+      <a class="brand" href="landing.html">
+        <span class="brand-mark">DE</span>
+        <span>
+          <strong>ADE Made Easy</strong>
+          <small>MASTER ENGINEERING REFERENCE</small>
+        </span>
+      </a>
+
+      <nav class="main-nav">
+        <a href="index.html">Product Index</a>
+        <a href="workbench.html" style="color: #e9bd4f; font-weight: 700;">⚡ IC Workbench</a>
+        <a href="schematic.html">Schematics</a>
+        <a href="mod-counter-reference.html">Counter Guide</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Sticky Pillar Navigation Bar -->
+  <nav class="pillar-nav">
+    <a href="#pillar1">Pillar 1: Memory &amp; Latches</a>
+    <a href="#pillar2">Pillar 2: Core 4 Flip-Flops</a>
+    <a href="#pillar3">Pillar 3: Excitation &amp; Conversions</a>
+    <a href="#pillar4">Pillar 4: Shift Registers &amp; 74194</a>
+    <a href="#pillar5">Pillar 5: Counters (Ripple &amp; Sync)</a>
+    <a href="#pillar6">Pillar 6: FSMs &amp; VLSI Physics</a>
+  </nav>
+
+  <div class="ref-container">
+    <div style="margin-bottom: 24px;">
+      <span class="meta-tag">TRACK 2 CURRICULUM • COLLEGE &amp; PROFESSOR PRESENTATION CORE</span>
+      <h1 style="font-size: 32px; color: var(--navy); margin-bottom: 10px;">Sequential Logic Circuits: Architecture, Physics &amp; Design</h1>
+      <p style="color: #64748b; font-size: 16px; line-height: 1.6;">
+        A rigorous academic and industry-grade engineering treatise covering 1-bit bistable elements, internal latch physics, master-slave flip-flops, master excitation matrices, shift registers, synchronous counters, and finite state machines.
+      </p>
+
+      <div class="badge-group">
+        <span class="badge badge-blue">⚡ Standard ICs: 7474, 7476, 7490, 7493, 74194</span>
+        <span class="badge badge-green">📐 Full Excitation Algebra &amp; K-Maps</span>
+        <span class="badge badge-yellow">🔬 Metastability &amp; Setup/Hold Timing</span>
+        <span class="badge badge-purple">🎯 Viva Exam Ready</span>
+      </div>
+    </div>
+
+    <!-- ======================================================== -->
+    <!-- PILLAR 1: FOUNDATIONS & 1-BIT MEMORY STORAGE -->
+    <!-- ======================================================== -->
+    <section class="ref-card" id="pillar1">
+      <h2><span>🧱</span> Pillar 1: Foundations &amp; 1-Bit Memory Storage</h2>
+      
+      <h3>1.1 Combinational vs. Sequential Circuits</h3>
+      <table class="ref-table">
+        <thead>
+          <tr>
+            <th>Parameter</th>
+            <th>Combinational Logic</th>
+            <th>Sequential Logic</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Output Dependency</strong></td>
+            <td>Depends strictly on <em>present inputs</em>: \(Y = f(X)\)</td>
+            <td>Depends on <em>present inputs and past history</em>: \(Y = f(X, Q_n)\)</td>
+          </tr>
+          <tr>
+            <td><strong>Memory Element</strong></td>
+            <td>None. Pure gate-level forward evaluation.</td>
+            <td>Present (Flip-Flops, Latches, or feedback delay loops).</td>
+          </tr>
+          <tr>
+            <td><strong>Feedback Path</strong></td>
+            <td>Strictly prohibited (acyclic graph).</td>
+            <td>Mandatory feedback loop creating bistable states.</td>
+          </tr>
+          <tr>
+            <td><strong>Clock Signal</strong></td>
+            <td>Unclocked. Evaluates continuously.</td>
+            <td>Synchronized by periodic clock pulses (or event-driven asynchronous).</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>1.2 Latches vs. Flip-Flops: Level vs. Edge Triggering</h3>
+      <p>
+        <strong>Latches</strong> are <em>level-triggered</em> storage elements. While the Enable signal is active (HIGH or LOW), the latch is <em>transparent</em>—any fluctuation at the input passes immediately to the output.
+      </p>
+      <p>
+        <strong>Flip-Flops</strong> are <em>edge-triggered</em>. They sample input data strictly during the brief transitional threshold of the clock—either rising edge (\(\uparrow\), positive-edge-triggered) or falling edge (\(\downarrow\), negative-edge-triggered).
+      </p>
+
+      <h3>1.3 S-R Latch: NOR vs. NAND Implementation &amp; The Forbidden State</h3>
+      <p>
+        The Set-Reset latch is the fundamental 1-bit bistable multivibrator.
+      </p>
+
+      <div class="callout-box">
+        <strong>Active-HIGH S-R Latch (Cross-Coupled NOR Gates):</strong><br>
+        $$Q = \overline{R + \overline{Q}}, \quad \overline{Q} = \overline{S + Q}$$
+        • \(S=0, R=0 \implies Q_{n+1} = Q_n\) (Memory / Hold)<br>
+        • \(S=1, R=0 \implies Q_{n+1} = 1\) (Set)<br>
+        • \(S=0, R=1 \implies Q_{n+1} = 0\) (Reset)<br>
+        • <span style="color: #dc2626; font-weight: 700;">\(S=1, R=1 \implies Q = \overline{Q} = 0\) (Forbidden / Indeterminate State)</span>. Both outputs go LOW simultaneously, violating the mathematical complement rule. When inputs transition back to \(0,0\), race condition forces the circuit into an unpredictable state.
+      </div>
+
+      <div class="callout-box warn">
+        <strong>Active-LOW \(\overline{S}\)-\(\overline{R}\) Latch (Cross-Coupled NAND Gates):</strong><br>
+        • \(\overline{S}=1, \overline{R}=1 \implies Q_{n+1} = Q_n\) (Hold)<br>
+        • \(\overline{S}=0, \overline{R}=1 \implies Q_{n+1} = 1\) (Set)<br>
+        • \(\overline{S}=1, \overline{R}=0 \implies Q_{n+1} = 0\) (Reset)<br>
+        • <span style="color: #dc2626; font-weight: 700;">\(\overline{S}=0, \overline{R}=0 \implies Q = \overline{Q} = 1\) (Forbidden State)</span>.
+      </div>
+
+      <h3>1.4 Asynchronous Override Controls: Preset (\(\overline{Pr}\)) and Clear (\(\overline{Cr}\))</h3>
+      <p>
+        In production ICs (like IC 7474 and IC 7476), active-low <strong>\(\overline{Preset}\)</strong> and <strong>\(\overline{Clear}\)</strong> pins feed directly into the final cross-coupled latch gates, bypassing all clock-steering input transistors.
+      </p>
+      <ul>
+        <li>\(\overline{Pr} = 0, \overline{Cr} = 1 \implies Q = 1\) instantaneously (Asynchronous Set).</li>
+        <li>\(\overline{Pr} = 1, \overline{Cr} = 0 \implies Q = 0\) instantaneously (Asynchronous Clear/Reset).</li>
+        <li>\(\overline{Pr} = 1, \overline{Cr} = 1 \implies\) Normal clocked synchronous operation enabled.</li>
+      </ul>
+    </section>
+
+    <!-- ======================================================== -->
+    <!-- PILLAR 2: CORE 4 FLIP-FLOPS & INTERNAL PHYSICS -->
+    <!-- ======================================================== -->
+    <section class="ref-card" id="pillar2">
+      <h2><span>🔬</span> Pillar 2: The Core 4 Flip-Flops &amp; Internal Physics</h2>
+
+      <h3>2.1 Clocked S-R Flip-Flop</h3>
+      <p>
+        Adds steering AND/NAND gates enabled by the clock signal:
+      </p>
+      <div class="formula-banner">
+        Characteristic Equation: \(Q_{n+1} = S + \overline{R}Q_n \quad \text{with constraint } S \cdot R = 0\)
+      </div>
+
+      <h3>2.2 J-K Flip-Flop: Eliminating the Forbidden State &amp; The Toggle State</h3>
+      <p>
+        The J-K flip-flop solves the forbidden state by cross-feeding the outputs back to the input gating: \(S = J\overline{Q}\) and \(R = KQ\).
+      </p>
+      <ul>
+        <li>\(J=0, K=0 \implies Q_{n+1} = Q_n\) (Hold)</li>
+        <li>\(J=0, K=1 \implies Q_{n+1} = 0\) (Reset)</li>
+        <li>\(J=1, K=0 \implies Q_{n+1} = 1\) (Set)</li>
+        <li><strong>\(J=1, K=1 \implies Q_{n+1} = \overline{Q}_n\) (Toggle Condition!)</strong></li>
+      </ul>
+      <div class="formula-banner">
+        Characteristic Equation: \(Q_{n+1} = J\overline{Q}_n + \overline{K}Q_n\)
+      </div>
+
+      <div class="viva-card">
+        <strong>🔥 TOP VIVA QUESTION: The Race-Around Condition in J-K Flip-Flops</strong>
+        <p>
+          <strong>What is it?</strong> In a level-triggered J-K flip-flop with \(J=1, K=1\), when the clock pulse duration \(t_p\) is greater than the internal propagation delay \(\Delta t\) (\(t_p > \Delta t\)), the output toggles back and forth multiple times during a single clock pulse, producing an unpredictable output at the clock's falling edge.
+        </p>
+        <p>
+          <strong>Condition to Avoid:</strong> \(t_p < \Delta t < T\) (where \(T\) is clock period).
+        </p>
+        <p>
+          <strong>Ultimate Hardware Solution:</strong> <em>Master-Slave J-K Flip-Flop (IC 7476)</em> or <em>Edge-Triggered Flip-Flops</em>. The Master stage responds when Clock=HIGH; the Slave stage isolates the output. The output updates strictly on the falling clock edge.
+        </p>
+      </div>
+
+      <h3>2.3 D-Type Flip-Flop (IC 74LS74)</h3>
+      <p>
+        The Data or Delay flip-flop ensures complementary inputs at all times by tying \(R = \overline{S} = \overline{D}\).
+      </p>
+      <div class="formula-banner">
+        Characteristic Equation: \(Q_{n+1} = D\)
+      </div>
+
+      <h3>2.4 T-Type Flip-Flop (Toggle Element)</h3>
+      <p>
+        Formed by tying the J and K inputs together (\(J = K = T\)). It toggles the output on every clock pulse when \(T=1\), acting as a fundamental divide-by-2 frequency divider.
+      </p>
+      <div class="formula-banner">
+        Characteristic Equation: \(Q_{n+1} = T \oplus Q_n = T\overline{Q}_n + \overline{T}Q_n\)
+      </div>
+    </section>
+
+    <!-- ======================================================== -->
+    <!-- PILLAR 3: EXCITATION TABLES & CONVERSIONS -->
+    <!-- ======================================================== -->
+    <section class="ref-card" id="pillar3">
+      <h2><span>🎯</span> Pillar 3: Excitation Tables &amp; Flip-Flop Conversions (The Design Core)</h2>
+
+      <p>
+        <strong>Characteristic Table:</strong> Tells you what the <em>Next State (\(Q_{n+1}\))</em> will be given the current inputs.<br>
+        <strong>Excitation Table:</strong> Tells you what <em>Inputs</em> are required to force a desired transition from <em>Present State (\(Q_n\))</em> to <em>Next State (\(Q_{n+1}\))</em>.
+      </p>
+
+      <h3>3.1 The Master Excitation Table</h3>
+      <table class="ref-table">
+        <thead>
+          <tr>
+            <th>Present State (\(Q_n\))</th>
+            <th>Next State (\(Q_{n+1}\))</th>
+            <th>Required S</th>
+            <th>Required R</th>
+            <th>Required J</th>
+            <th>Required K</th>
+            <th>Required D</th>
+            <th>Required T</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>0</strong></td>
+            <td><strong>0</strong></td>
+            <td>0</td>
+            <td>X</td>
+            <td>0</td>
+            <td>X</td>
+            <td>0</td>
+            <td>0</td>
+          </tr>
+          <tr>
+            <td><strong>0</strong></td>
+            <td><strong>1</strong></td>
+            <td>1</td>
+            <td>0</td>
+            <td>1</td>
+            <td>X</td>
+            <td>1</td>
+            <td>1</td>
+          </tr>
+          <tr>
+            <td><strong>1</strong></td>
+            <td><strong>0</strong></td>
+            <td>0</td>
+            <td>1</td>
+            <td>X</td>
+            <td>1</td>
+            <td>0</td>
+            <td>1</td>
+          </tr>
+          <tr>
+            <td><strong>1</strong></td>
+            <td><strong>1</strong></td>
+            <td>X</td>
+            <td>0</td>
+            <td>X</td>
+            <td>0</td>
+            <td>1</td>
+            <td>0</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>3.2 Universal 3-Step Flip-Flop Conversion Algorithm</h3>
+      <ol style="margin-left: 20px; line-height: 1.8;">
+        <li><strong>Step 1:</strong> Write the Truth / Characteristic Table of the <em>Desired (Target)</em> Flip-Flop.</li>
+        <li><strong>Step 2:</strong> In the same table, write the required inputs of the <em>Available (Given)</em> Flip-Flop for every \(Q_n \rightarrow Q_{n+1}\) transition using the Master Excitation Table.</li>
+        <li><strong>Step 3:</strong> Draw K-Maps for each Available input with the Target inputs and \(Q_n\) as variables to obtain the minimal drive equations.</li>
+      </ol>
+
+      <div class="callout-box success">
+        <strong>Solved Conversion Examples:</strong><br>
+        • <strong>JK to D:</strong> \(J = D\), \(K = \overline{D}\) (Pass \(D\) through an inverter to \(K\)).<br>
+        • <strong>JK to T:</strong> \(J = T\), \(K = T\) (Short \(J\) and \(K\) together).<br>
+        • <strong>SR to JK:</strong> \(S = J\overline{Q}_n\), \(R = KQ_n\) (AND gates fed by feedback from outputs).
+      </div>
+    </section>
+
+    <!-- ======================================================== -->
+    <!-- PILLAR 4: SHIFT REGISTERS & IC 74194 -->
+    <!-- ======================================================== -->
+    <section class="ref-card" id="pillar4">
+      <h2><span>🔄</span> Pillar 4: Shift Registers &amp; IC 74194</h2>
+
+      <h3>4.1 The 4 Primary Operating Modes</h3>
+      <table class="ref-table">
+        <thead>
+          <tr>
+            <th>Mode</th>
+            <th>Full Name</th>
+            <th>Operating Principle</th>
+            <th>Industry Applications</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>SISO</strong></td>
+            <td>Serial-In Serial-Out</td>
+            <td>Bits enter serially one per clock pulse; exit serially after \(N\) clock pulses.</td>
+            <td>Digital Delay Line: Delay time \(\Delta t = \frac{N}{f_{clk}}\).</td>
+          </tr>
+          <tr>
+            <td><strong>SIPO</strong></td>
+            <td>Serial-In Parallel-Out</td>
+            <td>Bits enter sequentially on 1 pin; all \(N\) bits read simultaneously.</td>
+            <td>Deserializer, UART / SPI Receiver, I2C to parallel port expander.</td>
+          </tr>
+          <tr>
+            <td><strong>PISO</strong></td>
+            <td>Parallel-In Serial-Out</td>
+            <td>\(N\) bits loaded in 1 clock pulse; clocked out bit-by-bit serially.</td>
+            <td>Serializer, UART / SPI Transmitter, telemetry data transmission.</td>
+          </tr>
+          <tr>
+            <td><strong>PIPO</strong></td>
+            <td>Parallel-In Parallel-Out</td>
+            <td>All \(N\) bits loaded simultaneously and available at output simultaneously.</td>
+            <td>High-speed CPU ALU registers, temporary data bus buffers.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>4.2 IC 74194 4-Bit Bidirectional Universal Shift Register</h3>
+      <p>
+        The standard MSI building block featuring parallel load, shift right, shift left, and hold capabilities:
+      </p>
+      <table class="ref-table">
+        <thead>
+          <tr>
+            <th>\(\overline{MR}\) (Clear)</th>
+            <th>Mode \(S_1\)</th>
+            <th>Mode \(S_0\)</th>
+            <th>Clock \(\uparrow\)</th>
+            <th>Function Performed</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>0</td>
+            <td>X</td>
+            <td>X</td>
+            <td>X</td>
+            <td><strong>Asynchronous Reset</strong>: \(Q_A Q_B Q_C Q_D = 0000\)</td>
+          </tr>
+          <tr>
+            <td>1</td>
+            <td>0</td>
+            <td>0</td>
+            <td>X</td>
+            <td><strong>Hold</strong>: No change in stored bits.</td>
+          </tr>
+          <tr>
+            <td>1</td>
+            <td>0</td>
+            <td>1</td>
+            <td>\(\uparrow\)</td>
+            <td><strong>Shift Right</strong>: \(Q_A \leftarrow SR\_SER, Q_B \leftarrow Q_A, Q_C \leftarrow Q_B, Q_D \leftarrow Q_C\)</td>
+          </tr>
+          <tr>
+            <td>1</td>
+            <td>1</td>
+            <td>0</td>
+            <td>\(\uparrow\)</td>
+            <td><strong>Shift Left</strong>: \(Q_D \leftarrow SL\_SER, Q_C \leftarrow Q_D, Q_B \leftarrow Q_C, Q_A \leftarrow Q_B\)</td>
+          </tr>
+          <tr>
+            <td>1</td>
+            <td>1</td>
+            <td>1</td>
+            <td>\(\uparrow\)</td>
+            <td><strong>Parallel Load</strong>: \(Q_A \leftarrow A, Q_B \leftarrow B, Q_C \leftarrow C, Q_D \leftarrow D\)</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>4.3 Ring Counter vs. Johnson Counter</h3>
+      <table class="ref-table">
+        <thead>
+          <tr>
+            <th>Attribute</th>
+            <th>Ring Counter</th>
+            <th>Johnson (Twisted-Ring) Counter</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Feedback Loop</strong></td>
+            <td>Straight: \(Q_0 \rightarrow D_{in}\)</td>
+            <td>Inverted: \(\overline{Q}_0 \rightarrow D_{in}\)</td>
+          </tr>
+          <tr>
+            <td><strong>Number of States</strong></td>
+            <td>\(N\) states (for \(N\) flip-flops)</td>
+            <td>\(2N\) states (doubles counting capacity!)</td>
+          </tr>
+          <tr>
+            <td><strong>Unused States</strong></td>
+            <td>\(2^N - N\) (requires self-starting logic)</td>
+            <td>\(2^N - 2N\)</td>
+          </tr>
+          <tr>
+            <td><strong>Decoding Logic</strong></td>
+            <td>No decoder needed (each output is 1 state)</td>
+            <td>Glitch-free 2-input AND gates</td>
+          </tr>
+          <tr>
+            <td><strong>Applications</strong></td>
+            <td>Multiphase non-overlapping clock generation</td>
+            <td>Quadrature signal generation, digital synthesizers</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- ======================================================== -->
+    <!-- PILLAR 5: COUNTERS (RIPPLE VS. SYNCHRONOUS) -->
+    <!-- ======================================================== -->
+    <section class="ref-card" id="pillar5">
+      <h2><span>⏱️</span> Pillar 5: Counters (Ripple vs. Synchronous)</h2>
+
+      <h3>5.1 Asynchronous (Ripple) Counters</h3>
+      <p>
+        In ripple counters, only the first flip-flop (LSB) receives the external clock. Subsequent flip-flops are clocked by the output of the preceding stage.
+      </p>
+      <ul>
+        <li><strong>Cumulative Delay:</strong> Total propagation delay across \(N\) stages is \(t_{\text{total}} = N \cdot t_{pd}\).</li>
+        <li>
+          <strong>Maximum Safe Frequency:</strong>
+          $$f_{max} \le \frac{1}{N \cdot t_{pd} + T_s}$$
+        </li>
+        <li><strong>Decoding Glitches:</strong> Because outputs don't switch simultaneously, brief intermediate invalid states appear on the bus, triggering false output spikes in combinational decoders.</li>
+      </ul>
+
+      <div class="callout-box">
+        <strong>TTL Workhorse Counter ICs:</strong><br>
+        • <strong>IC 7490 (Decade Counter):</strong> Divide-by-2 (\(CLK_A\)) &amp; Divide-by-5 (\(CLK_B\)). Wired for Mod-10 by connecting \(Q_A \rightarrow CLK_B\). Truncated to <strong>Mod-6</strong> by wiring feedback \(Q_C \cdot Q_B\) to reset pins \(R_{0(1)}, R_{0(2)}\).<br>
+        • <strong>IC 7493 (4-Bit Binary Counter):</strong> Divide-by-2 &amp; Divide-by-8. Mod-16 sequence (0..15). Truncated to <strong>Mod-12</strong> by wiring feedback \(Q_D \cdot Q_C\) to reset pins \(R_{0(1)}, R_{0(2)}\).
+      </div>
+
+      <h3>5.2 Synchronous Counters</h3>
+      <p>
+        All flip-flops share the same master clock simultaneously. State changes happen in parallel, eliminating cumulative ripple delay and decoding glitches.
+      </p>
+
+      <div class="formula-banner">
+        <strong>3-Bit Synchronous Binary UP Counter Drive Equations:</strong><br>
+        • Flip-Flop 0 (LSB): \(J_0 = K_0 = 1\) (toggles every cycle)<br>
+        • Flip-Flop 1: \(J_1 = K_1 = Q_0\)<br>
+        • Flip-Flop 2 (MSB): \(J_2 = K_2 = Q_0 \cdot Q_1\)
+      </div>
+
+      <h3>5.3 Presettable Synchronous MSI Counters</h3>
+      <ul>
+        <li><strong>IC 74160 / 74163:</strong> Fully synchronous 4-bit Decade / Binary counters with synchronous parallel load and Carry Lookahead (\(RCO\)) for high-speed cascading.</li>
+        <li><strong>IC 74190 / 74191:</strong> Up/Down Synchronous Counters with direction control pin \(U/\overline{D}\).</li>
+      </ul>
+    </section>
+
+    <!-- ======================================================== -->
+    <!-- PILLAR 6: FINITE STATE MACHINES & REAL-WORLD PHYSICS -->
+    <!-- ======================================================== -->
+    <section class="ref-card" id="pillar6">
+      <h2><span>⚙️</span> Pillar 6: Finite State Machines (FSMs) &amp; Real-World Physics</h2>
+
+      <h3>6.1 Mealy vs. Moore State Machine Models</h3>
+      <table class="ref-table">
+        <thead>
+          <tr>
+            <th>Characteristic</th>
+            <th>Mealy Machine</th>
+            <th>Moore Machine</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Output Equation</strong></td>
+            <td>\(Z = f(\text{Present State}, \text{Inputs})\)</td>
+            <td>\(Z = f(\text{Present State})\)</td>
+          </tr>
+          <tr>
+            <td><strong>State Count</strong></td>
+            <td>Generally requires <em>fewer states</em>.</td>
+            <td>Often requires <em>more states</em>.</td>
+          </tr>
+          <tr>
+            <td><strong>Timing Behavior</strong></td>
+            <td>Outputs can change asynchronously when inputs change between clock ticks (susceptible to glitches).</td>
+            <td>Outputs update strictly synchronously on clock edges (glitch-free).</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>6.2 Sequence Detector Design (Example: Detecting `1010`)</h3>
+      <p>
+        Serial bit stream detector using Moore and Mealy models:
+      </p>
+      <ul>
+        <li><strong>Overlapping Detection:</strong> An input sequence like `...101010...` generates detections at index 4 and index 6 (reusing the trailing `10`).</li>
+        <li><strong>Non-Overlapping Detection:</strong> Once `1010` is detected, the detector resets to the initial state, requiring 4 brand new bits.</li>
+      </ul>
+
+      <h3>6.3 VLSI Timing Constraints: Setup, Hold &amp; Metastability</h3>
+      <div class="callout-box danger">
+        <strong>Setup Time (\(t_s\)):</strong> The minimum time data input must remain stable <em>before</em> the active clock transition.<br>
+        <strong>Hold Time (\(t_h\)):</strong> The minimum time data input must remain stable <em>after</em> the active clock transition.<br>
+        <strong>Metastability:</strong> If input transitions within the aperture window (\(t_s + t_h\)), the flip-flop can enter a metastable state where the output lingers at an intermediate analog voltage (\(\approx V_{DD}/2\)) before randomly resolving to 0 or 1. Solved in digital design using dual-stage flip-flop synchronizers.
+      </div>
+
+      <div class="callout-box">
+        <strong>Clock Skew (\(\Delta t_{skew}\)) &amp; Hold Violation Prevention:</strong><br>
+        When clock arrives later at flip-flop B than flip-flop A, hold time violation can occur unless:
+        $$t_{\text{prop(min)}} \ge t_{\text{hold}} + \Delta t_{skew}$$
+      </div>
+
+      <h3>6.4 Real-World Practical Implementations</h3>
+      <div class="viva-card">
+        <strong>1. Mechanical Switch Debouncer:</strong> Mechanical switches bounce for 5–20 ms upon contact closure, generating dozens of false clock edges. A cross-coupled S-R latch (IC 74279) with an SPDT switch eliminates 100% of chatter.
+      </div>
+      <div class="viva-card" style="margin-top: 12px;">
+        <strong>2. 1-Bit Static RAM (SRAM) Cell:</strong> Composed of two cross-coupled inverters (6-transistor 6T cell) with NMOS pass transistors activated by Word Line (\(WL\)) and read/written via Bit Lines (\(BL, \overline{BL}\)).
+      </div>
+      <div class="viva-card" style="margin-top: 12px;">
+        <strong>3. Stepper Motor 4-Phase Wave Controller:</strong> A 4-bit ring counter generating non-overlapping wave drive sequence (`1000 -> 0100 -> 0010 -> 0001`) interfaced to a ULN2003 Darlington transistor array to drive inductive motor stator coils.
+      </div>
+    </section>
+
+    <div style="text-align: center; margin: 40px 0;">
+      <a href="workbench.html" style="display: inline-flex; align-items: center; gap: 10px; background: #2c6ee8; color: #ffffff; padding: 14px 28px; border-radius: 8px; font-weight: 700; text-decoration: none; font-size: 15px; box-shadow: 0 4px 14px rgba(44, 110, 232, 0.3);">
+        <span>⚡ Launch Interactive IC Workbench &amp; Test Sequential Presets</span>
+        <span>➔</span>
+      </a>
+    </div>
+  </div>
+
+  <footer>
+    <p>ADE Made Easy • Master Analog &amp; Digital Electronics from Concept to Silicon</p>
+  </footer>
+
+  <script src="config.js"></script>
+  <script src="auth.js"></script>
+  <script src="user-menu.js"></script>
+</body>
+</html>

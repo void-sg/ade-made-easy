@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sequential Theory &amp; Excitation Tables | ADE Made Easy</title>
+  <link rel="stylesheet" href="../shared/ui-components.css">
+  <link rel="stylesheet" href="../style.css">
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+  <link href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css" rel="stylesheet">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'\\(',right:'\\)',display:false}]});"></script>
+  <style>
+    .ref-card { background: #ffffff; border: 1px solid var(--line); border-radius: 12px; padding: 28px; margin-bottom: 32px; }
+    .formula-banner { background: #0f172a; color: #38bdf8; padding: 14px 20px; border-radius: 8px; font-family: var(--font-mono); margin: 16px 0; overflow-x: auto; }
+    .ref-table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 14px; }
+    .ref-table th, .ref-table td { border: 1px solid #e2e8f0; padding: 10px 14px; text-align: left; }
+    .ref-table th { background: #f8fafc; color: var(--navy); font-weight: 700; font-family: var(--font-mono); }
+    .callout-box { background: #f8fafc; border-left: 4px solid var(--amber); padding: 14px 18px; border-radius: 0 8px 8px 0; margin: 18px 0; font-size: 14px; }
+    .callout-box.danger { border-left-color: #ef4444; background: #fef2f2; }
+    .viva-card { background: #fffbeb; border: 1px solid #fde68a; border-radius: 8px; padding: 18px; margin-top: 18px; }
+    .viva-card strong { color: #92400e; display: block; margin-bottom: 6px; }
+
+    /* Interactive Excitation Solver Widget */
+    .solver-box {
+      background: #0f172a;
+      color: #ffffff;
+      border-radius: 10px;
+      padding: 22px;
+      margin: 20px 0;
+    }
+    .solver-btn-group {
+      display: flex;
+      gap: 10px;
+      margin: 12px 0 18px;
+      flex-wrap: wrap;
+    }
+    .solver-btn {
+      background: #1e293b;
+      color: #94a3b8;
+      border: 1px solid #334155;
+      padding: 8px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-family: var(--font-mono);
+      font-weight: 700;
+      transition: all 0.2s ease;
+    }
+    .solver-btn.active {
+      background: var(--amber);
+      color: #ffffff;
+      border-color: #f59e0b;
+      box-shadow: 0 2px 10px rgba(217, 119, 6, 0.4);
+    }
+    .solver-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+      gap: 12px;
+    }
+    .solver-cell {
+      background: #1e293b;
+      padding: 12px;
+      border-radius: 8px;
+      text-align: center;
+      border: 1px solid #334155;
+    }
+    .solver-cell-name {
+      font-size: 11px;
+      color: #94a3b8;
+      font-family: var(--font-mono);
+      margin-bottom: 4px;
+    }
+    .solver-cell-val {
+      font-size: 22px;
+      font-weight: 800;
+      font-family: var(--font-mono);
+      color: #38bdf8;
+    }
+    .solver-cell-val.dont-care {
+      color: #f59e0b;
+    }
+  </style>
+</head>
+<body class="track-seq">
+
+  <!-- Symmetrical Global Header -->
+  <header class="ade-global-header">
+    <div class="ade-header-wrap">
+      <a class="ade-brand" href="../index.html">
+        <span class="ade-brand-badge">ADE</span>
+        <span class="ade-brand-text">
+          <strong>ADE Made Easy</strong>
+          <small>Concept to Silicon</small>
+        </span>
+      </a>
+
+      <nav class="ade-segment-switcher">
+        <a href="../combinational/index.html" class="segment-toggle-btn">
+          <span class="icon">🔷</span>
+          <span>Combinational Track</span>
+        </a>
+        <a href="index.html" class="segment-toggle-btn active-sequential">
+          <span class="icon">🔶</span>
+          <span>Sequential Track</span>
+        </a>
+      </nav>
+
+      <div class="ade-header-right">
+        <a href="../index.html" class="hub-nav-link">🏠 Main Hub</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- 4-Part Subsystem Navigation -->
+  <nav class="subsystem-subnav">
+    <div class="subsystem-nav-wrap">
+      <div class="subsystem-tabs">
+        <a href="index.html" class="subsystem-tab-link">
+          <span class="step-num">0</span>
+          <span>Overview</span>
+        </a>
+        <a href="theory.html" class="subsystem-tab-link active">
+          <span class="step-num">1</span>
+          <span>Theory &amp; Excitation</span>
+        </a>
+        <a href="schematic.html" class="subsystem-tab-link">
+          <span class="step-num">2</span>
+          <span>Vector Schematics</span>
+        </a>
+        <a href="workbench.html" class="subsystem-tab-link">
+          <span class="step-num">3</span>
+          <span>Clocked Workbench &amp; Scope</span>
+        </a>
+        <a href="applications.html" class="subsystem-tab-link">
+          <span class="step-num">4</span>
+          <span>FSMs &amp; VLSI Timing</span>
+        </a>
+      </div>
+      <div class="subsystem-track-indicator indicator-seq">
+        🔶 PART 1 &bull; THEORY, EXCITATION &amp; TIMING PHYSICS
+      </div>
+    </div>
+  </nav>
+
+  <main style="max-width: 1140px; margin: 36px auto 80px; padding: 0 24px;">
+    <!-- Title -->
+    <div style="margin-bottom: 28px;">
+      <span class="meta-tag" style="background: #fef3c7; color: #92400e; border: 1px solid #fde68a;">
+        SEQUENTIAL LOGIC • THE 6 ESSENTIAL PILLARS
+      </span>
+      <h1 style="font-size: 32px; color: var(--navy); margin-bottom: 8px;">
+        Theory, Physics, Excitation Tables &amp; Conversions
+      </h1>
+      <p style="color: var(--muted); font-size: 16px; line-height: 1.6;">
+        Master 1-bit bistable storage elements, the Race-Around condition physics, the Master Excitation Matrix with Don't Cares, shift registers, synchronous counter derivations, and FSM synthesis.
+      </p>
+    </div>
+
+    <!-- ======================================================== -->
+    <!-- PILLAR 1: FOUNDATIONS -->
+    <!-- ======================================================== -->
+    <section class="ref-card" id="pillar1">
+      <h2 style="font-size: 22px; color: var(--navy); margin-bottom: 12px;">🧱 Pillar 1: Foundations &amp; 1-Bit Memory Storage</h2>
+      <p>
+        <strong>Combinational vs. Sequential:</strong> While combinational circuits evaluate purely as \(Y = f(X)\), sequential circuits incorporate feedback memory where \(Y = f(X, Q_n)\).
+      </p>
+      
+      <div class="callout-box">
+        <strong>The S-R Latch Forbidden / Indeterminate State:</strong><br>
+        • Active-HIGH (NOR): \(S=1, R=1 \implies Q = \overline{Q} = 0\) (violates complementary logic). When inputs drop simultaneously to 0,0, race condition occurs.<br>
+        • Active-LOW (NAND): \(\overline{S}=0, \overline{R}=0 \implies Q = \overline{Q} = 1\) (forbidden state).
+      </div>
+
+      <h3>Asynchronous Override Controls: Preset (\(\overline{Pr}\)) &amp; Clear (\(\overline{Cr}\))</h3>
+      <p>
+        In TTL ICs like <strong>74LS74</strong> and <strong>74LS76</strong>, active-low \(\overline{Pr}\) and \(\overline{Cr}\) bypass the internal clock gating transistors and force outputs to \(Q=1\) or \(Q=0\) instantaneously.
+      </p>
+    </section>
+
+    <!-- ======================================================== -->
+    <!-- PILLAR 2: CORE 4 FLIP-FLOPS -->
+    <!-- ======================================================== -->
+    <section class="ref-card" id="pillar2">
+      <h2 style="font-size: 22px; color: var(--navy); margin-bottom: 12px;">🔬 Pillar 2: The Core 4 Flip-Flops &amp; Internal Physics</h2>
+      
+      <table class="ref-table">
+        <thead>
+          <tr>
+            <th>Flip-Flop Type</th>
+            <th>Standard IC</th>
+            <th>Characteristic Equation</th>
+            <th>Key Physical Property</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Clocked S-R</strong></td>
+            <td>Discrete / 74279</td>
+            <td>\(Q_{n+1} = S + \overline{R}Q_n \quad (S \cdot R = 0)\)</td>
+            <td>Basic gated memory; requires input interlock.</td>
+          </tr>
+          <tr>
+            <td><strong>J-K Flip-Flop</strong></td>
+            <td><strong>IC 7476</strong></td>
+            <td>\(Q_{n+1} = J\overline{Q}_n + \overline{K}Q_n\)</td>
+            <td>Feedback eliminates forbidden state; \(J=K=1\) creates <strong>Toggle State</strong> (\(Q_{n+1} = \overline{Q}_n\)).</td>
+          </tr>
+          <tr>
+            <td><strong>D-Type Latch</strong></td>
+            <td><strong>IC 7474</strong></td>
+            <td>\(Q_{n+1} = D\)</td>
+            <td>Single data line delay; eliminates all illegal states.</td>
+          </tr>
+          <tr>
+            <td><strong>T-Type Toggle</strong></td>
+            <td>7476 (\(J=K=T\))</td>
+            <td>\(Q_{n+1} = T \oplus Q_n\)</td>
+            <td>Fundamental frequency divider (\(\div 2\) per clock pulse).</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="viva-card">
+        <strong>🔥 TOP VIVA TOPIC: The Race-Around Condition in J-K Latches</strong>
+        <p>
+          <strong>The Cause:</strong> In level-triggered J-K latches when \(J=K=1\), if the clock pulse width \(t_p\) exceeds the flip-flop propagation delay \(\Delta t\) (\(t_p > \Delta t\)), the output toggles back and forth multiple times during a single clock pulse, producing an unpredictable output when the clock falls.
+        </p>
+        <p>
+          <strong>Hardware Solution:</strong> <em>Master-Slave J-K Flip-Flop (IC 7476)</em>. Master samples when Clock=HIGH; Slave updates outputs strictly on the falling clock edge (\(\downarrow\)), breaking the feedback loop.
+        </p>
+      </div>
+    </section>
+
+    <!-- ======================================================== -->
+    <!-- PILLAR 3: MASTER EXCITATION TABLE SOLVER -->
+    <!-- ======================================================== -->
+    <section class="ref-card" id="pillar3">
+      <h2 style="font-size: 22px; color: var(--navy); margin-bottom: 12px;">🎯 Pillar 3: Excitation Tables &amp; Universal Conversions</h2>
+      
+      <p>
+        <strong>Interactive Master Excitation Table Solver:</strong> Select a desired state transition (\(Q_n \rightarrow Q_{n+1}\)) to dynamically view the required inputs across all 4 flip-flop types:
+      </p>
+
+      <!-- Interactive Solver Widget -->
+      <div class="solver-box">
+        <span style="font-family: var(--font-mono); font-size: 12px; color: #94a3b8; letter-spacing: 0.5px;">SELECT DESIRED STATE TRANSITION:</span>
+        <div class="solver-btn-group">
+          <button class="solver-btn active" onclick="solveExcitation(0, 0)">Transition: 0 ➔ 0 (Hold 0)</button>
+          <button class="solver-btn" onclick="solveExcitation(0, 1)">Transition: 0 ➔ 1 (Set 1)</button>
+          <button class="solver-btn" onclick="solveExcitation(1, 0)">Transition: 1 ➔ 0 (Reset 0)</button>
+          <button class="solver-btn" onclick="solveExcitation(1, 1)">Transition: 1 ➔ 1 (Hold 1)</button>
+        </div>
+
+        <div class="solver-grid">
+          <div class="solver-cell">
+            <div class="solver-cell-name">S (SR)</div>
+            <div class="solver-cell-val" id="val-s">0</div>
+          </div>
+          <div class="solver-cell">
+            <div class="solver-cell-name">R (SR)</div>
+            <div class="solver-cell-val dont-care" id="val-r">X</div>
+          </div>
+          <div class="solver-cell">
+            <div class="solver-cell-name">J (JK)</div>
+            <div class="solver-cell-val" id="val-j">0</div>
+          </div>
+          <div class="solver-cell">
+            <div class="solver-cell-name">K (JK)</div>
+            <div class="solver-cell-val dont-care" id="val-k">X</div>
+          </div>
+          <div class="solver-cell">
+            <div class="solver-cell-name">D (D-Type)</div>
+            <div class="solver-cell-val" id="val-d">0</div>
+          </div>
+          <div class="solver-cell">
+            <div class="solver-cell-name">T (T-Type)</div>
+            <div class="solver-cell-val" id="val-t">0</div>
+          </div>
+        </div>
+      </div>
+
+      <h3>Universal 3-Step Conversion Algorithm</h3>
+      <ol style="margin-left: 20px; line-height: 1.8;">
+        <li><strong>Step 1:</strong> Write the characteristic table of the target flip-flop.</li>
+        <li><strong>Step 2:</strong> Look up required inputs of the available flip-flop for each transition using the Master Excitation Table.</li>
+        <li><strong>Step 3:</strong> Solve K-Maps to derive the conversion logic:
+          <ul>
+            <li><strong>JK to D:</strong> \(J = D, \quad K = \overline{D}\)</li>
+            <li><strong>JK to T:</strong> \(J = T, \quad K = T\)</li>
+            <li><strong>SR to JK:</strong> \(S = J\overline{Q}_n, \quad R = KQ_n\)</li>
+          </ul>
+        </li>
+      </ol>
+    </section>
+
+    <!-- ======================================================== -->
+    <!-- PILLAR 4: SHIFT REGISTERS -->
+    <!-- ======================================================== -->
+    <section class="ref-card" id="pillar4">
+      <h2 style="font-size: 22px; color: var(--navy); margin-bottom: 12px;">🔄 Pillar 4: Shift Registers &amp; IC 74194</h2>
+      
+      <p>
+        <strong>4 Operating Modes:</strong> <strong>SISO</strong> (delay lines), <strong>SIPO</strong> (UART RX deserializer), <strong>PISO</strong> (UART TX serializer), <strong>PIPO</strong> (bus registers).
+      </p>
+
+      <h3>IC 74194 Mode Selection Table</h3>
+      <table class="ref-table">
+        <thead>
+          <tr>
+            <th>Mode \(S_1\)</th>
+            <th>Mode \(S_0\)</th>
+            <th>Active Function</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>0</td>
+            <td>0</td>
+            <td><strong>Hold</strong></td>
+            <td>Outputs retain data state (\(Q_{n+1} = Q_n\)).</td>
+          </tr>
+          <tr>
+            <td>0</td>
+            <td>1</td>
+            <td><strong>Shift Right</strong></td>
+            <td>Bits shift toward LSB (\(Q_A \leftarrow SR\_SER, Q_B \leftarrow Q_A, \dots\)).</td>
+          </tr>
+          <tr>
+            <td>1</td>
+            <td>0</td>
+            <td><strong>Shift Left</strong></td>
+            <td>Bits shift toward MSB (\(Q_D \leftarrow SL\_SER, Q_C \leftarrow Q_D, \dots\)).</td>
+          </tr>
+          <tr>
+            <td>1</td>
+            <td>1</td>
+            <td><strong>Parallel Load</strong></td>
+            <td>All 4 inputs (\(A, B, C, D\)) clocked simultaneously into register.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="callout-box">
+        <strong>Ring vs. Johnson Counters:</strong><br>
+        • <em>Ring Counter:</em> Straight feedback (\(Q_0 \rightarrow D_{in}\)) gives \(N\) states.<br>
+        • <em>Johnson (Twisted-Ring) Counter:</em> Inverted feedback (\(\overline{Q}_0 \rightarrow D_{in}\)) gives \(2N\) states with glitch-free 2-input AND decoding.
+      </div>
+    </section>
+
+    <!-- ======================================================== -->
+    <!-- PILLAR 5: COUNTERS -->
+    <!-- ======================================================== -->
+    <section class="ref-card" id="pillar5">
+      <h2 style="font-size: 22px; color: var(--navy); margin-bottom: 12px;">⏱️ Pillar 5: Counters (Ripple vs. Synchronous)</h2>
+      
+      <h3>Asynchronous (Ripple) Cumulative Delay</h3>
+      <p>
+        Because each stage clocks the next, propagation delays accumulate: \(t_{total} = N \cdot t_{pd}\). Maximum safe clock frequency:
+      </p>
+      <div class="formula-banner">
+        \(f_{max} \le \frac{1}{N \cdot t_{pd} + T_s}\)
+      </div>
+
+      <h3>Synchronous UP Counter Derivation (3-Bit)</h3>
+      <div class="formula-banner">
+        \(J_0 = K_0 = 1 \quad \mid \quad J_1 = K_1 = Q_0 \quad \mid \quad J_2 = K_2 = Q_0 \cdot Q_1\)
+      </div>
+      <p>
+        All flip-flops share the same master clock simultaneously, eliminating cumulative ripple delay and decoding glitches.
+      </p>
+    </section>
+
+    <!-- ======================================================== -->
+    <!-- PILLAR 6: FSM & VLSI TIMING -->
+    <!-- ======================================================== -->
+    <section class="ref-card" id="fsm-physics">
+      <h2 style="font-size: 22px; color: var(--navy); margin-bottom: 12px;">⚙️ Pillar 6: FSMs &amp; Real-World VLSI Physics</h2>
+
+      <h3>6.1 Mealy vs. Moore State Machine Models</h3>
+      <table class="ref-table">
+        <thead>
+          <tr>
+            <th>Model</th>
+            <th>Output Function</th>
+            <th>Timing Behavior</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Mealy</strong></td>
+            <td>\(Output = f(\text{Present State}, \text{Current Inputs})\)</td>
+            <td>Asynchronous output changes can glitch when inputs switch between clock edges.</td>
+          </tr>
+          <tr>
+            <td><strong>Moore</strong></td>
+            <td>\(Output = f(\text{Present State})\)</td>
+            <td>Outputs are strictly synchronized with clock edges (glitch-free).</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>6.2 VLSI Timing Constraints</h3>
+      <div class="callout-box danger">
+        <strong>Setup Time (\(t_s\)):</strong> Minimum duration data input must stay stable <em>before</em> the active clock edge.<br>
+        <strong>Hold Time (\(t_h\)):</strong> Minimum duration data input must stay stable <em>after</em> the active clock edge.<br>
+        <strong>Metastability:</strong> When \(t_s\) or \(t_h\) is violated, internal bistable transistors enter an undefined analog equilibrium (\(\approx V_{DD}/2\)) before resolving unpredictably. Solved in silicon using dual-stage synchronizer flip-flops.
+      </div>
+
+      <h3>6.3 Real-World Applications</h3>
+      <div class="viva-card">
+        <strong>1. SPDT Switch Debouncer (IC 74279):</strong> Mechanical pushbuttons bounce for 5–20 ms upon contact closure, generating dozens of false clock edges. Cross-coupled SR latches eliminate 100% of contact bounce.
+      </div>
+      <div class="viva-card" style="margin-top: 10px;">
+        <strong>2. 1-Bit SRAM 6T Cell:</strong> Formed by cross-coupled inverters gated by Word Line (\(WL\)) access NMOS transistors onto complementary Bit Lines (\(BL, \overline{BL}\)).
+      </div>
+    </section>
+
+    <div style="text-align: center; margin-top: 40px;">
+      <a href="workbench.html" style="display: inline-flex; align-items: center; gap: 8px; background: var(--amber); color: #ffffff; padding: 12px 24px; border-radius: 8px; font-weight: 700; text-decoration: none;">
+        <span>Launch Part 3: Clocked Workbench &amp; Waveform Scope</span>
+        <span>➔</span>
+      </a>
+    </div>
+  </main>
+
+  <footer>
+    <p>ADE Made Easy • Segment 2: Sequential Logic &amp; Systems Track</p>
+  </footer>
+
+  <script src="../config.js"></script>
+  <script src="../shared/auth.js"></script>
+  <script src="../user-menu.js"></script>
+  <script>
+    const excitationMatrix = {
+      "0-0": { s: "0", r: "X", j: "0", k: "X", d: "0", t: "0" },
+      "0-1": { s: "1", r: "0", j: "1", k: "X", d: "1", t: "1" },
+      "1-0": { s: "0", r: "1", j: "X", k: "1", d: "0", t: "1" },
+      "1-1": { s: "X", r: "0", j: "X", k: "0", d: "1", t: "0" }
+    };
+
+    function solveExcitation(qn, qnext) {
+      const key = `${qn}-${qnext}`;
+      const res = excitationMatrix[key];
+      if (!res) return;
+
+      document.querySelectorAll(".solver-btn").forEach(btn => btn.classList.remove("active"));
+      event.target.classList.add("active");
+
+      document.getElementById("val-s").textContent = res.s;
+      document.getElementById("val-r").textContent = res.r;
+      document.getElementById("val-j").textContent = res.j;
+      document.getElementById("val-k").textContent = res.k;
+      document.getElementById("val-d").textContent = res.d;
+      document.getElementById("val-t").textContent = res.t;
+
+      ["s", "r", "j", "k", "d", "t"].forEach(k => {
+        const el = document.getElementById(`val-${k}`);
+        if (res[k] === "X") {
+          el.classList.add("dont-care");
+        } else {
+          el.classList.remove("dont-care");
+        }
+      });
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Combinational Logic Track | ADE Made Easy</title>
+  <link rel="stylesheet" href="../shared/ui-components.css">
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body class="track-comb">
+
+  <!-- Symmetrical Global Header -->
+  <header class="ade-global-header">
+    <div class="ade-header-wrap">
+      <!-- 1. Brand Identity (Left) -->
+      <a class="ade-brand" href="../index.html">
+        <span class="ade-brand-badge">ADE</span>
+        <span class="ade-brand-text">
+          <strong>ADE Made Easy</strong>
+          <small>Concept to Silicon</small>
+        </span>
+      </a>
+
+      <!-- 2. Segment Switcher (Center - Prominent Pill Toggle) -->
+      <nav class="ade-segment-switcher">
+        <a href="index.html" class="segment-toggle-btn active-combinational">
+          <span class="icon">🔷</span>
+          <span>Combinational Track</span>
+        </a>
+        <a href="../sequential/index.html" class="segment-toggle-btn">
+          <span class="icon">🔶</span>
+          <span>Sequential Track</span>
+        </a>
+      </nav>
+
+      <!-- 3. User Profile & Hub Link (Right) -->
+      <div class="ade-header-right">
+        <a href="../index.html" class="hub-nav-link">🏠 Main Hub</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- 4-Part Subsystem Sub-Navigation -->
+  <nav class="subsystem-subnav">
+    <div class="subsystem-nav-wrap">
+      <div class="subsystem-tabs">
+        <a href="index.html" class="subsystem-tab-link active">
+          <span class="step-num">0</span>
+          <span>Track Overview</span>
+        </a>
+        <a href="theory.html" class="subsystem-tab-link">
+          <span class="step-num">1</span>
+          <span>Theory &amp; K-Maps</span>
+        </a>
+        <a href="schematic.html" class="subsystem-tab-link">
+          <span class="step-num">2</span>
+          <span>Vector Schematics</span>
+        </a>
+        <a href="workbench.html" class="subsystem-tab-link">
+          <span class="step-num">3</span>
+          <span>IC Workbench</span>
+        </a>
+        <a href="applications.html" class="subsystem-tab-link">
+          <span class="step-num">4</span>
+          <span>Practical &amp; ALU</span>
+        </a>
+      </div>
+      <div class="subsystem-track-indicator indicator-comb">
+        🔷 SEGMENT 1 • COMBINATIONAL LOGIC
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="ref-container" style="max-width: 1240px; margin: 36px auto; padding: 0 24px;">
+    <div style="margin-bottom: 32px;">
+      <p class="meta-tag" style="background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe;">
+        SEGMENT 1 OF 2 • MEMORYLESS LOGIC NETWORKS
+      </p>
+      <h1 style="font-size: 32px; color: var(--navy); margin-bottom: 8px;">
+        Combinational Logic Engineering Suite
+      </h1>
+      <p style="color: var(--muted); font-size: 16px; max-width: 860px; line-height: 1.6;">
+        Combinational switching networks evaluate logic outputs strictly from present input values ($Y = f(X)$) with zero feedback or memory delay. Explore gate minimization, multiplexing, magnitude comparison, and 4-bit binary arithmetic across the 4-part subsystem.
+      </p>
+
+      <!-- 4-Step Stepper Cards -->
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 18px; margin: 28px 0 36px;">
+        <a href="theory.html" style="background: #ffffff; border: 1px solid var(--line); border-radius: 10px; padding: 20px; text-decoration: none; color: inherit; transition: all 0.25s ease; box-shadow: 0 2px 6px rgba(0,0,0,0.03);">
+          <div style="font-size: 24px; margin-bottom: 8px;">📖</div>
+          <div style="font-size: 11px; font-family: var(--font-mono); font-weight: 700; color: var(--blue);">PART 1</div>
+          <h3 style="font-size: 17px; color: var(--navy); margin: 4px 0 6px;">Theory &amp; Equations</h3>
+          <p style="font-size: 13px; color: var(--muted); margin: 0;">Truth tables, K-Maps with don't-cares, SOP/POS synthesis, and IC pinout definitions.</p>
+        </a>
+
+        <a href="schematic.html" style="background: #ffffff; border: 1px solid var(--line); border-radius: 10px; padding: 20px; text-decoration: none; color: inherit; transition: all 0.25s ease; box-shadow: 0 2px 6px rgba(0,0,0,0.03);">
+          <div style="font-size: 24px; margin-bottom: 8px;">📐</div>
+          <div style="font-size: 11px; font-family: var(--font-mono); font-weight: 700; color: var(--blue);">PART 2</div>
+          <h3 style="font-size: 17px; color: var(--navy); margin: 4px 0 6px;">Vector Schematics</h3>
+          <p style="font-size: 13px; color: var(--muted); margin: 0;">KiCad-style ANSI/IEEE schematics with real-time interactive net tracing from pin to pin.</p>
+        </a>
+
+        <a href="workbench.html" style="background: #ffffff; border: 1px solid var(--line); border-radius: 10px; padding: 20px; text-decoration: none; color: inherit; transition: all 0.25s ease; box-shadow: 0 2px 6px rgba(0,0,0,0.03);">
+          <div style="font-size: 24px; margin-bottom: 8px;">⚡</div>
+          <div style="font-size: 11px; font-family: var(--font-mono); font-weight: 700; color: var(--blue);">PART 3</div>
+          <h3 style="font-size: 17px; color: var(--navy); margin: 4px 0 6px;">IC Breadboard Lab</h3>
+          <p style="font-size: 13px; color: var(--muted); margin: 0;">60 FPS virtual breadboard wired with 7400, 7483, 7485, 74153, power rails, and LED probes.</p>
+        </a>
+
+        <a href="applications.html" style="background: #ffffff; border: 1px solid var(--line); border-radius: 10px; padding: 20px; text-decoration: none; color: inherit; transition: all 0.25s ease; box-shadow: 0 2px 6px rgba(0,0,0,0.03);">
+          <div style="font-size: 24px; margin-bottom: 8px;">🚀</div>
+          <div style="font-size: 11px; font-family: var(--font-mono); font-weight: 700; color: var(--blue);">PART 4</div>
+          <h3 style="font-size: 17px; color: var(--navy); margin: 4px 0 6px;">Practical ALU &amp; RTL</h3>
+          <p style="font-size: 13px; color: var(--muted); margin: 0;">Industry applications: ALU arithmetic datapath, keyboard priority encoders, and Verilog RTL.</p>
+        </a>
+      </div>
+    </div>
+
+    <!-- Core Module Index -->
+    <h2 style="font-size: 22px; color: var(--navy); margin-bottom: 16px;">Core Combinational Modules</h2>
+    
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-bottom: 48px;">
+      <!-- Module 1: Code Converters -->
+      <div class="ref-card" style="margin-bottom: 0;">
+        <span class="meta-tag">MODULE 01 • CODE CONVERSION</span>
+        <h3 style="margin-top: 0;">Universal Code Converters</h3>
+        <p style="font-size: 13px; color: var(--muted); line-height: 1.6;">
+          Binary \(\leftrightarrow\) Gray code, BCD \(\leftrightarrow\) Excess-3 with don't-care handling for invalid decimal codes (1010 to 1111).
+        </p>
+        <div style="margin-top: 14px;">
+          <a href="../binary-to-from-gray(1).html" class="reference-link">Binary ↔ Gray Converter <span>↗</span></a>
+          <a href="../bcd-to-gray.html" class="reference-link">BCD ↔ Gray Converter <span>↗</span></a>
+          <a href="../bcd-to-from-excess3.html" class="reference-link">BCD ↔ Excess-3 Converter <span>↗</span></a>
+        </div>
+      </div>
+
+      <!-- Module 2: Multiplexers -->
+      <div class="ref-card" style="margin-bottom: 0;">
+        <span class="meta-tag">MODULE 02 • DATA ROUTING</span>
+        <h3 style="margin-top: 0;">Multiplexers &amp; Selectors</h3>
+        <p style="font-size: 13px; color: var(--muted); line-height: 1.6;">
+          IC 74151 8:1 MUX and IC 74153 Dual 4:1 MUX architectures with active-low strobe enables and Boolean function synthesis.
+        </p>
+        <div style="margin-top: 14px;">
+          <a href="../multiplexer.html" class="reference-link">Launch MUX Interactive Tool <span>↗</span></a>
+          <a href="../multiplexer-reference.html" class="reference-link">74151 &amp; 74153 Design Guide <span>↗</span></a>
+          <a href="schematic.html?circuit=mux_8to1" class="reference-link">8:1 MUX KiCad Schematic <span>↗</span></a>
+        </div>
+      </div>
+
+      <!-- Module 3: Comparators -->
+      <div class="ref-card" style="margin-bottom: 0;">
+        <span class="meta-tag">MODULE 03 • MAGNITUDE LOGIC</span>
+        <h3 style="margin-top: 0;">4-Bit Magnitude Comparators</h3>
+        <p style="font-size: 13px; color: var(--muted); line-height: 1.6;">
+          IC 7485 bit-by-bit cascading comparison (\(A>B, A=B, A<B\)) with active-HIGH equality tie-off behavior.
+        </p>
+        <div style="margin-top: 14px;">
+          <a href="../comparator.html" class="reference-link">Launch Comparator Simulator <span>↗</span></a>
+          <a href="../comparator-reference.html" class="reference-link">7485 Cascading Specification <span>↗</span></a>
+          <a href="schematic.html?circuit=comparator_4bit" class="reference-link">7485 KiCad Schematic <span>↗</span></a>
+        </div>
+      </div>
+
+      <!-- Module 4: Adders & Arithmetic -->
+      <div class="ref-card" style="margin-bottom: 0;">
+        <span class="meta-tag">MODULE 04 • ARITHMETIC UNIT</span>
+        <h3 style="margin-top: 0;">4-Bit Binary Adders &amp; ALU</h3>
+        <p style="font-size: 13px; color: var(--muted); line-height: 1.6;">
+          IC 7483 Carry Lookahead Full Adder and controlled 2's complement subtraction using XOR mode gates with carry propagation.
+        </p>
+        <div style="margin-top: 14px;">
+          <a href="../adder-subtractor.html" class="reference-link">Launch 4-Bit Adder/Subtractor <span>↗</span></a>
+          <a href="../adder-reference.html" class="reference-link">7483 Arithmetic Manual <span>↗</span></a>
+          <a href="schematic.html?circuit=adder_subtractor_4bit" class="reference-link">7483 KiCad Schematic <span>↗</span></a>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <p>ADE Made Easy • Segment 1: Combinational Logic Track</p>
+  </footer>
+
+  <script src="../config.js"></script>
+  <script src="../shared/auth.js"></script>
+  <script src="../user-menu.js"></script>
+</body>
+</html>

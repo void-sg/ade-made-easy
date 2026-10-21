@@ -9,9 +9,13 @@
   });
 
   async function initUserMenu() {
-    // Find nav container
-    const navWrap = document.querySelector(".wb-header") || document.querySelector(".nav-wrap") || document.querySelector("header");
+    // Find nav container - prioritize modern symmetrical ade-header-right
+    const navWrap = document.querySelector(".ade-header-right") || document.querySelector(".wb-header") || document.querySelector(".nav-wrap") || document.querySelector("header");
     if (!navWrap) return;
+
+    // Detect if inside subfolder (/combinational/ or /sequential/)
+    const isSubdir = window.location.pathname.includes("/combinational/") || window.location.pathname.includes("/sequential/");
+    const loginPath = isSubdir ? "../login.html" : "login.html";
 
     // Inject User Menu CSS
     injectUserMenuStyles();
@@ -26,7 +30,7 @@
       guestContainer.id = "guestSignInContainer";
       guestContainer.className = "user-profile-widget";
       guestContainer.innerHTML = `
-        <a href="login.html" class="user-signin-nav-btn" title="Sign in with your roll number or email">
+        <a href="${loginPath}" class="user-signin-nav-btn" title="Sign in with your roll number or email">
           <span>🔑 Sign In / Register</span>
         </a>
       `;
@@ -144,7 +148,8 @@
           localStorage.removeItem("auth_user");
           sessionStorage.removeItem("auth_token");
           sessionStorage.removeItem("auth_user");
-          window.location.href = "login.html";
+          const isSubdir = window.location.pathname.includes("/combinational/") || window.location.pathname.includes("/sequential/");
+          window.location.href = isSubdir ? "../login.html" : "login.html";
         }
       }
     });

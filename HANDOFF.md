@@ -14,11 +14,15 @@ This project is governed by the configuration in [`AGENTS.md`](file:///c:/Users/
    - **Frontend**: Vercel CDN (`vercel.json`)
    - **Backend API**: Render Web Service (`https://logic-sim-suite.onrender.com` / `render.yaml`)
    - **Cloud Database**: Neon Serverless PostgreSQL (`bold-poetry-01774125`, `production` branch)
-4. **Phase 2 Engineering Roadmap**:
-   - Milestone 1: Sequential Circuits (Flip-Flops, 7474, 7476, 74194 Universal Shift Register)
-   - Milestone 2: Waveform Analyzer & Digital Logic Scope
-   - Milestone 3: Excitation Tables, K-Map Solver & State Machine Synthesizer
-   - Milestone 4: Analog Electronics (Op-Amp 741, NE555 Timer, R-2R DAC)
+4. **Two Specialized Tracks & 6 Pillars of Sequential Logic**:
+   - **Track 1**: Combinational Logic (Gates, Adders, Comparators, MUX/DEMUX, Code Converters)
+   - **Track 2**: Sequential Logic ([`sequential-reference.html`](file:///c:/Users/Sagar/Documents/GitHub/ade-made-easy/frontend/sequential-reference.html)):
+     - *Pillar 1*: Foundations & 1-Bit Memory Storage (Latches, SR NAND/NOR, Forbidden States, Preset/Clear)
+     - *Pillar 2*: Core 4 Flip-Flops & Internal Physics (SR, JK, Race-Around Condition, Master-Slave 7476, D 7474, T)
+     - *Pillar 3*: Excitation Tables & Flip-Flop Conversions (Master Excitation Matrix, 3-Step Algorithm)
+     - *Pillar 4*: Shift Registers & IC 74194 (SISO, SIPO, PISO, PIPO, Ring & Johnson Counters)
+     - *Pillar 5*: Counters (Ripple vs Sync, IC 7490 Mod-10/Mod-6, IC 7493 Mod-16/Mod-12, Sync UP/DOWN, 74160/163)
+     - *Pillar 6*: Finite State Machines & VLSI Physics (Mealy vs Moore, 1010 Detector, Setup/Hold, Debouncers, SRAM)
 
 ---
 
