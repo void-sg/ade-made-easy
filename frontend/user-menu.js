@@ -31,7 +31,7 @@
       guestContainer.className = "user-profile-widget";
       guestContainer.innerHTML = `
         <a href="${loginPath}" class="user-signin-nav-btn" title="Sign in with your roll number or email">
-          <span>🔑 Sign In / Register</span>
+          <span>Sign In / Register</span>
         </a>
       `;
       navWrap.appendChild(guestContainer);
@@ -101,19 +101,19 @@
         <div class="user-dropdown-divider"></div>
 
         <button type="button" class="user-dropdown-item" id="btnOpenEditProfileModal">
-          <span class="menu-icon">🎓</span>
+          
           <span>Edit Academic Profile</span>
         </button>
 
         <button type="button" class="user-dropdown-item" id="btnOpenChangePassModal">
-          <span class="menu-icon">🔑</span>
+          
           <span>Change Password</span>
         </button>
 
         <div class="user-dropdown-divider"></div>
 
         <button type="button" class="user-dropdown-item logout" id="btnLogoutAction">
-          <span class="menu-icon">🚪</span>
+          
           <span>Log Out</span>
         </button>
       </div>
@@ -467,7 +467,7 @@
     backdrop.innerHTML = `
       <div class="modal-card-generic">
         <div class="modal-head-generic">
-          <h3>🎓 Edit Academic Profile</h3>
+          <h3>Edit Academic Profile</h3>
           <button type="button" class="modal-close-btn-generic" id="profModalCloseBtn">&times;</button>
         </div>
 
@@ -598,7 +598,7 @@
     backdrop.innerHTML = `
       <div class="modal-card-generic">
         <div class="modal-head-generic">
-          <h3>🔑 Change Account Password</h3>
+          <h3>Change Account Password</h3>
           <button type="button" class="modal-close-btn-generic" id="modalCloseBtn">&times;</button>
         </div>
 

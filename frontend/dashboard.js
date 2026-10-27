@@ -51,7 +51,7 @@
       if (nameEl) nameEl.textContent = username;
       if (rollEl) rollEl.textContent = `${roll} • ${branch} • ${sem}`;
     } else {
-      if (avatarEl) avatarEl.textContent = "🎓";
+      if (avatarEl) avatarEl.textContent = "G";
       if (nameEl) nameEl.textContent = "Student Guest";
       if (rollEl) rollEl.innerHTML = `<a href="login.html" style="color: inherit; text-decoration: underline;">Sign In with Roll No</a>`;
     }
@@ -174,7 +174,7 @@
     container.innerHTML = html;
   }
 
-  // 3. Filter Tabs ([ 🔷 Combinational ] vs [ 🔶 Sequential ])
+  // 3. Filter Tabs ([ Combinational ] vs [ Sequential ])
   function initFilterTabs() {
     const tabs = document.querySelectorAll(".tink-filter-tab");
     const cards = document.querySelectorAll("#recommendedTutorialsGrid .tink-card");

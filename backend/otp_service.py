@@ -41,7 +41,7 @@ def send_otp_email(to_email: str, otp: str, purpose: str = "register") -> dict:
     <body>
       <div class="card">
         <div class="header">
-          <div class="brand">⚡ Digital Logic Simulation Suite <span class="badge">SECURE</span></div>
+          <div class="brand">Digital Logic Simulation Suite <span class="badge">SECURE</span></div>
         </div>
         <div class="content">
           <h2>{title_text}</h2>
@@ -49,7 +49,7 @@ def send_otp_email(to_email: str, otp: str, purpose: str = "register") -> dict:
           <p>Use the following 6-digit One-Time Password (OTP) to {action_text}:</p>
           <div class="otp-box">
             <div class="otp-code">{otp}</div>
-            <div class="expiry-note">⏱️ Valid for 5 minutes only. Do not share this code with anyone.</div>
+            <div class="expiry-note">Valid for 5 minutes only. Do not share this code with anyone.</div>
           </div>
           <p>If you did not make this request, please safely ignore this email.</p>
         </div>

@@ -25,17 +25,17 @@
 
       <nav class="ade-segment-switcher">
         <a href="index.html" class="segment-toggle-btn active-combinational">
-          <span class="icon">🔷</span>
+          
           <span>Combinational Track</span>
         </a>
         <a href="../sequential/index.html" class="segment-toggle-btn">
-          <span class="icon">🔶</span>
+          
           <span>Sequential Track</span>
         </a>
       </nav>
 
       <div class="ade-header-right">
-        <a href="../index.html" class="hub-nav-link">🏠 Main Hub</a>
+        <a href="../index.html" class="hub-nav-link">Main Hub</a>
       </div>
     </div>
   </header>
@@ -66,7 +66,7 @@
         </a>
       </div>
       <div class="subsystem-track-indicator indicator-comb">
-        🔷 PART 3 &bull; COMBINATIONAL VIRTUAL BREADBOARD
+        PART 3 &bull; COMBINATIONAL VIRTUAL BREADBOARD
       </div>
     </div>
   </nav>
@@ -81,15 +81,15 @@
       </button>
 
       <button class="wb-btn wb-btn-blank" id="btn-blank-canvas" title="New Blank Canvas / Clear Workstation">
-        <span>✨ Blank Canvas</span>
+        <span>Blank Canvas</span>
       </button>
 
       <button class="wb-btn wb-btn-save" id="btn-save-exp" title="Save Current Experiment (Title + Objective + Wires)">
-        <span>💾 Save Exp</span>
+        <span>Save Exp</span>
       </button>
 
       <button class="wb-btn wb-btn-library" id="btn-saved-library" title="Open My Saved Experiments Library">
-        <span>📁 Saved Exps</span>
+        <span>Saved Exps</span>
       </button>
 
       <div class="wb-toolbar-divider"></div>
@@ -101,11 +101,11 @@
         </button>
 
         <button class="wb-btn tool-btn" id="btn-tool-wire" title="Draw Manhattan Wire (Shortcut: W)">
-          <span>⚡ Wire [W]</span>
+          <span>Wire [W]</span>
         </button>
 
         <button class="wb-btn tool-btn wb-btn-danger" id="btn-tool-delete" title="Delete Selected Item (Shortcut: Del)">
-          <span>🗑 Delete [Del]</span>
+          <span>Delete [Del]</span>
         </button>
       </div>
 
@@ -162,8 +162,8 @@
 
     <!-- View & Canvas Controls -->
     <div class="wb-toolbar-group">
-      <button class="wb-btn" id="btn-zoom-in" title="Zoom In (+)">🔍 +</button>
-      <button class="wb-btn" id="btn-zoom-out" title="Zoom Out (-)">🔍 -</button>
+      <button class="wb-btn" id="btn-zoom-in" title="Zoom In (+)">+</button>
+      <button class="wb-btn" id="btn-zoom-out" title="Zoom Out (-)">−</button>
       <button class="wb-btn" id="btn-zoom-reset" title="Reset Zoom">1:1</button>
       <button class="wb-btn wb-btn-danger" id="btn-clear-canvas" title="Clear all components from canvas">Clear All</button>
     </div>
@@ -413,7 +413,7 @@
           <input type="text" class="wb-exp-obj-input" id="exp-banner-obj" value="" placeholder="Objective / Notes (e.g., Verify truth table of XOR and AND gates)..." title="Click to edit experiment objective">
         </div>
         <div class="wb-exp-banner-actions">
-          <button class="wb-exp-quick-save-btn" id="btn-banner-save" title="Save / Update Experiment">💾 Save</button>
+          <button class="wb-exp-quick-save-btn" id="btn-banner-save" title="Save / Update Experiment">Save</button>
         </div>
       </div>
 
@@ -447,7 +447,7 @@
 
       <!-- Search Bar -->
       <div class="modal-search-row">
-        <span class="modal-search-icon">🔍 Q:</span>
+        <span class="modal-search-icon">Search:</span>
         <input type="text" class="modal-search-input" id="modal-search" placeholder="Filter symbols (e.g., 7400, 7483, 74151, 74153, 7490, diode, switch)..." autocomplete="off">
       </div>
 
@@ -504,7 +504,7 @@
       <!-- Modal Header -->
       <div class="modal-header-bar">
         <div class="modal-title-group">
-          <h2 class="modal-title">💾 Save Experiment</h2>
+          <h2 class="modal-title">Save Experiment</h2>
           <span class="modal-badge">Local Storage</span>
         </div>
         <button class="modal-close-btn" id="btn-close-save-modal" title="Close">&times;</button>
@@ -524,7 +524,7 @@
 
         <!-- Cloud Storage Sync Indicator -->
         <div id="save-cloud-indicator" style="display: flex; align-items: center; justify-content: space-between; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 6px; padding: 8px 12px; margin-bottom: 14px; font-size: 12px; color: #166534;">
-          <span id="save-cloud-text">☁️ Saving to your Cloud Account (Synced across devices)</span>
+          <span id="save-cloud-text">Saving to your Cloud Account (Synced across devices)</span>
         </div>
 
         <!-- Component and Wire Statistics Pill Counter -->
@@ -555,7 +555,7 @@
         <span class="save-status-msg" id="save-status-msg"></span>
         <div class="modal-actions">
           <button class="wb-btn" id="btn-cancel-save-modal">Cancel</button>
-          <button class="wb-btn wb-btn-primary" id="btn-confirm-save-exp">💾 Save Experiment</button>
+          <button class="wb-btn wb-btn-primary" id="btn-confirm-save-exp">Save Experiment</button>
         </div>
       </div>
     </div>
@@ -569,7 +569,7 @@
       <!-- Modal Header -->
       <div class="modal-header-bar">
         <div class="modal-title-group">
-          <h2 class="modal-title">📁 Project Library</h2>
+          <h2 class="modal-title">Project Library</h2>
           <span class="modal-badge" id="library-count-badge">0 saved</span>
         </div>
         <button class="modal-close-btn" id="btn-close-library-modal" title="Close">&times;</button>
@@ -578,25 +578,25 @@
       <!-- Cloud vs Local Tab Toggle -->
       <div class="library-tabs-row" style="display: flex; gap: 8px; margin: 12px 24px 0; border-bottom: 1px solid #e2e8f0; padding-bottom: 8px;">
         <button type="button" class="library-tab-btn active" id="tab-cloud-projects" style="display: inline-flex; align-items: center; gap: 6px; padding: 7px 14px; border-radius: 6px; border: 1px solid #2563eb; background: #2563eb; color: #ffffff; font-weight: 700; font-size: 13px; cursor: pointer;">
-          <span>☁️ Cloud Projects (My Account)</span>
+          <span>Cloud Projects (My Account)</span>
         </button>
         <button type="button" class="library-tab-btn" id="tab-local-projects" style="display: inline-flex; align-items: center; gap: 6px; padding: 7px 14px; border-radius: 6px; border: 1px solid #cbd5e1; background: #f8fafc; color: #475569; font-weight: 600; font-size: 13px; cursor: pointer;">
-          <span>💻 Local Browser Cache</span>
+          <span>Local Browser Cache</span>
         </button>
       </div>
 
       <!-- Library Action Toolbar -->
       <div class="library-toolbar">
         <div class="modal-search-row" style="flex: 1; border: 1px solid #cbd5e1; border-radius: 6px; padding: 4px 10px; background: #ffffff;">
-          <span class="modal-search-icon">🔍</span>
+          <span class="modal-search-icon"></span>
           <input type="text" class="modal-search-input" id="library-search" placeholder="Search saved projects by title or notes..." autocomplete="off">
         </div>
         <button class="wb-btn" id="btn-library-import-trigger" title="Import Experiment from JSON file">
-          <span>📥 Import JSON</span>
+          <span>Import JSON</span>
         </button>
         <input type="file" id="library-file-input" accept=".json,application/json" style="display: none;">
         <button class="wb-btn" id="btn-library-export-all" title="Backup all saved experiments to a JSON file">
-          <span>📦 Export All</span>
+          <span>Export All</span>
         </button>
       </div>
 

@@ -4711,7 +4711,7 @@
 
       if (confirmBtn) {
         confirmBtn.disabled = false;
-        confirmBtn.textContent = "💾 Save Experiment";
+        confirmBtn.textContent = "Save Experiment";
       }
 
       const statusMsg = document.getElementById("save-status-msg");
@@ -5199,12 +5199,12 @@
         cloudIndicator.style.borderColor = "#bbf7d0";
         cloudIndicator.style.color = "#166534";
         const rollBadge = user.roll_number ? ` (${escapeHTML(user.roll_number)})` : "";
-        cloudText.innerHTML = `☁️ Saving to <strong>${escapeHTML(user.username || 'Student')}</strong>'s Cloud Account${rollBadge} &bull; Synced across devices`;
+        cloudText.innerHTML = `Saving to <strong>${escapeHTML(user.username || 'Student')}</strong>'s Cloud Account${rollBadge} &bull; Synced across devices`;
       } else {
         cloudIndicator.style.background = "#fffbeb";
         cloudIndicator.style.borderColor = "#fef3c7";
         cloudIndicator.style.color = "#92400e";
-        cloudText.innerHTML = `💻 Saving locally to browser cache (Sign in to sync circuits across computers)`;
+        cloudText.innerHTML = `Saving locally to browser cache (Sign in to sync circuits across computers)`;
       }
     }
 
@@ -5283,11 +5283,11 @@
     if (filtered.length === 0) {
       listContainer.innerHTML = `
         <div class="library-empty-state">
-          <div class="library-empty-icon">📁</div>
+          <div class="library-empty-icon"></div>
           <div class="library-empty-title">${allExps.length === 0 ? "No Saved Experiments in Local Cache" : "No Matching Experiments"}</div>
           <div class="library-empty-desc">
             ${allExps.length === 0
-              ? "Build your digital logic circuit on the IC Workbench and click <strong>💾 Save Exp</strong> to store it in your browser."
+              ? "Build your digital logic circuit on the IC Workbench and click <strong>Save Exp</strong> to store it in your browser."
               : "Try searching with a different keyword or IC reference (e.g. 7400, Adder, MUX)."}
           </div>
         </div>
@@ -5319,13 +5319,13 @@
           <div class="saved-exp-meta">
             <span class="stat-pill">${compCount} IC/Comps</span>
             <span class="stat-pill">${wireCount} Wires</span>
-            <span class="stat-pill" style="background: #f1f5f9; color: #475569; border-color: #cbd5e1;">💻 Local Cache</span>
+            <span class="stat-pill" style="background: #f1f5f9; color: #475569; border-color: #cbd5e1;">Local Cache</span>
             ${isCurrentlyOpen ? `<span class="stat-pill" style="background: #dbeafe; color: #1e40af; border-color: #93c5fd;">Currently Open</span>` : ""}
           </div>
           <div class="saved-exp-actions">
-            <button class="wb-btn wb-btn-primary btn-load-exp" title="Load onto Workbench Canvas" data-id="${exp.id}">⚡ Load</button>
-            <button class="wb-btn btn-export-exp" title="Download JSON file" data-id="${exp.id}">💾 Export</button>
-            <button class="wb-btn wb-btn-danger btn-delete-exp" title="Delete experiment" data-id="${exp.id}">🗑</button>
+            <button class="wb-btn wb-btn-primary btn-load-exp" title="Load onto Workbench Canvas" data-id="${exp.id}">Load</button>
+            <button class="wb-btn btn-export-exp" title="Download JSON file" data-id="${exp.id}">Export</button>
+            <button class="wb-btn wb-btn-danger btn-delete-exp" title="Delete experiment" data-id="${exp.id}">Delete</button>
           </div>
         </div>
       `;
@@ -5359,13 +5359,13 @@
       if (countBadge) countBadge.textContent = "Not logged in";
       listContainer.innerHTML = `
         <div class="library-empty-state">
-          <div class="library-empty-icon">☁️</div>
+          <div class="library-empty-icon"></div>
           <div class="library-empty-title">Sign In to Access Cloud Projects</div>
           <div class="library-empty-desc">
             Sign in with your roll number or student account to access your saved circuits from any computer, tablet, or college lab PC.
             <div style="margin-top: 14px;">
               <a href="login.html" class="wb-btn wb-btn-primary" style="display: inline-flex; align-items: center; gap: 6px; padding: 8px 18px; text-decoration: none; border-radius: 6px;">
-                <span>🔑 Sign In / Register</span>
+                <span>Sign In / Register</span>
               </a>
             </div>
           </div>
@@ -5391,7 +5391,7 @@
         if (res.status === 401) {
           listContainer.innerHTML = `
             <div class="library-empty-state">
-              <div class="library-empty-icon">🔒</div>
+              <div class="library-empty-icon"></div>
               <div class="library-empty-title">Session Expired</div>
               <div class="library-empty-desc">Please sign in again to view your cloud projects.<br><br>
                 <a href="login.html" class="wb-btn wb-btn-primary" style="display: inline-block;">Log In</a>
@@ -5408,12 +5408,12 @@
       console.error("Failed to load cloud projects:", err);
       listContainer.innerHTML = `
         <div class="library-empty-state">
-          <div class="library-empty-icon">⚠️</div>
+          <div class="library-empty-icon"></div>
           <div class="library-empty-title">Cannot Connect to Cloud Server</div>
           <div class="library-empty-desc">
             Make sure your backend server is running. You can still access local browser experiments via the <strong>Local Browser Cache</strong> tab above.
             <div style="margin-top: 12px;">
-              <button class="wb-btn" id="btn-retry-cloud-load">🔄 Retry Connection</button>
+              <button class="wb-btn" id="btn-retry-cloud-load">Retry Connection</button>
             </div>
           </div>
         </div>
@@ -5440,11 +5440,11 @@
     if (filtered.length === 0) {
       listContainer.innerHTML = `
         <div class="library-empty-state">
-          <div class="library-empty-icon">☁️</div>
+          <div class="library-empty-icon"></div>
           <div class="library-empty-title">${cachedCloudProjects.length === 0 ? "No Cloud Projects Yet" : "No Matching Cloud Projects"}</div>
           <div class="library-empty-desc">
             ${cachedCloudProjects.length === 0
-              ? "Design your digital logic circuit on the IC Workbench and click <strong>💾 Save Exp</strong> to save it directly to your cloud account."
+              ? "Design your digital logic circuit on the IC Workbench and click <strong>Save Exp</strong> to save it directly to your cloud account."
               : "Try searching with a different keyword or title."}
           </div>
         </div>
@@ -5469,7 +5469,7 @@
       card.innerHTML = `
         <div class="saved-exp-header">
           <span class="saved-exp-title" style="display: flex; align-items: center; gap: 6px;">
-            <span style="font-size: 14px;">☁️</span>
+            
             <span>${escapeHTML(proj.title || "Untitled Project")}</span>
           </span>
           <span class="saved-exp-date">${dateStr}</span>
@@ -5477,14 +5477,14 @@
         ${proj.description ? `<div class="saved-exp-obj">${escapeHTML(proj.description)}</div>` : ""}
         <div class="saved-exp-footer">
           <div class="saved-exp-meta">
-            <span class="stat-pill" style="background: #eff6ff; color: #1d4ed8; border-color: #bfdbfe;">☁️ Cloud Synced</span>
+            <span class="stat-pill" style="background: #eff6ff; color: #1d4ed8; border-color: #bfdbfe;">Cloud Synced</span>
             ${isCurrentlyOpen ? `<span class="stat-pill" style="background: #dbeafe; color: #1e40af; border-color: #93c5fd;">Currently Open</span>` : ""}
           </div>
           <div class="saved-exp-actions">
-            <button class="wb-btn wb-btn-primary btn-load-cloud-exp" title="Load onto Workbench Canvas" data-id="${proj.id}">⚡ Load</button>
-            <button class="wb-btn btn-dup-cloud-exp" title="Duplicate this project" data-id="${proj.id}">📋 Duplicate</button>
-            <button class="wb-btn btn-export-cloud-exp" title="Download JSON file" data-id="${proj.id}">💾 Export</button>
-            <button class="wb-btn wb-btn-danger btn-delete-cloud-exp" title="Delete project from cloud" data-id="${proj.id}">🗑</button>
+            <button class="wb-btn wb-btn-primary btn-load-cloud-exp" title="Load onto Workbench Canvas" data-id="${proj.id}">Load</button>
+            <button class="wb-btn btn-dup-cloud-exp" title="Duplicate this project" data-id="${proj.id}">Duplicate</button>
+            <button class="wb-btn btn-export-cloud-exp" title="Download JSON file" data-id="${proj.id}">Export</button>
+            <button class="wb-btn wb-btn-danger btn-delete-cloud-exp" title="Delete project from cloud" data-id="${proj.id}">Delete</button>
           </div>
         </div>
       `;

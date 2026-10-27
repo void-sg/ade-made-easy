@@ -942,7 +942,7 @@
       const btnCas = document.getElementById("btn-cascade-90");
       if (btnCas) {
         btnCas.classList.toggle("active", state.counter90.cascade === 1);
-        btnCas.textContent = state.counter90.cascade === 1 ? "🔗 QA ➔ CP1 (Jumper ON)" : "⚠️ QA ➔ CP1 (Jumper OFF)";
+        btnCas.textContent = state.counter90.cascade === 1 ? "QA ➔ CP1 (Jumper ON)" : "QA ➔ CP1 (Jumper OFF)";
       }
 
       const btnAuto = document.getElementById("btn-clk-auto-90");
@@ -962,7 +962,7 @@
       const btnCas = document.getElementById("btn-cascade-93");
       if (btnCas) {
         btnCas.classList.toggle("active", state.counter93.cascade === 1);
-        btnCas.textContent = state.counter93.cascade === 1 ? "🔗 QA ➔ CP1 (Jumper ON)" : "⚠️ QA ➔ CP1 (Jumper OFF)";
+        btnCas.textContent = state.counter93.cascade === 1 ? "QA ➔ CP1 (Jumper ON)" : "QA ➔ CP1 (Jumper OFF)";
       }
 
       const btnAuto = document.getElementById("btn-clk-auto-93");
@@ -1458,11 +1458,11 @@
       const desc = document.getElementById("ff74-status-desc");
       if (desc) {
         if (state.flipflop74.pr_n === 0 && state.flipflop74.clr_n === 0) {
-          desc.textContent = "⚠️ FORBIDDEN INDETERMINATE STATE (~PR=~CLR=0 -> Q=Q'=1)";
+          desc.textContent = "FORBIDDEN INDETERMINATE STATE (~PR=~CLR=0 -> Q=Q'=1)";
         } else if (state.flipflop74.pr_n === 0) {
-          desc.textContent = "⚡ ASYNC PRESET OVERRIDE: Q forced to 1";
+          desc.textContent = "ASYNC PRESET OVERRIDE: Q forced to 1";
         } else if (state.flipflop74.clr_n === 0) {
-          desc.textContent = "⚡ ASYNC CLEAR OVERRIDE: Q forced to 0";
+          desc.textContent = "ASYNC CLEAR OVERRIDE: Q forced to 0";
         } else {
           desc.textContent = `Active Data State: D=${state.flipflop74.d} -> Q=${q} on Clock Edge`;
         }
@@ -1477,13 +1477,13 @@
       const desc = document.getElementById("ff76-status-desc");
       if (desc) {
         if (state.flipflop76.pr_n === 0 && state.flipflop76.clr_n === 0) {
-          desc.textContent = "⚠️ FORBIDDEN STATE (~PR=~CLR=0)";
+          desc.textContent = "FORBIDDEN STATE (~PR=~CLR=0)";
         } else if (state.flipflop76.pr_n === 0) {
-          desc.textContent = "⚡ ASYNC PRESET: Q=1";
+          desc.textContent = "ASYNC PRESET: Q=1";
         } else if (state.flipflop76.clr_n === 0) {
-          desc.textContent = "⚡ ASYNC CLEAR: Q=0";
+          desc.textContent = "ASYNC CLEAR: Q=0";
         } else if (state.flipflop76.j === 1 && state.flipflop76.k === 1) {
-          desc.textContent = `🔄 TOGGLE MODE (J=1, K=1): Current Q=${q}`;
+          desc.textContent = `TOGGLE MODE (J=1, K=1): Current Q=${q}`;
         } else if (state.flipflop76.j === 1 && state.flipflop76.k === 0) {
           desc.textContent = `SET MODE (J=1, K=0): Q=1 on Falling Edge`;
         } else if (state.flipflop76.j === 0 && state.flipflop76.k === 1) {
@@ -1508,7 +1508,7 @@
       }
       if (desc) {
         if (state.shiftreg194.clr_n === 0) {
-          desc.textContent = "⚡ ASYNC RESET: Clear active (~CLR=0) -> QA..QD=0000";
+          desc.textContent = "ASYNC RESET: Clear active (~CLR=0) -> QA..QD=0000";
         } else if (mode === "00") {
           desc.textContent = `HOLD: State [${qStr}] unchanged on clock pulse`;
         } else if (mode === "01") {
